@@ -110,23 +110,52 @@ RunAction::RunAction()
     ////////////////////////////////////////////////////
     
     // Creating ntuple
-    analysisManager->CreateNtuple("DataTreeSim", "K600 Spectrometer - Coincident Events");
+    analysisManager->CreateNtuple("SimulationTree", "SimulationTree");
     
-    analysisManager->CreateNtupleDColumn(0, "InitialParticleKineticEnergy");
-    analysisManager->CreateNtupleDColumn(0, "InitialParticleKineticEnergy_COM");
+    //------------------------------------
+    //      Initial Simulated Particle
+    analysisManager->CreateNtupleDColumn(0, "iSimulatedParticle_T", iSimulatedParticle_T);
+
+
+    //--------------------------------
+    //      Scattering Reaction
+    analysisManager->CreateNtupleIColumn(0, "nReactionProducts", nReactionProducts);
+    analysisManager->CreateNtupleIColumn(0, "reaction_Z", reaction_Z);
+    analysisManager->CreateNtupleDColumn(0, "reaction_A", reaction_A);
+    analysisManager->CreateNtupleDColumn(0, "reaction_P", reaction_P);
+    analysisManager->CreateNtupleDColumn(0, "reaction_T", reaction_T);
+    analysisManager->CreateNtupleDColumn(0, "reaction_theta_LAB", reaction_theta_LAB);
+    analysisManager->CreateNtupleDColumn(0, "reaction_phi_LAB", reaction_phi_LAB);
+    analysisManager->CreateNtupleDColumn(0, "reaction_theta_reactionCOM", reaction_theta_reactionCOM);
+    analysisManager->CreateNtupleDColumn(0, "reaction_phi_reactionCOM", reaction_phi_reactionCOM);
     
-    analysisManager->CreateNtupleDColumn(0, "InitialParticleTheta");
-    analysisManager->CreateNtupleDColumn(0, "InitialParticlePhi");
+    //--------------------------------
+    //      Recoil Nucleus Decay
+    analysisManager->CreateNtupleIColumn(0, "nDecayProducts", nDecayProducts);
+    analysisManager->CreateNtupleIColumn(0, "decay_Z", decay_Z);
+    analysisManager->CreateNtupleDColumn(0, "decay_A", decay_A);
+    analysisManager->CreateNtupleDColumn(0, "decay_P", decay_P);
+    analysisManager->CreateNtupleDColumn(0, "decay_T", decay_T);
+    analysisManager->CreateNtupleDColumn(0, "decay_theta_LAB", decay_theta_LAB);
+    analysisManager->CreateNtupleDColumn(0, "decay_phi_LAB", decay_phi_LAB);
+    analysisManager->CreateNtupleDColumn(0, "decay_theta_recoilCOM", decay_theta_recoilCOM);
+    analysisManager->CreateNtupleDColumn(0, "decay_phi_recoilCOM", decay_phi_recoilCOM);
+    analysisManager->CreateNtupleDColumn(0, "decay_theta_reactionCOM", decay_theta_reactionCOM);
+    analysisManager->CreateNtupleDColumn(0, "decay_phi_reactionCOM", decay_phi_reactionCOM);
+
+    //--------------------------------
+    //      CAKE Array
+    analysisManager->CreateNtupleIColumn(0, "ga_CAKE_detNr", ga_CAKE_detNr);
+    analysisManager->CreateNtupleIColumn(0, "ga_CAKE_ringNr", ga_CAKE_ringNr);
+    analysisManager->CreateNtupleIColumn(0, "ga_CAKE_sectorNr", ga_CAKE_sectorNr);
 
     //--------------------------------
     //      CLOVER Detectors
-    analysisManager->CreateNtupleIColumn(0, "CLOVER_EventFold");
+    analysisManager->CreateNtupleIColumn(0, "CLOVER_EventFold", CLOVER_eventFold);
     analysisManager->CreateNtupleIColumn(0, "CLOVER_NCrystalsTriggered", CLOVER_nCrystalsTriggered);
     analysisManager->CreateNtupleIColumn(0, "CLOVER_Number", CLOVER_iD);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_EnergyPerCrystal", CLOVER_energyPerCrystal);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_Energy", CLOVER_energy);
-    //analysisManager->CreateNtupleDColumn(0, "CLOVER_InitialParticleEnergy", CLOVER_initialEnergy);
-    //analysisManager->CreateNtupleDColumn(0, "CLOVER_InitialParticleEnergy_COM", CLOVER_initialEnergy);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_DetectorTheta", CLOVER_detectorTheta);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_DetectorPhi", CLOVER_detectorPhi);
     analysisManager->CreateNtupleIColumn(0, "CLOVER_CrystalReflectionIndex", CLOVER_CrystalReflectionIndex);
@@ -134,12 +163,11 @@ RunAction::RunAction()
     analysisManager->CreateNtupleDColumn(0, "CLOVER_InitialInteractionPhi", CLOVER_initialInteractionPhi);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_InitialParticleTheta", CLOVER_initialInteractionTheta);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_InitialParticlePhi", CLOVER_initialInteractionPhi);
-
     analysisManager->CreateNtupleIColumn(0, "CLOVER_BGOCrystalsTriggered", CLOVER_BGOCrystalsTriggered);
 
     //--------------------------------
     //      LaBr3Ce Detectors
-    analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_EventFold");
+    analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_EventFold", laBr3Ce_eventFold);
     analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_Number", laBr3Ce_iD);
     analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Energy", laBr3Ce_energy);
     analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_DetectorTheta", laBr3Ce_detectorTheta);
@@ -150,47 +178,7 @@ RunAction::RunAction()
     analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_yPos", laBr3Ce_yPos); // cm (relative to the target/origin)
     analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_zPos", laBr3Ce_zPos); // cm (relative to the target/origin)
     
-    
     analysisManager->FinishNtuple(0);
-    
-    
-    ////////////////////////////////////////////////////////////
-    //                  GeometryAnalysisTree
-    ////////////////////////////////////////////////////////////
-    
-    // Creating ntuple
-    
-    analysisManager->CreateNtuple("GeometryAnalysisTree", "K600 Spectrometer - GeometryAnalysis");
-    
-    ////    CAKE Detectors
-    analysisManager->CreateNtupleIColumn(1, "CAKENo");
-    analysisManager->CreateNtupleIColumn(1, "CAKE_RowNo");
-    analysisManager->CreateNtupleIColumn(1, "CAKE_SectorNo");
-    analysisManager->CreateNtupleDColumn(1, "Theta");
-    analysisManager->CreateNtupleDColumn(1, "Phi");
-    
-    analysisManager->FinishNtuple(1);
-    
-    
-    ////////////////////////////////////////////////////////////
-    //                  Input Variable Tree
-    ////////////////////////////////////////////////////////////
-    
-    // Creating ntuple
-    analysisManager->CreateNtuple("InputVariableTree", "K600 Spectrometer - InputVariable");
-    
-    ////    Initial Particle Angular Distributions
-    analysisManager->CreateNtupleDColumn(2, "ThetaDist");
-    analysisManager->CreateNtupleDColumn(2, "PhiDist");
-    analysisManager->CreateNtupleDColumn(2, "ThetaDist_COM");
-    analysisManager->CreateNtupleDColumn(2, "InitialParticleKineticEnergy");
-    analysisManager->CreateNtupleDColumn(2, "InitialParticleKineticEnergy_COM");
-
-    //analysisManager->CreateNtupleDColumn(2, "ThetaDist_projX");
-    //analysisManager->CreateNtupleDColumn(2, "ThetaDist_projY");
-
-    analysisManager->FinishNtuple(2);
-    
     
 }
 

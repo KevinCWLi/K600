@@ -38,9 +38,9 @@ find_package(cadmesh)
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(ALBA K600.cc ${sources} ${headers})
-target_link_libraries(ALBA ${Geant4_LIBRARIES})
-target_link_libraries(ALBA ${cadmesh_LIBRARIES})
+add_executable(K600 K600.cc ${sources} ${headers})
+target_link_libraries(K600 ${Geant4_LIBRARIES})
+target_link_libraries(K600 ${cadmesh_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -70,4 +70,4 @@ endforeach()
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS ALBA DESTINATION bin)
+install(TARGETS K600 DESTINATION bin)

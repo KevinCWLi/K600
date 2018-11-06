@@ -422,7 +422,24 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     ////////////////////////////////////////////
     //              CAKE ARRAY
     ////////////////////////////////////////////
-        
+
+    if(GA_MODE)
+    {        
+        //if(GA_CAKE && (volumeName=="CAKE_AA_RS" || volumeName=="CAKE_SiliconWafer"))
+        if(GA_CAKE && volumeName=="CAKE_AA_RS")
+        {
+            channelID = volume->GetCopyNo();
+            
+            CAKENo = channelID/128;
+            CAKE_RowNo = (channelID - (CAKENo*128))/8;
+            CAKE_SectorNo = (channelID - (CAKENo*128))%8;
+
+            fEventAction->SetCAKE_AA_hit(CAKENo, CAKE_RowNo, CAKE_SectorNo);
+        }
+    }
+    
+    
+    
     if(GA_MODE)
     {
         
@@ -524,12 +541,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
                     if(xPosW<0 && yPosW>0) phi = phi + 180.; // deg
                     if(xPosW<0 && yPosW<0) phi = phi + 180.; // deg
                     if(xPosW>0 && yPosW<0) phi = phi + 360.; // deg
-                }
-
-                
-                fEventAction->SetInputDist(0, theta);
-                fEventAction->SetInputDist(1, phi);
-                
+                }                
                 
                 //G4cout << "" << G4endl;
                 //G4cout << "Here is the geantino Hit!     -->     " << G4endl;

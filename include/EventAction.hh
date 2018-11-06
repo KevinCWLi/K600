@@ -54,7 +54,7 @@ using namespace std;
 const G4bool        GA_MODE = true;
 const G4bool        GA_CAKE = true;
 const G4bool        GA_W1 = false;
-const G4bool        GA_LineOfSightMODE = true;
+const G4bool        GA_LineOfSightMODE = false;
 const G4int         GA_numberOfEvents = 100000000;
 
 const G4bool        GA_GenInputVar = true;
@@ -166,24 +166,30 @@ public:
     void AddAbs(G4double de, G4double dl);
     void AddGap(G4double de, G4double dl);
     
-    G4int       evtNb;
+    G4int evtNb;
     
-    G4double initialParticleKineticEnergy;
-    G4double initialParticleKineticEnergy_COM;
-    void SetInitialParticleKineticEnergy(G4double a) {initialParticleKineticEnergy = a;};
-    void SetInitialParticleKineticEnergy_COM(G4double a) {initialParticleKineticEnergy_COM = a;};
+    //----------------------------------------
+    //      Initial Simulated Particles
+
+    std::vector<double>   iSimulatedParticle_T; // MeV
+    
+    void SetInitialParticleKineticEnergy(double a)
+    {
+        iSimulatedParticle_T.push_back(a);
+    };
     
     G4double initialParticleTheta;
     G4double initialParticlePhi;
     void SetInitialParticleTheta(G4double a) {initialParticleTheta = a;};
     void SetInitialParticlePhi(G4double a) {initialParticlePhi = a;};
 
-    /////////////////////
+    //----------------------------------------
     //      CAKE
     G4double GainCAKE;
     G4double OffsetCAKE;
     
     G4double    CAKE_AA[5][16][8][3][CAKE_TotalTimeSamples];
+    G4bool      CAKE_AA_hit[5][16][8];
     //  First index designates the CAKENo
     //  Second index designates the CAKE_RowNo
     //  Third index designates the CAKE_SectorNo
@@ -200,8 +206,19 @@ public:
     G4double GetVar_CAKE_AA(G4int i, G4int j, G4int l, G4int m, G4int k)
     {return CAKE_AA[i][j][l][m][k];};
     
+    void SetCAKE_AA_hit(int detNr, int ringNr, int sectorNr)
+    {
+        if(detNr>=0 && detNr<5 && ringNr>=0 && ringNr<16 && sectorNr>=0 && sectorNr<8)
+        {
+            CAKE_AA_hit[detNr][ringNr][sectorNr] = true;
+        }
+        else
+        {
+            G4cout << "Invalid arguments for EventAction::SetCAKE_AA_hit()" << G4endl;
+        }
+    };
     
-    ////////////////////////
+    //----------------------------------------
     //      CLOVERS
     //G4int nCLOVER_detectors;
     G4double GainCLOVER;
@@ -236,7 +253,7 @@ public:
     
     std::vector<std::tuple<int, double, double>> angles_CLOVER;
     
-    /////////////////////////////////////////
+    //----------------------------------------
     //      CLOVER Shield BGO Crystals
     
     std::vector<int> CLOVER_BGO_Triggered_vec;
@@ -247,7 +264,7 @@ public:
     
     
     
-    ////////////////////////
+    //----------------------------------------
     //      LEPS
     G4double GainLEPS;
     G4double OffsetLEPS;
@@ -260,7 +277,7 @@ public:
     
     void AddEnergyLEPS_HPGeCrystals(G4int i, G4int j, G4int k, G4double a)	{LEPS_HPGeCrystal_EDep[i][j][k] += a;};
     
-    ////////////////////////
+    //----------------------------------------
     //      LaBr3Ce
     //G4int nLaBr3Ce_detectors;
     G4double GainLaBr3Ce;
@@ -288,7 +305,7 @@ public:
 
     std::vector<std::tuple<int, double, double>> angles_ALBA_LaBr3Ce;
     
-    /////////////////////////////////////////
+    //----------------------------------------
     //          PADDLE DETECTORS
     G4double GainPADDLE;
     G4double OffsetPADDLE;
@@ -312,7 +329,7 @@ public:
     G4bool Get_PADDLE_Trig(G4int i) {return PADDLE_Trig[i];};
     
     
-    /////////////////////////////////////////
+    //----------------------------------------
     //          VDC DETECTORS
     G4double GainVDC;
     G4double OffsetVDC;
@@ -383,19 +400,14 @@ public:
         return WireplaneTraversePOST[WireplaneNumber];
     }
     
-    /////////////////////////////////
+    //----------------------------------------
     //      GEOMETRY ANALYSIS
-    /////////////////////////////////
     
     G4bool      GA_LineOfSight;  //  LOF -> Line of Sight
     
     G4bool  GA_GetLineOfSight()	{return GA_LineOfSight;};
     void GA_SetLineOfSight(G4bool b)	{GA_LineOfSight = b;};
-    
-    ////    Input Variables
-    G4double    inputDist[3];
-    void SetInputDist(G4int i, G4double a)	{inputDist[i] = a;};
-    
+        
     ////    CAKE
     G4int CAKE_No, CAKE_RowNo, CAKE_SectorNo;
     G4double    GA_CAKE_AA_stor[640][4];
@@ -411,12 +423,12 @@ public:
     G4String fileNameHolder;
     
     
-    ////    Angular Distribution for Data Sorting
+    //      Angular Distribution for Data Sorting
     G4int       GA_MMM_AngDist_counter[5][16][8];
     G4double    GA_MMM_AngDist[4][16][8][2][100];
     
-    ////////////////////////////////////
-    ////    GA mode for CAKE
+    //----------------------------------------
+    //      GA mode for CAKE
     //  First index designates channel
     //  Second index:
     //  Indices 0, 1 and 2 designates summed x, y and z positions respectively whilst an index of 3 designates the number of valid hits
@@ -433,8 +445,8 @@ public:
     double GetGA_CAKE(G4int i, G4int j)	{return GA_CAKE_AA[i][j];};
     
 
-    ////////////////////////////////////
-    ////    GA mode for W1
+    //----------------------------------------
+    //      GA mode for W1
     //  First index designates channel
     //  Second index:
     //  Indices 0, 1 and 2 designates summed x, y and z positions respectively whilst an index of 3 designates the number of valid hits
@@ -450,14 +462,88 @@ public:
     double GetGA_W1(G4int i, G4int j)	{return GA_W1_AA[i][j];};
 
     
-    ////    Primary Generator Action Variables
+    //      Primary Generator Action Variables
     G4double recoilExcitationEnergy;
     void SetRecoilExcitationEnergy(G4double initialExcitationEnergy) {recoilExcitationEnergy = initialExcitationEnergy;};
     
-    ////    Primary Generator Action Variables
+    //      Primary Generator Action Variables
     G4String decayModeName;
     void SetDecayMode(G4String string_decayMode) {decayModeName = string_decayMode;};
 
+    //--------------------------------------------------------------------------------
+    //      Geometry Analysis variables
+    
+    //----------------
+    //      CAKE
+    std::vector<int>    ga_CAKE_detNr;
+    std::vector<int>    ga_CAKE_ringNr;
+    std::vector<int>    ga_CAKE_sectorNr;
+    std::vector<double> ga_CAKE_theta_LAB;
+    std::vector<double> ga_CAKE_phi_LAB;
+    std::vector<double> ga_CAKE_theta_recoilCOM;
+    std::vector<double> ga_CAKE_phi_recoilCOM;
+    //std::vector<double> ga_CAKE_theta_reactionCOM;
+    //std::vector<double> ga_CAKE_phi_reactionCOM;
+    
+    void SetGA_CAKE_detNr(std::vector<int> vec)                 {ga_CAKE_detNr = vec;};
+    void SetGA_CAKE_ringNr(std::vector<int> vec)                {ga_CAKE_ringNr = vec;};
+    void SetGA_CAKE_sectorNr(std::vector<int> vec)              {ga_CAKE_sectorNr = vec;};
+    void SetGA_CAKE_theta_LAB(std::vector<double> vec)          {ga_CAKE_theta_LAB = vec;};
+    void SetGA_CAKE_phi_LAB(std::vector<double> vec)            {ga_CAKE_phi_LAB = vec;};
+    void SetGA_CAKE_theta_recoilCOM(std::vector<double> vec)    {ga_CAKE_theta_recoilCOM = vec;};
+    void SetGA_CAKE_phi_recoilCOM(std::vector<double> vec)      {ga_CAKE_phi_recoilCOM = vec;};
+
+    //--------------------------------------------------------------------------------
+    //      Reaction variables
+    int nReactionProducts;
+    std::vector<int>    reaction_Z;
+    std::vector<double> reaction_A;
+    std::vector<double> reaction_P;
+    std::vector<double> reaction_T;
+    
+    void SetNReactionProducts(int n)            {nReactionProducts = n;};
+    void SetReaction_Z(std::vector<int> vec)    {reaction_Z = vec;};
+    void SetReaction_A(std::vector<double> vec) {reaction_A = vec;};
+    void SetReaction_P(std::vector<double> vec) {reaction_P = vec;};
+    void SetReaction_T(std::vector<double> vec) {reaction_T = vec;};
+    
+    std::vector<double> reaction_theta_LAB;
+    std::vector<double> reaction_phi_LAB;
+    std::vector<double> reaction_theta_reactionCOM;
+    std::vector<double> reaction_phi_reactionCOM;
+    
+    void SetReaction_theta_LAB(std::vector<double> vec)         {reaction_theta_LAB = vec;};
+    void SetReaction_phi_LAB(std::vector<double> vec)           {reaction_phi_LAB = vec;};
+    void SetReaction_theta_reactionCOM(std::vector<double> vec) {reaction_theta_reactionCOM = vec;};
+    void SetReaction_phi_reactionCOM(std::vector<double> vec)   {reaction_phi_reactionCOM = vec;};
+    
+    //--------------------------------------------------------------------------------
+    //      Decay variables
+    int                 nDecayProducts;
+    std::vector<int>    decay_Z;
+    std::vector<double> decay_A;
+    std::vector<double> decay_P;
+    std::vector<double> decay_T;
+    
+    void SetNDecayProducts(int n)               {nDecayProducts = n;};
+    void SetDecay_Z(std::vector<int> vec)       {decay_Z = vec;};
+    void SetDecay_A(std::vector<double> vec)    {decay_A = vec;};
+    void SetDecay_P(std::vector<double> vec)    {decay_P = vec;};
+    void SetDecay_T(std::vector<double> vec)    {decay_T = vec;};
+    
+    std::vector<double> decay_theta_LAB;
+    std::vector<double> decay_phi_LAB;
+    std::vector<double> decay_theta_recoilCOM;
+    std::vector<double> decay_phi_recoilCOM;
+    std::vector<double> decay_theta_reactionCOM;
+    std::vector<double> decay_phi_reactionCOM;
+    
+    void SetDecay_theta_LAB(std::vector<double> vec)            {decay_theta_LAB = vec;};
+    void SetDecay_phi_LAB(std::vector<double> vec)              {decay_phi_LAB = vec;};
+    void SetDecay_theta_recoilCOM(std::vector<double> vec)      {decay_theta_recoilCOM = vec;};
+    void SetDecay_phi_recoilCOM(std::vector<double> vec)        {decay_phi_recoilCOM = vec;};
+    void SetDecay_theta_reactionCOM(std::vector<double> vec)    {decay_theta_reactionCOM = vec;};
+    void SetDecay_phi_reactionCOM(std::vector<double> vec)      {decay_phi_reactionCOM = vec;};
     
 private:
     G4double  fEnergyAbs;

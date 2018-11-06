@@ -1,6 +1,3 @@
-
-using namespace std;
-
 ////////////////////////////////////
 ////        BiRelKin        ////
 ////////////////////////////////////
@@ -9,6 +6,9 @@ using namespace std;
 //  Kevin C.W. Li, kcwli@sun.ac.za
 //  10/02/15
 
+//  Based upon the Derivations for two-body kinematics (both relativistic and non-relativistic), C. Wheldon
+
+#include "iostream"
 
 ////////////////////////
 ////    Constants   ////
@@ -18,89 +18,254 @@ using namespace std;
 double c2 = 931.494;     // MeV/u, c^2
 double c4 = c2*c2;  // (MeV/u)^2, c^4
 
-////    Lab Variables
-double Q, Etotal;
-double theta_lab, phi_lab;
-
-////    Quadratic equation variables
-double a = 0.0;
-double b = 0.0;
-double c = 0.0;
-
-
-void BiRelKin(double *m, double *T, double *E, double *p, double ThetaSCAT,  double &PhiSCAT, double Ex) {
+void BiRelKin(double *m, double *T, double *E, double *p, double ThetaSCAT_ejectile,  double &ThetaSCAT_recoil, double Ex) {
     
     ////    Q-value calculation
-    Q = (m[2] + m[3])*c2 - (m[0] + m[1])*c2; // MeV
+    double Q = (m[0] + m[1])*c2 - (m[2] + m[3])*c2; // MeV
     
     ////    Conversion of ejectile scattering angle from degrees to radians
-    theta_lab = ThetaSCAT*0.017453292; // radians
-    phi_lab = PhiSCAT*0.017453292; // radians
-
+    double theta_lab_ejectile = ThetaSCAT_ejectile*0.017453292; // radians
+    //double theta_lab_recoil = ThetaSCAT_recoil*0.017453292; // radians
+    double theta_lab_recoil = 0.0; // radians
+    
     ////    Initial Total Energy Calculation
     E[0] = T[0] + (m[0]*c2);
     E[1] = T[1] + (m[1]*c2);
-    Etotal = E[0] + E[1] + Q - Ex;
-
+    double Etot = E[0] + E[1] + Q - Ex;
+    
     ////    Initial Momentum Calculation
-    p[0] = (1/sqrt(c2))*sqrt((E[0]*E[0]) - (m[0]*m[0]*c4));
-    p[1] = (1/sqrt(c2))*sqrt((E[1]*E[1]) - (m[1]*m[1]*c4));
-
+    p[0] = sqrt((E[0]*E[0]) - (m[0]*m[0]*c4))*(1.0/pow(c2, 0.5));
+    p[1] = sqrt((E[1]*E[1]) - (m[1]*m[1]*c4))*(1.0/pow(c2, 0.5));
     
     ////////////////////////////////////////////////////////////////////////////////
     ////    E[2] is now solved via the solution of a quadratic equation
-
-    a = 4*p[0]*p[0]*c2*cos(theta_lab)*cos(theta_lab) - 4*Etotal*Etotal;
-    b = (4*Etotal*Etotal*Etotal) - (4*p[0]*p[0]*c2*Etotal) + (4*m[2]*m[2]*c4*Etotal) - (4*m[3]*m[3]*c4*Etotal);
-    c = (2*p[0]*p[0]*c2*Etotal*Etotal) - (2*m[2]*m[2]*c4*Etotal*Etotal) + (2*m[2]*m[2]*c4*p[0]*p[0]*c2) + (2*m[3]*m[3]*c4*Etotal*Etotal) - (2*m[3]*m[3]*c4*p[0]*p[0]*c2) + (2*m[3]*m[3]*c4*m[2]*m[2]*c4) - (Etotal*Etotal*Etotal*Etotal) - (p[0]*p[0]*p[0]*p[0]*c4) - (m[2]*m[2]*m[2]*m[2]*c4*c4) - (m[3]*m[3]*m[3]*m[3]*c4*c4) - (4*m[2]*m[2]*c4*p[0]*p[0]*c2*cos(theta_lab)*cos(theta_lab));
-
+    double a = 4*p[0]*p[0]*c2*cos(theta_lab_ejectile)*cos(theta_lab_ejectile) - 4*Etot*Etot;
+    double b = (4*Etot*Etot*Etot) - (4*p[0]*p[0]*c2*Etot) + (4*m[2]*m[2]*c4*Etot) - (4*m[3]*m[3]*c4*Etot);
+    double c = (2*p[0]*p[0]*c2*Etot*Etot) - (2*m[2]*m[2]*c4*Etot*Etot) + (2*m[2]*m[2]*c4*p[0]*p[0]*c2) + (2*m[3]*m[3]*c4*Etot*Etot) - (2*m[3]*m[3]*c4*p[0]*p[0]*c2) + (2*m[3]*m[3]*c4*m[2]*m[2]*c4) - (Etot*Etot*Etot*Etot) - (p[0]*p[0]*p[0]*p[0]*c4) - (m[2]*m[2]*m[2]*m[2]*c4*c4) - (m[3]*m[3]*m[3]*m[3]*c4*c4) - (4*m[2]*m[2]*c4*p[0]*p[0]*c2*cos(theta_lab_ejectile)*cos(theta_lab_ejectile));
+    
     ////    Total Energy, Kinetic Energy and Momentum of Ejectile
     E[2] = (- b - sqrt((b*b) - (4*a*c)))/(2*a);
     T[2] = E[2] - m[2]*c2;
-    p[2] = (1/sqrt(c2))*sqrt((E[2]*E[2]) - (m[2]*m[2]*c4));
-
+    p[2] = sqrt((E[2]*E[2]) - (m[2]*m[2]*c4))*(1.0/pow(c2, 0.5));
+    
     ////    Total Energy, Kinetic Energy and Momentum of Recoil
-    E[3] = Etotal - E[2];
+    E[3] = Etot - E[2];
     T[3] = E[3] - m[3]*c2;
-    p[3] = (1/sqrt(c2))*sqrt((E[3]*E[3]) - (m[3]*m[3]*c4));
-
+    p[3] = sqrt((E[3]*E[3]) - (m[3]*m[3]*c4))*(1.0/pow(c2, 0.5));
+    
     ////    Angle between beam axis and Recoil velocity
-    phi_lab = asin((p[2]/p[3])*sin(theta_lab)); // radians
-    PhiSCAT = phi_lab/0.0174532925; // deg
+    theta_lab_recoil = asin((p[2]/p[3])*sin(theta_lab_ejectile)); // radians
+    ThetaSCAT_recoil = theta_lab_recoil/0.0174532925; // deg
+    
+    ////    For backward-angled calculations
+    if(p[2]>p[0] && ThetaSCAT_ejectile<90.0)
+    {
+        ThetaSCAT_recoil = 180 - ThetaSCAT_recoil;
+    }
     
     bool printResults = false;
     
-    if (printResults)
+    if(printResults)
     {
-        cout << "///////////////////////////////" << endl;
-        cout << "////   Particle Massses    ////" << endl;
         
-        cout << "m[0]:    " << m[0] << " u"  << endl;
-        cout << "m[1]:    " << m[1] << " u"  << endl;
-        cout << "m[2]:    " << m[2] << " u"  << endl;
-        cout << "m[3]:    " << m[3] << " u"  << endl;
+        std::cout << "///////////////////////////////" << std::endl;
+        std::cout << "////   Particle Massses    ////" << std::endl;
         
-        cout << "///////////////////////" << endl;
-        cout << "////   Ejectile    ////" << endl;
-
-        cout << "Total Energy, E[2]:    " << E[2] << " MeV"  << endl;
-        cout << "Kinetic Energy, T[2]:    " << T[2] << " MeV"  << endl;
-        cout << "Momentum, p[2]:    " << p[2] << " MeV/c"  << endl;
-
+        std::cout << "m[0]:    " << m[0] << " u"  << std::endl;
+        std::cout << "m[1]:    " << m[1] << " u"  << std::endl;
+        std::cout << "m[2]:    " << m[2] << " u"  << std::endl;
+        std::cout << "m[3]:    " << m[3] << " u"  << std::endl;
         
-        cout << "///////////////////////" << endl;
-        cout << "////   Recoil    ////" << endl;
-        cout << "Total Energy, E[3]:    " << E[3] << " MeV"  << endl;
-        cout << "Kinetic Energy, T[3]:    " << T[3] << " MeV"  << endl;
-        cout << "Momentum, p[3]:    " << p[3] << " MeV/c"  << endl;
+        std::cout << "/////////////////////////" << std::endl;
+        std::cout << "////   Projectile    ////" << std::endl;
+        
+        std::cout << "Total Energy, E[0]:    " << E[0] << " MeV"  << std::endl;
+        std::cout << "Kinetic Energy, T[0]:    " << T[0] << " MeV"  << std::endl;
+        std::cout << "Momentum, p[0]:    " << p[0] << " MeV/c"  << std::endl;
         
         
-        cout << "   " << endl;
-        cout << "ThetaSCAT (angle of ejectile w.r.t. beam axis):    " << ThetaSCAT << " deg"  << endl;
-        cout << "PhiSCAT (angle of recoil w.r.t. beam axis):    " << PhiSCAT << " deg"  << endl;
+        std::cout << "///////////////////////" << std::endl;
+        std::cout << "////   Ejectile    ////" << std::endl;
+        
+        std::cout << "Total Energy, E[2]:    " << E[2] << " MeV"  << std::endl;
+        std::cout << "Kinetic Energy, T[2]:    " << T[2] << " MeV"  << std::endl;
+        std::cout << "Momentum, p[2]:    " << p[2] << " MeV/c"  << std::endl;
+        
+        
+        std::cout << "///////////////////////" << std::endl;
+        std::cout << "////   Recoil    ////" << std::endl;
+        std::cout << "Total Energy, E[3]:    " << E[3] << " MeV"  << std::endl;
+        std::cout << "Kinetic Energy, T[3]:    " << T[3] << " MeV"  << std::endl;
+        std::cout << "Momentum, p[3]:    " << p[3] << " MeV/c"  << std::endl;
+        
+        
+        std::cout << "   " << std::endl;
+        std::cout << "ThetaSCAT_ejectile (angle of ejectile w.r.t. beam axis):    " << ThetaSCAT_ejectile << " deg"  << std::endl;
+        std::cout << "ThetaSCAT_recoil (angle of recoil w.r.t. beam axis):    " << ThetaSCAT_recoil << " deg"  << std::endl;
+        
+        
+        //std::cout << "///////////////////////" << std::endl;
+        //std::cout << "////   Ejectile    ////" << std::endl;
+        /*
+         std::cout << "Total Energy, E[2]:    " << E[2] << " MeV"  << std::endl;
+         std::cout << "Momentum, p[2]:    " << p[2] << " MeV/c"  << std::endl;
+         std::cout << "Excitation Energy, Ex:    " << Ex << " MeV"  << std::endl;
+         std::cout << "Kinetic Energy, T[2]:    " << T[2] << " MeV"  << std::endl;
+         */
+        
+        //std::cout << "Kinetic Energy, T[3]:    " << T[3] << " MeV"  << std::endl;
+        //std::cout << "Q:    " << Q << " MeV"  << std::endl;
+        
+        //std::cout << "Momentum, E[2]:    " << E[2] << " MeV"  << std::endl;
+        //std::cout << "Momentum, E[3]:    " << E[3] << " MeV"  << std::endl;
+        //std::cout << "Momentum, Etot:    " << Etot << " MeV"  << std::endl;
+        
+        //Etot = E[0] + E[1] + Q - Ex;
+        //std::cout << "Calculated Ex:    " << Ex << " MeV"  << std::endl;
     }
-    
-    
-    
-    
 }
+
+
+void CalcEx(double *m, double *T, double *E, double *p, double Xpos, double theta, double &Ex, std::vector<double> momentumCalPars) {
+    
+    ////    Q-value calculation
+    double Q = (m[0] + m[1])*c2 - (m[2] + m[3])*c2; // MeV
+    
+    ////    Conversion of ejectile scattering angle from degrees to radians
+    double theta_lab = theta*0.017453292; // radians
+    
+    ////    Initial Total Energy Calculation
+    E[0] = T[0] + (m[0]*c2);
+    E[1] = T[1] + (m[1]*c2);
+    
+    ////    Initial Momentum Calculation
+    p[0] = sqrt((E[0]*E[0]) - (m[0]*m[0]*c4))*(1.0/pow(c2, 0.5));
+    p[1] = sqrt((E[1]*E[1]) - (m[1]*m[1]*c4))*(1.0/pow(c2, 0.5));
+    
+    p[2] = 0.0;
+    for(int i=0; i<(int) momentumCalPars.size(); i++)
+    {
+        p[2] += momentumCalPars[i]*(1.0/pow(c2, 0.5))*pow(Xpos, i);
+    }
+    E[2] = sqrt(p[2]*p[2]*c2 + (m[2]*m[2]*c4));
+    T[2] = E[2] - m[2]*c2;
+    
+    p[3] = sqrt((p[0]*p[0]) + (p[2]*p[2]) - 2*p[0]*p[2]*cos(theta_lab));
+    E[3] = sqrt(p[3]*p[3]*c2 + (m[3]*m[3]*c4));
+    T[3] = E[3] - m[3]*c2;
+    
+    Ex = E[0] + E[1] + Q - E[2] - E[3];
+}
+
+/*
+ double fExErrorFunction(double *x, double *par) {
+ 
+ double result = 0.0;
+ 
+ double p[3], pE[3];
+ 
+ double  sigma[3];
+ double  totalSigma = 0.0;
+ 
+ double  lowest = 0.0;
+ double  central = 0.0;
+ double  highest = 0.0;
+ 
+ m[0] = 4.0015061791;
+ m[1] = 15.994914619;
+ m[2] = 4.0015061791;
+ m[3] = 15.994914619;
+ 
+ p[0] = fitPar[0];
+ p[1] = fitPar[1];
+ p[2] = fitPar[2];
+ 
+ pE[0] = fitParError[0];
+ pE[1] = fitParError[1];
+ pE[2] = fitParError[2];
+ 
+ 
+ sigma[0] = pE[0];
+ sigma[1] = sqrt(pow(x[0], 2.0))*pE[1];
+ sigma[2] = pow(p[2], 2.0)*x[0]*2.0*(pE[2]/p[2]);
+ 
+ //sigma[0] = 0.0;
+ //sigma[1] = 0.0;
+ //sigma[2] = 0.0;
+ 
+ 
+ totalSigma = sqrt(pow(sigma[0], 2.0) + pow(sigma[1], 2.0) + pow(sigma[2], 2.0));
+ 
+ //std::cout << "totalSigma:    " << totalSigma << std::endl;
+ ThSCAT = 0.0;
+ 
+ CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2], fitPar[1], fitPar[0]);
+ lowest = Ex;
+ central = Ex;
+ highest = Ex;
+ 
+ ////////////////////////////////
+ ////    VERSION 1
+ 
+ CalcEx_Error(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2], fitPar[1], fitPar[0], totalSigma);
+ if(Ex<lowest){ lowest = Ex;}
+ if(Ex>highest){ highest = Ex;}
+ 
+ ////
+ 
+ CalcEx_Error(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2], fitPar[1], fitPar[0], -totalSigma);
+ if(Ex<lowest){ lowest = Ex;}
+ if(Ex>highest){ highest = Ex;}
+ 
+ result = (highest - lowest)/2.0;
+ //result = (highest - central);
+ result *= 1000.0;
+ 
+ return result;
+ 
+ }
+ */
+
+
+////////////////////////////////
+////    VERSION 2
+/*
+ CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] - fitParError[2], fitPar[1] - fitParError[1], fitPar[0] - fitParError[0]);
+ if(Ex<lowest){ lowest = Ex;}
+ if(Ex>highest){ highest = Ex;}
+ 
+ CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] - fitParError[2], fitPar[1] - fitParError[1], fitPar[0] + fitParError[0]);
+ if(Ex<lowest){ lowest = Ex;}
+ if(Ex>highest){ highest = Ex;}
+ 
+ CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] - fitParError[2], fitPar[1] + fitParError[1], fitPar[0] - fitParError[0]);
+ if(Ex<lowest){ lowest = Ex;}
+ if(Ex>highest){ highest = Ex;}
+ 
+ CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] - fitParError[2], fitPar[1] + fitParError[1], fitPar[0] + fitParError[0]);
+ if(Ex<lowest){ lowest = Ex;}
+ if(Ex>highest){ highest = Ex;}
+ 
+ ////
+ 
+ CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] + fitParError[2], fitPar[1] - fitParError[1], fitPar[0] - fitParError[0]);
+ if(Ex<lowest){ lowest = Ex;}
+ if(Ex>highest){ highest = Ex;}
+ 
+ CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] + fitParError[2], fitPar[1] - fitParError[1], fitPar[0] + fitParError[0]);
+ if(Ex<lowest){ lowest = Ex;}
+ if(Ex>highest){ highest = Ex;}
+ 
+ CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] + fitParError[2], fitPar[1] + fitParError[1], fitPar[0] - fitParError[0]);
+ if(Ex<lowest){ lowest = Ex;}
+ if(Ex>highest){ highest = Ex;}
+ 
+ CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] + fitParError[2], fitPar[1] + fitParError[1], fitPar[0] + fitParError[0]);
+ if(Ex<lowest){ lowest = Ex;}
+ if(Ex>highest){ highest = Ex;}
+ */
+
+
+
+
+

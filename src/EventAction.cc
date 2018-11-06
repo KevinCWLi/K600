@@ -125,8 +125,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
             }
         }
     }
-    
-    
+        
     //------------------------------------------------
     CLOVER_Number_vec.clear();
     CLOVER_NCrystalsTriggered_vec.clear();
@@ -220,6 +219,19 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
         }
     }
     
+    //------------------------------------------------
+    for(G4int i=0; i<5; i++)
+    {
+        for(G4int j=0; j<16; j++)
+        {
+            for(G4int k=0; k<8; k++)
+            {
+                CAKE_AA_hit[i][j][k] = false;
+            }
+        }
+    }
+
+    //------------------------------------------------
     for(G4int i=0; i<3; i++)
     {
         for (G4int k=0; k<PADDLE_TotalTimeSamples; k++)
@@ -244,16 +256,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
             if(j==0) VDC_Observables[j][k] = -1;
             else{VDC_Observables[j][k] = 0;}
         }
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    //      Input Variables
-    //      When inputDist is being filled by the PGA, then it must not be zero'd as it is filled before this point
-    /*
-    inputDist[0] = 0;
-    inputDist[1] = 0;
-    */
-    
+    }    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -268,19 +271,19 @@ void EventAction::EndOfEventAction(const G4Event* event)
     
     
     ////////////////////////////////////////////////////////
-    ////            RECOIL EXCITATION ENERGY
+    //              Initial Simulated Particles
     ////////////////////////////////////////////////////////
     
-    //recoilExcitationEnergy = G4RandGauss::shoot(recoilExcitationEnergy, 0.080*(1.0/2.35));
+    fRunAction->SetInitialParticleKineticEnergy(iSimulatedParticle_T);
     
-    
+    iSimulatedParticle_T.clear();
     
     ////////////////////////////////////////////////////////
     //
     //                CAKE DETECTOR ARRAY
     //
     ////////////////////////////////////////////////////////
-    
+    /*
     for(G4int i=0; i<5; i++)
     {
         for(G4int k=0; k<CAKE_TotalTimeSamples; k++)
@@ -339,7 +342,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
             }
         }
     }
-    
+    */
     
     ////////////////////////////////////////////////////////
     //
@@ -387,18 +390,6 @@ void EventAction::EndOfEventAction(const G4Event* event)
             }
         }
     }
-    
-    ////////////////////////////////////////////////////////
-    //
-    //          Initial Particle Kinetic Energy
-    //
-    ////////////////////////////////////////////////////////
-
-    analysisManager->FillNtupleDColumn(0, 0, initialParticleKineticEnergy);
-    analysisManager->FillNtupleDColumn(0, 1, initialParticleKineticEnergy_COM);
-
-    analysisManager->FillNtupleDColumn(0, 2, initialParticleTheta);
-    analysisManager->FillNtupleDColumn(0, 3, initialParticlePhi);
 
     ////////////////////////////////////////////////////////
     //
@@ -829,35 +820,64 @@ void EventAction::EndOfEventAction(const G4Event* event)
     {
         if(GA_GenInputVar)
         {
+            //--------------------------------------------------------------------
+            fRunAction->SetNReactionProducts(nReactionProducts);
+            fRunAction->SetReaction_Z(reaction_Z);
+            fRunAction->SetReaction_A(reaction_A);
+            fRunAction->SetReaction_P(reaction_P);
+            fRunAction->SetReaction_T(reaction_T);
             
-            double theta_projX = atan((tan(inputDist[0]*deg)/rad)*rad*(cos(inputDist[1]*deg)/rad)*rad)/deg; // deg
-            double theta_projY = atan((tan(inputDist[0]*deg)/rad)*rad*(sin(inputDist[1]*deg)/rad)*rad)/deg; // deg
+            fRunAction->SetReaction_theta_LAB(reaction_theta_LAB);
+            fRunAction->SetReaction_phi_LAB(reaction_phi_LAB);
 
-            //if(inputDist[1]>180.0) theta_projY = -theta_projY;
-                
-            ////////////////////////////////
-            ////    Input Variables
-            analysisManager->FillNtupleDColumn(2, 0, inputDist[0]);
-            analysisManager->FillNtupleDColumn(2, 1, inputDist[1]);
-            analysisManager->FillNtupleDColumn(2, 2, inputDist[2]);
-            analysisManager->FillNtupleDColumn(2, 3, initialParticleKineticEnergy);
-            analysisManager->FillNtupleDColumn(2, 4, initialParticleKineticEnergy_COM);
+            //--------------------------------------------------------------------
+            fRunAction->SetNDecayProducts(nReactionProducts);
+            fRunAction->SetDecay_Z(decay_Z);
+            fRunAction->SetDecay_A(decay_A);
+            fRunAction->SetDecay_P(decay_P);
+            fRunAction->SetDecay_T(decay_T);
             
-            //analysisManager->FillNtupleDColumn(2, 2, theta_projX);
-            //analysisManager->FillNtupleDColumn(2, 3, theta_projY);
-            
+            fRunAction->SetDecay_theta_LAB(decay_theta_LAB);
+            fRunAction->SetDecay_phi_LAB(decay_phi_LAB);
+            fRunAction->SetDecay_theta_recoilCOM(decay_theta_recoilCOM);
+            fRunAction->SetDecay_phi_recoilCOM(decay_phi_recoilCOM);
+            fRunAction->SetDecay_theta_reactionCOM(decay_theta_reactionCOM);
+            fRunAction->SetDecay_phi_reactionCOM(decay_phi_reactionCOM);
 
-            
-            analysisManager->AddNtupleRow(2);
-            
-            //G4cout << "Here is the value of inputDist[0]:    -->     " << inputDist[0] << G4endl;
-            //G4cout << "Here is the value of inputDist[1]:    -->     " << inputDist[1] << G4endl;
+            //--------------------------------------------------------------------
+            std::vector<int>    ga_CAKE_detNr;
+            std::vector<int>    ga_CAKE_ringNr;
+            std::vector<int>    ga_CAKE_sectorNr;
+    
+            for(G4int i=0; i<5; i++)
+            {
+                for(G4int j=0; j<16; j++)
+                {
+                    for(G4int k=0; k<8; k++)
+                    {
+                        if(CAKE_AA_hit[i][j][k])
+                        {
+                            ga_CAKE_detNr.push_back(i);
+                            ga_CAKE_ringNr.push_back(j);
+                            ga_CAKE_sectorNr.push_back(k);
+                        }
+                    }
+                }
+            }
+
+            //--------------------------------------------------------------------
+            fRunAction->SetGA_CAKE_detNr(ga_CAKE_detNr);
+            fRunAction->SetGA_CAKE_ringNr(ga_CAKE_ringNr);
+            fRunAction->SetGA_CAKE_sectorNr(ga_CAKE_sectorNr);
+
+            //--------------------------------------------------------------------
+            analysisManager->AddNtupleRow(0);
         }
         
         
         ////////////////////////////////////////////////////////////
         ////    Creating Distribution txt file for Data Sorting
-        
+        /*
         if(GA_GenAngDist)
         {
             if(GA_CAKE)
@@ -869,7 +889,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
                     fileV_MMM.open(fileNameHolder, std::ios_base::app);
                 }
                 
-                for(G4int i=0; i<512; i++)  //  i<640 for all 5 silicons
+                for(G4int i=0; i<640; i++)  //  i<640 for all 5 silicons
                 {
                     if(GA_CAKE_AA[i][0]!=0)
                     {
@@ -945,13 +965,9 @@ void EventAction::EndOfEventAction(const G4Event* event)
                 {
                     fileV_MMM.close();
                 }
-                
             }
-
-            
-            
         }
-        
+        */
         
         
         
@@ -985,7 +1001,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
                 
                 ////    For the Silicon Array
                 //for(G4int i=0; i<640; i++)  //  i<640 for all 5 silicons
-                for(G4int i=0; i<512; i++)  //  i<640 for all 5 silicons
+                for(G4int i=0; i<640; i++)  //  i<640 for all 5 silicons
                 {
                     if(i%128 == 0) file1 << "   " << endl;
                     

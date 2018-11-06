@@ -71,9 +71,89 @@ public:
     virtual void   EndOfRunAction(const G4Run*);
     
     //--------------------------------------------------------------------------------
+    //      Initial Simulated Particles
+    std::vector<double>   iSimulatedParticle_T; // MeV
+    
+    void SetInitialParticleKineticEnergy(std::vector<double> vec) {iSimulatedParticle_T = vec;};
+    
+    //--------------------------------------------------------------------------------
+    //      CAKE
+    std::vector<int>    ga_CAKE_detNr;
+    std::vector<int>    ga_CAKE_ringNr;
+    std::vector<int>    ga_CAKE_sectorNr;
+    
+    void SetGA_CAKE_detNr(std::vector<int> vec)     {ga_CAKE_detNr = vec;};
+    void SetGA_CAKE_ringNr(std::vector<int> vec)    {ga_CAKE_ringNr = vec;};
+    void SetGA_CAKE_sectorNr(std::vector<int> vec)  {ga_CAKE_sectorNr = vec;};
+
+    //--------------------------------------------------------------------------------
+    //      Reaction variables
+    std::vector<int>    nReactionProducts;
+    std::vector<int>    reaction_Z;
+    std::vector<double> reaction_A;
+    std::vector<double> reaction_P;
+    std::vector<double> reaction_T;
+    
+    void SetNReactionProducts(int n)
+    {
+        nReactionProducts.clear();
+        nReactionProducts.push_back(n);
+    };
+
+    void SetReaction_Z(std::vector<int> vec)    {reaction_Z = vec;};
+    void SetReaction_A(std::vector<double> vec) {reaction_A = vec;};
+    void SetReaction_P(std::vector<double> vec) {reaction_P = vec;};
+    void SetReaction_T(std::vector<double> vec) {reaction_T = vec;};
+
+    std::vector<double> reaction_theta_LAB;
+    std::vector<double> reaction_phi_LAB;
+    std::vector<double> reaction_theta_reactionCOM;
+    std::vector<double> reaction_phi_reactionCOM;
+    
+    void SetReaction_theta_LAB(std::vector<double> vec)         {reaction_theta_LAB = vec;};
+    void SetReaction_phi_LAB(std::vector<double> vec)           {reaction_phi_LAB = vec;};
+    void SetReaction_theta_reactionCOM(std::vector<double> vec) {reaction_theta_reactionCOM = vec;};
+    void SetReaction_phi_reactionCOM(std::vector<double> vec)   {reaction_phi_reactionCOM = vec;};
+
+    //--------------------------------------------------------------------------------
+    //      Decay variables
+    std::vector<int>    nDecayProducts;
+    std::vector<int>    decay_Z;
+    std::vector<double> decay_A;
+    std::vector<double> decay_P;
+    std::vector<double> decay_T;
+
+    void SetNDecayProducts(int n)
+    {
+        nDecayProducts.clear();
+        nDecayProducts.push_back(n);
+    };
+
+    void SetDecay_Z(std::vector<int> vec)       {decay_Z = vec;};
+    void SetDecay_A(std::vector<double> vec)    {decay_A = vec;};
+    void SetDecay_P(std::vector<double> vec)    {decay_P = vec;};
+    void SetDecay_T(std::vector<double> vec)    {decay_T = vec;};
+
+    std::vector<double> decay_theta_LAB;
+    std::vector<double> decay_phi_LAB;
+    std::vector<double> decay_theta_reactionCOM;
+    std::vector<double> decay_phi_reactionCOM;
+    std::vector<double> decay_theta_recoilCOM;
+    std::vector<double> decay_phi_recoilCOM;
+
+    void SetDecay_theta_LAB(std::vector<double> vec)            {decay_theta_LAB = vec;};
+    void SetDecay_phi_LAB(std::vector<double> vec)              {decay_phi_LAB = vec;};
+    void SetDecay_theta_recoilCOM(std::vector<double> vec)      {decay_theta_recoilCOM = vec;};
+    void SetDecay_phi_recoilCOM(std::vector<double> vec)        {decay_phi_recoilCOM = vec;};
+    void SetDecay_theta_reactionCOM(std::vector<double> vec)    {decay_theta_reactionCOM = vec;};
+    void SetDecay_phi_reactionCOM(std::vector<double> vec)      {decay_phi_reactionCOM = vec;};
+    
+    
+    //--------------------------------------------------------------------------------
     //      CLOVER detectors
-    std::vector<int> CLOVER_iD;
-    std::vector<int> CLOVER_nCrystalsTriggered;
+    std::vector<int>    CLOVER_eventFold;
+    std::vector<int>    CLOVER_iD;
+    std::vector<int>    CLOVER_nCrystalsTriggered;
     std::vector<double> CLOVER_energyPerCrystal;
     std::vector<double> CLOVER_energy;
     std::vector<double> CLOVER_initialEnergy;
@@ -86,8 +166,14 @@ public:
     std::vector<double> CLOVER_initialParticleTheta;
     std::vector<double> CLOVER_initialParticlePhi;
 
-    std::vector<int> CLOVER_BGOCrystalsTriggered;
+    std::vector<int>    CLOVER_BGOCrystalsTriggered;
 
+    void SetCLOVER_EventFold(int n)
+    {
+        CLOVER_eventFold.clear();
+        CLOVER_eventFold.push_back(n);
+    };
+    
     void SetCLOVER_IDs(std::vector<int> vec) {CLOVER_iD = vec;};
     void SetCLOVER_NCrystalsTriggered(std::vector<int> vec) {CLOVER_nCrystalsTriggered = vec;};
     void SetCLOVER_EnergiesPerCrystal(std::vector<double> vec) {CLOVER_energyPerCrystal = vec;};
@@ -106,7 +192,8 @@ public:
 
     //--------------------------------------------------------------------------------
     //      LaBr3Ce detectors
-    std::vector<int> laBr3Ce_iD;
+    std::vector<int>    laBr3Ce_eventFold;
+    std::vector<int>    laBr3Ce_iD;
     std::vector<double> laBr3Ce_energy;
     std::vector<double> laBr3Ce_detectorTheta;
     std::vector<double> laBr3Ce_detectorPhi;
@@ -116,6 +203,12 @@ public:
     std::vector<double> laBr3Ce_yPos;
     std::vector<double> laBr3Ce_zPos;
     
+    void SetLaBr3Ce_EventFold(int n)
+    {
+        laBr3Ce_eventFold.clear();
+        laBr3Ce_eventFold.push_back(n);
+    };
+
     void SetLaBr3Ce_IDs(std::vector<int> vec) {laBr3Ce_iD = vec;};
     void SetLaBr3Ce_Energies(std::vector<double> vec) {laBr3Ce_energy = vec;};
     void SetLaBr3Ce_Thetas(std::vector<double> vec) {laBr3Ce_theta = vec;};
