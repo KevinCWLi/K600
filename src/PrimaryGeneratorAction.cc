@@ -457,17 +457,17 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     double mx, my, mz;
     
-    /*
+    
     mx = sin(decay_theta_LAB[0]*deg)*cos(decay_phi_LAB[0]*deg);
     my = sin(decay_theta_LAB[0]*deg)*sin(decay_phi_LAB[0]*deg);
     mz = cos(decay_theta_LAB[0]*deg);
-    */
     
     
+    /*
     mx = sin(decay_theta_recoilCOM[0]*deg)*cos(decay_phi_recoilCOM[0]*deg);
     my = sin(decay_theta_recoilCOM[0]*deg)*sin(decay_phi_recoilCOM[0]*deg);
     mz = cos(decay_theta_recoilCOM[0]*deg);
-    
+    */
     
     /*
     double initialTheta = acos(1 - (2.0*G4UniformRand()))/deg;
