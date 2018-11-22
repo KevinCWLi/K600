@@ -219,11 +219,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     CAKE_AllPresent_Override = true;
     CAKE_AllAbsent_Override = false;
     
+    double distance_CAKE_arm = 59.54;
+    
     ////    STANDARD PR226 - Assuming target at origin
     //offset_CAKE_BeamAxis = -131.3217600; // mm
     
     ////    PR226 - Error estimation
-    offset_CAKE_BeamAxis = -131.3217600 + 3.0; // mm, Standard with the +3mm target frame offset
+    //offset_CAKE_BeamAxis = -131.3217600 + 3.0; // mm, Standard with the +3mm target frame offset
 
     ////    Phil's experiment
     //offset_CAKE_BeamAxis = -130.5217600 + 2.0; // mm
@@ -235,6 +237,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //  MT2:    -2.0
     //  MT3:    +2.0
 
+    offset_CAKE_BeamAxis = -131.3217600 - 55.5 + distance_CAKE_arm;
 
     //  CAKE 1
     CAKE_Presence[0] = true;
