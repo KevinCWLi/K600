@@ -93,6 +93,7 @@ public:
     std::vector<double> reaction_A;
     std::vector<double> reaction_P;
     std::vector<double> reaction_T;
+    std::vector<double> reaction_Ex;
     
     void SetNReactionProducts(int n)
     {
@@ -104,6 +105,7 @@ public:
     void SetReaction_A(std::vector<double> vec) {reaction_A = vec;};
     void SetReaction_P(std::vector<double> vec) {reaction_P = vec;};
     void SetReaction_T(std::vector<double> vec) {reaction_T = vec;};
+    void SetReaction_Ex(std::vector<double> vec) {reaction_Ex = vec;};
 
     std::vector<double> reaction_theta_LAB;
     std::vector<double> reaction_phi_LAB;

@@ -826,6 +826,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
             fRunAction->SetReaction_A(reaction_A);
             fRunAction->SetReaction_P(reaction_P);
             fRunAction->SetReaction_T(reaction_T);
+            fRunAction->SetReaction_Ex(reaction_Ex);
             
             fRunAction->SetReaction_theta_LAB(reaction_theta_LAB);
             fRunAction->SetReaction_phi_LAB(reaction_phi_LAB);

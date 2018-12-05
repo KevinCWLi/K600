@@ -366,6 +366,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     std::vector<double> reaction_A{1.00727647, 14.00324199, 3.01550071, 12}; // amu
     auto reaction_P = std::vector<double>(4, 0.0);
     std::vector<double> reaction_T{140.0, 0.0, 0.0, 0.0}; // MeV
+    std::vector<double> reaction_Ex{0.0, 0.0, 0.0, 0.0}; // MeV
     auto reaction_E = std::vector<double>(4, 0.0);
     
     //------------------------------------------------------------------------------------
@@ -393,6 +394,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //      Executing the Binary Relativistic Kinematics code
     BiRelKin(&reaction_A[0], &reaction_T[0], &reaction_E[0], &reaction_P[0], reaction_theta_LAB[2], reaction_theta_LAB[3], recoilExcitationEnergy);
     
+    reaction_Ex[3] = recoilExcitationEnergy;
+    
     //------------------------------------------------------------------------------------
     //      Filling the vectors in the EventAction object
     fEventAction->SetNReactionProducts(nReactionProducts);
@@ -400,6 +403,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fEventAction->SetReaction_A(reaction_A);
     fEventAction->SetReaction_P(reaction_P);
     fEventAction->SetReaction_T(reaction_T);
+    fEventAction->SetReaction_Ex(reaction_Ex);
     
     fEventAction->SetReaction_theta_LAB(reaction_theta_LAB);
     fEventAction->SetReaction_phi_LAB(reaction_phi_LAB);
@@ -1425,50 +1429,54 @@ void PrimaryGeneratorAction::CalculateBinaryRelativisticKinematics(double theta_
 
 void PrimaryGeneratorAction::CalculateBinaryDecayKinematics(double eX, double eX_residual, double sepE, std::vector<double> initialScatteringReactionMomentum, std::vector<double> initialScatteringReactionEnergy, std::vector<double> decay_A, double theta_recoil_LAB, double phi_recoil_LAB, std::vector<double>& decay_theta_recoilCOM, std::vector<double>& decay_phi_recoilCOM, std::vector<double>& decay_theta_LAB, std::vector<double>& decay_phi_LAB, std::vector<double>& decay_T)
 {
-    //------------------------------------------------
-    G4ThreeVector recoilCOM_P_v3 = initialScatteringReactionMomentum[3]*G4ThreeVector(sin(theta_recoil_LAB*deg)*cos(phi_recoil_LAB*deg), sin(theta_recoil_LAB*deg)*sin(phi_recoil_LAB*deg), cos(theta_recoil_LAB*deg));
-    G4LorentzVector recoilCOM_P_v4 = G4LorentzVector(recoilCOM_P_v3, initialScatteringReactionEnergy[3]/pow(c2, 0.5));
-    double betaRecoil = recoilCOM_P_v4.beta();
-    G4ThreeVector boostVector_recoilCOMtoLAB = betaRecoil*(recoilCOM_P_v3.unit());
-    
-    //------------------------------------------------
-    double sumOfIndividualMasses = decay_A[0] + decay_A[1]; // amu
-    decay_T[0] = (eX - sepE - eX_residual)*(decay_A[1]/sumOfIndividualMasses); // MeV
-    decay_T[1] = (eX - sepE - eX_residual)*(decay_A[0]/sumOfIndividualMasses); // MeV
-
-    double decay_0_E = decay_T[0] + (decay_A[0]*c2);
-    double decay_0_P = (1.0/pow(c2, 0.5))*sqrt(pow(decay_0_E, 2.0) - pow(decay_A[0]*c2, 2.0));
-    
-    double decay_1_E = decay_T[1] + (decay_A[1]*c2);
-    double decay_1_P = (1.0/pow(c2, 0.5))*sqrt(pow(decay_1_E, 2.0) - pow(decay_A[1]*c2, 2.0));
-    
-    //------------------------------------------------
-    G4ThreeVector decay_0_P_v3 = decay_0_P*G4ThreeVector(sin(decay_theta_recoilCOM[0]*deg)*cos(decay_phi_recoilCOM[0]*deg), sin(decay_theta_recoilCOM[0]*0.0174533)*sin(decay_phi_recoilCOM[0]*deg), cos(decay_theta_recoilCOM[0]*deg));
-    G4LorentzVector decay_0_P_v4 = G4LorentzVector(decay_0_P_v3, decay_0_E/pow(c2, 0.5));
-    
-    G4ThreeVector decay_1_P_v3 = decay_1_P*G4ThreeVector(sin(decay_theta_recoilCOM[1]*deg)*cos(decay_phi_recoilCOM[1]*deg), sin(decay_theta_recoilCOM[1]*0.0174533)*sin(decay_phi_recoilCOM[1]*deg), cos(decay_theta_recoilCOM[1]*deg));
-    G4LorentzVector decay_1_P_v4 = G4LorentzVector(decay_1_P_v3, decay_1_E/pow(c2, 0.5));
-    
-    //------------------------------------------------
-    decay_0_P_v4.boost(boostVector_recoilCOMtoLAB);
-    decay_theta_LAB[0] = decay_0_P_v4.vect().theta()/deg;
-    
-    decay_1_P_v4.boost(boostVector_recoilCOMtoLAB);
-    decay_theta_LAB[1] = decay_1_P_v4.vect().theta()/deg;
-    
-    //------------------------------------------------
-    decay_phi_LAB[0] = decay_0_P_v4.vect().phi()/deg;
-    
-    while(decay_phi_LAB[0]<0.0)
+    if(eX - eX_residual - sepE >= 0.0) // Energy conservation
     {
-        decay_phi_LAB[0] += 360.0;
-    }
-    
-    decay_phi_LAB[1] = decay_phi_LAB[0] - 180.0;
-    
-    while(decay_phi_LAB[1]<0.0)
-    {
-        decay_phi_LAB[1] += 360.0;
+        
+        //------------------------------------------------
+        G4ThreeVector recoilCOM_P_v3 = initialScatteringReactionMomentum[3]*G4ThreeVector(sin(theta_recoil_LAB*deg)*cos(phi_recoil_LAB*deg), sin(theta_recoil_LAB*deg)*sin(phi_recoil_LAB*deg), cos(theta_recoil_LAB*deg));
+        G4LorentzVector recoilCOM_P_v4 = G4LorentzVector(recoilCOM_P_v3, initialScatteringReactionEnergy[3]/pow(c2, 0.5));
+        double betaRecoil = recoilCOM_P_v4.beta();
+        G4ThreeVector boostVector_recoilCOMtoLAB = betaRecoil*(recoilCOM_P_v3.unit());
+        
+        //------------------------------------------------
+        double sumOfIndividualMasses = decay_A[0] + decay_A[1]; // amu
+        decay_T[0] = (eX - sepE - eX_residual)*(decay_A[1]/sumOfIndividualMasses); // MeV
+        decay_T[1] = (eX - sepE - eX_residual)*(decay_A[0]/sumOfIndividualMasses); // MeV
+        
+        double decay_0_E = decay_T[0] + (decay_A[0]*c2);
+        double decay_0_P = (1.0/pow(c2, 0.5))*sqrt(pow(decay_0_E, 2.0) - pow(decay_A[0]*c2, 2.0));
+        
+        double decay_1_E = decay_T[1] + (decay_A[1]*c2);
+        double decay_1_P = (1.0/pow(c2, 0.5))*sqrt(pow(decay_1_E, 2.0) - pow(decay_A[1]*c2, 2.0));
+        
+        //------------------------------------------------
+        G4ThreeVector decay_0_P_v3 = decay_0_P*G4ThreeVector(sin(decay_theta_recoilCOM[0]*deg)*cos(decay_phi_recoilCOM[0]*deg), sin(decay_theta_recoilCOM[0]*0.0174533)*sin(decay_phi_recoilCOM[0]*deg), cos(decay_theta_recoilCOM[0]*deg));
+        G4LorentzVector decay_0_P_v4 = G4LorentzVector(decay_0_P_v3, decay_0_E/pow(c2, 0.5));
+        
+        G4ThreeVector decay_1_P_v3 = decay_1_P*G4ThreeVector(sin(decay_theta_recoilCOM[1]*deg)*cos(decay_phi_recoilCOM[1]*deg), sin(decay_theta_recoilCOM[1]*0.0174533)*sin(decay_phi_recoilCOM[1]*deg), cos(decay_theta_recoilCOM[1]*deg));
+        G4LorentzVector decay_1_P_v4 = G4LorentzVector(decay_1_P_v3, decay_1_E/pow(c2, 0.5));
+        
+        //------------------------------------------------
+        decay_0_P_v4.boost(boostVector_recoilCOMtoLAB);
+        decay_theta_LAB[0] = decay_0_P_v4.vect().theta()/deg;
+        
+        decay_1_P_v4.boost(boostVector_recoilCOMtoLAB);
+        decay_theta_LAB[1] = decay_1_P_v4.vect().theta()/deg;
+        
+        //------------------------------------------------
+        decay_phi_LAB[0] = decay_0_P_v4.vect().phi()/deg;
+        
+        while(decay_phi_LAB[0]<0.0)
+        {
+            decay_phi_LAB[0] += 360.0;
+        }
+        
+        decay_phi_LAB[1] = decay_phi_LAB[0] - 180.0;
+        
+        while(decay_phi_LAB[1]<0.0)
+        {
+            decay_phi_LAB[1] += 360.0;
+        }
     }
 }
 

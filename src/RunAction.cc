@@ -124,6 +124,7 @@ RunAction::RunAction()
     analysisManager->CreateNtupleDColumn(0, "reaction_A", reaction_A);
     analysisManager->CreateNtupleDColumn(0, "reaction_P", reaction_P);
     analysisManager->CreateNtupleDColumn(0, "reaction_T", reaction_T);
+    analysisManager->CreateNtupleDColumn(0, "reaction_Ex", reaction_Ex);
     analysisManager->CreateNtupleDColumn(0, "reaction_theta_LAB", reaction_theta_LAB);
     analysisManager->CreateNtupleDColumn(0, "reaction_phi_LAB", reaction_phi_LAB);
     analysisManager->CreateNtupleDColumn(0, "reaction_theta_reactionCOM", reaction_theta_reactionCOM);
