@@ -443,6 +443,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }
     
     //------------------------------------------------------------------------------------
+    reaction_P = std::vector<double>(4, 0.0);
     CalculateBinaryDecayKinematics(recoilExcitationEnergy, 0.0, 7.36659, reaction_P, reaction_E, decay_A, reaction_theta_LAB[3], reaction_phi_LAB[3], decay_theta_recoilCOM, decay_phi_recoilCOM, decay_theta_LAB, decay_phi_LAB, decay_T);
     
     //------------------------------------------------------------------------------------

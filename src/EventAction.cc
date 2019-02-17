@@ -867,9 +867,9 @@ void EventAction::EndOfEventAction(const G4Event* event)
             }
 
             //--------------------------------------------------------------------
-            fRunAction->SetGA_CAKE_detNr(ga_CAKE_detNr);
-            fRunAction->SetGA_CAKE_ringNr(ga_CAKE_ringNr);
-            fRunAction->SetGA_CAKE_sectorNr(ga_CAKE_sectorNr);
+            fRunAction->SetCAKE_detNr(ga_CAKE_detNr);
+            fRunAction->SetCAKE_ringNr(ga_CAKE_ringNr);
+            fRunAction->SetCAKE_sectorNr(ga_CAKE_sectorNr);
 
             //--------------------------------------------------------------------
             analysisManager->AddNtupleRow(0);

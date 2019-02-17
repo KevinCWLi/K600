@@ -44,7 +44,15 @@ void BiRelKin(double *m, double *T, double *E, double *p, double ThetaSCAT_eject
     double c = (2*p[0]*p[0]*c2*Etot*Etot) - (2*m[2]*m[2]*c4*Etot*Etot) + (2*m[2]*m[2]*c4*p[0]*p[0]*c2) + (2*m[3]*m[3]*c4*Etot*Etot) - (2*m[3]*m[3]*c4*p[0]*p[0]*c2) + (2*m[3]*m[3]*c4*m[2]*m[2]*c4) - (Etot*Etot*Etot*Etot) - (p[0]*p[0]*p[0]*p[0]*c4) - (m[2]*m[2]*m[2]*m[2]*c4*c4) - (m[3]*m[3]*m[3]*m[3]*c4*c4) - (4*m[2]*m[2]*c4*p[0]*p[0]*c2*cos(theta_lab_ejectile)*cos(theta_lab_ejectile));
     
     ////    Total Energy, Kinetic Energy and Momentum of Ejectile
-    E[2] = (- b - sqrt((b*b) - (4*a*c)))/(2*a);
+    if(ThetaSCAT_ejectile<90.0)
+    {
+        E[2] = (- b - sqrt((b*b) - (4*a*c)))/(2*a);
+    }
+    else
+    {
+        E[2] = (- b + sqrt((b*b) - (4*a*c)))/(2*a);
+    }
+    
     T[2] = E[2] - m[2]*c2;
     p[2] = sqrt((E[2]*E[2]) - (m[2]*m[2]*c4))*(1.0/pow(c2, 0.5));
     
@@ -125,6 +133,95 @@ void BiRelKin(double *m, double *T, double *E, double *p, double ThetaSCAT_eject
     }
 }
 
+double CalculateEjectileEnergy(double mass_projectile_amu, double mass_target_amu, double mass_ejectile_amu, double mass_recoil_amu, double beamEnergy_MeV, double recoilExcitationEnergy_MeV, double ejectilePolarAngle_labFrame_deg)
+{
+    double m[4];
+    double T[4];
+    double E[4];
+    double p[4];
+    
+    ////    Excitation of the Recoil Nucleus
+    double Ex; // MeV
+    
+    ////    theta_ejectile is the angle of the Ejectile with respect to the beam axis
+    double theta_ejectile; // deg
+    
+    ////    theta_recoil is the angle of the Recoil with respect to the beam axis
+    double theta_recoil; // deg
+    
+    for(int i=0; i<4; i++)
+    {
+        m[i] = 0.0;
+        T[i] = 0.0;
+        E[i] = 0.0;
+        p[i] = 0.0;
+    }
+    
+    ////    These are the input variables
+    m[0] = mass_projectile_amu;
+    m[1] = mass_target_amu;
+    m[2] = mass_ejectile_amu;
+    m[3] = mass_recoil_amu;
+    
+    ////    Projectile/Beam Energy (Lab Frame)
+    T[0] = beamEnergy_MeV;
+    
+    ////    Target Energy (Lab Frame)
+    T[1] = 0.0;
+    
+    theta_ejectile = ejectilePolarAngle_labFrame_deg; // deg
+    
+    Ex = recoilExcitationEnergy_MeV; // MeV
+    
+    BiRelKin(m, T, E, p, theta_ejectile, theta_recoil, Ex);
+    
+    return T[2];
+}
+
+double CalculateRecoilEnergy(double mass_projectile_amu, double mass_target_amu, double mass_ejectile_amu, double mass_recoil_amu, double beamEnergy_MeV, double recoilExcitationEnergy_MeV, double ejectilePolarAngle_labFrame_deg)
+{
+    double m[4];
+    double T[4];
+    double E[4];
+    double p[4];
+    
+    ////    Excitation of the Recoil Nucleus
+    double Ex; // MeV
+    
+    ////    theta_ejectile is the angle of the Ejectile with respect to the beam axis
+    double theta_ejectile; // deg
+    
+    ////    theta_recoil is the angle of the Recoil with respect to the beam axis
+    double theta_recoil; // deg
+    
+    for(int i=0; i<4; i++)
+    {
+        m[i] = 0.0;
+        T[i] = 0.0;
+        E[i] = 0.0;
+        p[i] = 0.0;
+    }
+    
+    ////    These are the input variables
+    m[0] = mass_projectile_amu;
+    m[1] = mass_target_amu;
+    m[2] = mass_ejectile_amu;
+    m[3] = mass_recoil_amu;
+    
+    ////    Projectile/Beam Energy (Lab Frame)
+    T[0] = beamEnergy_MeV;
+    
+    ////    Target Energy (Lab Frame)
+    T[1] = 0.0;
+    
+    theta_ejectile = ejectilePolarAngle_labFrame_deg; // deg
+    
+    Ex = recoilExcitationEnergy_MeV; // MeV
+    
+    BiRelKin(m, T, E, p, theta_ejectile, theta_recoil, Ex);
+    
+    return T[3];
+}
 
 void CalcEx(double *m, double *T, double *E, double *p, double Xpos, double theta, double &Ex, std::vector<double> momentumCalPars) {
     
@@ -156,115 +253,6 @@ void CalcEx(double *m, double *T, double *E, double *p, double Xpos, double thet
     
     Ex = E[0] + E[1] + Q - E[2] - E[3];
 }
-
-/*
- double fExErrorFunction(double *x, double *par) {
- 
- double result = 0.0;
- 
- double p[3], pE[3];
- 
- double  sigma[3];
- double  totalSigma = 0.0;
- 
- double  lowest = 0.0;
- double  central = 0.0;
- double  highest = 0.0;
- 
- m[0] = 4.0015061791;
- m[1] = 15.994914619;
- m[2] = 4.0015061791;
- m[3] = 15.994914619;
- 
- p[0] = fitPar[0];
- p[1] = fitPar[1];
- p[2] = fitPar[2];
- 
- pE[0] = fitParError[0];
- pE[1] = fitParError[1];
- pE[2] = fitParError[2];
- 
- 
- sigma[0] = pE[0];
- sigma[1] = sqrt(pow(x[0], 2.0))*pE[1];
- sigma[2] = pow(p[2], 2.0)*x[0]*2.0*(pE[2]/p[2]);
- 
- //sigma[0] = 0.0;
- //sigma[1] = 0.0;
- //sigma[2] = 0.0;
- 
- 
- totalSigma = sqrt(pow(sigma[0], 2.0) + pow(sigma[1], 2.0) + pow(sigma[2], 2.0));
- 
- //std::cout << "totalSigma:    " << totalSigma << std::endl;
- ThSCAT = 0.0;
- 
- CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2], fitPar[1], fitPar[0]);
- lowest = Ex;
- central = Ex;
- highest = Ex;
- 
- ////////////////////////////////
- ////    VERSION 1
- 
- CalcEx_Error(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2], fitPar[1], fitPar[0], totalSigma);
- if(Ex<lowest){ lowest = Ex;}
- if(Ex>highest){ highest = Ex;}
- 
- ////
- 
- CalcEx_Error(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2], fitPar[1], fitPar[0], -totalSigma);
- if(Ex<lowest){ lowest = Ex;}
- if(Ex>highest){ highest = Ex;}
- 
- result = (highest - lowest)/2.0;
- //result = (highest - central);
- result *= 1000.0;
- 
- return result;
- 
- }
- */
-
-
-////////////////////////////////
-////    VERSION 2
-/*
- CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] - fitParError[2], fitPar[1] - fitParError[1], fitPar[0] - fitParError[0]);
- if(Ex<lowest){ lowest = Ex;}
- if(Ex>highest){ highest = Ex;}
- 
- CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] - fitParError[2], fitPar[1] - fitParError[1], fitPar[0] + fitParError[0]);
- if(Ex<lowest){ lowest = Ex;}
- if(Ex>highest){ highest = Ex;}
- 
- CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] - fitParError[2], fitPar[1] + fitParError[1], fitPar[0] - fitParError[0]);
- if(Ex<lowest){ lowest = Ex;}
- if(Ex>highest){ highest = Ex;}
- 
- CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] - fitParError[2], fitPar[1] + fitParError[1], fitPar[0] + fitParError[0]);
- if(Ex<lowest){ lowest = Ex;}
- if(Ex>highest){ highest = Ex;}
- 
- ////
- 
- CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] + fitParError[2], fitPar[1] - fitParError[1], fitPar[0] - fitParError[0]);
- if(Ex<lowest){ lowest = Ex;}
- if(Ex>highest){ highest = Ex;}
- 
- CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] + fitParError[2], fitPar[1] - fitParError[1], fitPar[0] + fitParError[0]);
- if(Ex<lowest){ lowest = Ex;}
- if(Ex>highest){ highest = Ex;}
- 
- CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] + fitParError[2], fitPar[1] + fitParError[1], fitPar[0] - fitParError[0]);
- if(Ex<lowest){ lowest = Ex;}
- if(Ex>highest){ highest = Ex;}
- 
- CalcEx(m, T, E, p, x[0], ThSCAT, Ex, fitPar[2] + fitParError[2], fitPar[1] + fitParError[1], fitPar[0] + fitParError[0]);
- if(Ex<lowest){ lowest = Ex;}
- if(Ex>highest){ highest = Ex;}
- */
-
 
 
 

@@ -146,9 +146,9 @@ RunAction::RunAction()
 
     //--------------------------------
     //      CAKE Array
-    analysisManager->CreateNtupleIColumn(0, "ga_CAKE_detNr", ga_CAKE_detNr);
-    analysisManager->CreateNtupleIColumn(0, "ga_CAKE_ringNr", ga_CAKE_ringNr);
-    analysisManager->CreateNtupleIColumn(0, "ga_CAKE_sectorNr", ga_CAKE_sectorNr);
+    analysisManager->CreateNtupleIColumn(0, "CAKE_detNr", CAKE_detNr);
+    analysisManager->CreateNtupleIColumn(0, "CAKE_ringNr", CAKE_ringNr);
+    analysisManager->CreateNtupleIColumn(0, "CAKE_sectorNr", CAKE_sectorNr);
 
     //--------------------------------
     //      CLOVER Detectors
