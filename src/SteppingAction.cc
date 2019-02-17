@@ -443,7 +443,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     if(GA_MODE)
     {
         
-        if((((GA_CAKE && (volumeName=="CAKE_AA_RS" || volumeName=="CAKE_SiliconWafer")) || (GA_W1 && (volumeName=="W1_AA"))) && ((GA_LineOfSightMODE && fEventAction->GA_GetLineOfSight()==true) || !GA_LineOfSightMODE)) || (volumeName == "World" && GA_GenInputVar))
+        if((((GA_CAKE && (volumeName=="CAKE_AA_RS")) || (GA_W1 && (volumeName=="W1_AA"))) && ((GA_LineOfSightMODE && fEventAction->GA_GetLineOfSight()==true) || !GA_LineOfSightMODE)) || (volumeName == "World" && GA_GenInputVar))
         {
             
             channelID = volume->GetCopyNo();
