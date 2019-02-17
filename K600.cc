@@ -55,7 +55,7 @@
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
 #endif
-//Test
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 namespace {
