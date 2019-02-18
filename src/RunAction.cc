@@ -112,10 +112,10 @@ RunAction::RunAction()
     // Creating ntuple
     analysisManager->CreateNtuple("SimulationTree", "SimulationTree");
     
+    /*
     //------------------------------------
     //      Initial Simulated Particle
     analysisManager->CreateNtupleDColumn(0, "iSimulatedParticle_T", iSimulatedParticle_T);
-
 
     //--------------------------------
     //      Scattering Reaction
@@ -178,7 +178,16 @@ RunAction::RunAction()
     analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_xPos", laBr3Ce_xPos); // cm (relative to the target/origin)
     analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_yPos", laBr3Ce_yPos); // cm (relative to the target/origin)
     analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_zPos", laBr3Ce_zPos); // cm (relative to the target/origin)
-    
+    */
+
+    //--------------------------------------------------------------------------------
+    //      Only the neccessary leaves for the CAKE solid-angle simulation (LAB)
+    analysisManager->CreateNtupleDColumn(0, "decay_theta_LAB", decay_theta_LAB);
+    analysisManager->CreateNtupleDColumn(0, "decay_phi_LAB", decay_phi_LAB);
+    analysisManager->CreateNtupleIColumn(0, "CAKE_detNr", CAKE_detNr);
+    analysisManager->CreateNtupleIColumn(0, "CAKE_ringNr", CAKE_ringNr);
+    analysisManager->CreateNtupleIColumn(0, "CAKE_sectorNr", CAKE_sectorNr);
+
     analysisManager->FinishNtuple(0);
     
 }

@@ -474,113 +474,17 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     //====================================================================================
     //      SOLID ANGLE DETERMINATION (LAB FRAME)
+    double mx, my, mz;
 
-    int nReactionProducts = 4;
-    std::vector<int>    reaction_Z{1, 6, 1, 6}; // e
-    std::vector<double> reaction_A{1.00727647, 14.00324199, 3.01550071, 12}; // amu
-    auto reaction_P = std::vector<double>(4, 0.0);
-    std::vector<double> reaction_T{140.0, 0.0, 0.0, 0.0}; // MeV
-    std::vector<double> reaction_Ex{0.0, 0.0, 0.0, 0.0}; // MeV
-    auto reaction_E = std::vector<double>(4, 0.0);
-    
-    //------------------------------------------------------------------------------------
-    //      Polar angles (LAB)
-    std::vector<double> reaction_theta_LAB{0.0, 0.0, acos(1 - (6.09173503004822869e-04*G4UniformRand()))/deg, 0.0}; // deg
-    auto reaction_theta_reactionCOM = std::vector<double>(4, 0.0);
-    
-    //------------------------------------------------------------------------------------
-    //      Azimuthal angles (LAB)
-    double reaction_ejectile_phi_LAB = 360.0*G4UniformRand(); // deg
-    double reaction_recoil_phi_LAB = reaction_ejectile_phi_LAB - 180.0; // deg
-    if(reaction_recoil_phi_LAB<0.0)
-    {
-        reaction_recoil_phi_LAB += 360.0;
-    }
-    
-    std::vector<double> reaction_phi_LAB{0.0, 0.0, reaction_ejectile_phi_LAB, reaction_recoil_phi_LAB}; // deg
-    auto reaction_phi_reactionCOM = std::vector<double>(4, 0.0);
-    
-    //------------------------------------------------------------------------------------
-    //      Recoil Nucleux Excitation Energy
-    //double recoilExcitationEnergy = 7.654; // MeV
-    
-    //------------------------------------------------------------------------------------
-    //      Executing the Binary Relativistic Kinematics code
-    //BiRelKin(&reaction_A[0], &reaction_T[0], &reaction_E[0], &reaction_P[0], reaction_theta_LAB[2], reaction_theta_LAB[3], recoilExcitationEnergy);
-    
-    //reaction_Ex[3] = recoilExcitationEnergy;
-    
-    //------------------------------------------------------------------------------------
-    //      Filling the vectors in the EventAction object
-    fEventAction->SetNReactionProducts(nReactionProducts);
-    fEventAction->SetReaction_Z(reaction_Z);
-    fEventAction->SetReaction_A(reaction_A);
-    fEventAction->SetReaction_P(reaction_P);
-    fEventAction->SetReaction_T(reaction_T);
-    fEventAction->SetReaction_Ex(reaction_Ex);
-    
-    fEventAction->SetReaction_theta_LAB(reaction_theta_LAB);
-    fEventAction->SetReaction_phi_LAB(reaction_phi_LAB);
-    fEventAction->SetReaction_theta_reactionCOM(reaction_theta_reactionCOM);
-    fEventAction->SetReaction_phi_reactionCOM(reaction_phi_reactionCOM);
-    
-    
-    //------------------------------------------------------------------------------------
-    //      Recoil Nucleus Decay
-    
-    int nDecayProducts = 2;
-    std::vector<int>    decay_Z{2, 4}; // e
-    std::vector<double> decay_A{4.00260325413, 8.005305102}; // amu
-    auto decay_P = std::vector<double>(2, 0.0);
-    auto decay_T = std::vector<double>(2, 0.0);
-    
-    auto decay_theta_LAB = std::vector<double>(2, 0.0);
-    auto decay_phi_LAB = std::vector<double>(2, 0.0);
-    auto decay_theta_recoilCOM = std::vector<double>(2, 0.0);
-    auto decay_phi_recoilCOM = std::vector<double>(2, 0.0);
-    auto decay_theta_reactionCOM = std::vector<double>(2, 0.0);
-    auto decay_phi_reactionCOM = std::vector<double>(2, 0.0);
-    
-    //------------------------------------------------------------------------------------
-    //      Polar angles (recoilCOM)
-    decay_theta_recoilCOM[0] = acos(1 - (2.0*G4UniformRand()))/deg;
-    decay_theta_recoilCOM[1] = 180.0 - decay_theta_recoilCOM[0];
-    
-    //------------------------------------------------------------------------------------
-    //      Azimuthal angles (LAB)
-    decay_phi_recoilCOM[0] = 360.0*G4UniformRand(); // deg
-    decay_phi_recoilCOM[1] = decay_phi_recoilCOM[0] - 180.0; // deg
-    
-    if(decay_phi_recoilCOM[1]<0.0)
-    {
-        decay_phi_recoilCOM[1] += 360.0;
-    }
-    
-    //------------------------------------------------------------------------------------
-    reaction_P = std::vector<double>(4, 0.0);
-    //CalculateBinaryDecayKinematics(recoilExcitationEnergy, 0.0, 7.36659, reaction_P, reaction_E, decay_A, reaction_theta_LAB[3], reaction_phi_LAB[3], decay_theta_recoilCOM, decay_phi_recoilCOM, decay_theta_LAB, decay_phi_LAB, decay_T);
-    
-    decay_theta_LAB[0] = decay_theta_recoilCOM[0];
-    decay_theta_LAB[1] = decay_theta_recoilCOM[1];
-    
-    decay_phi_LAB[0] = decay_phi_recoilCOM[0];
-    decay_phi_LAB[1] = decay_phi_recoilCOM[1];
-    
-    //------------------------------------------------------------------------------------
-    fEventAction->SetNDecayProducts(nDecayProducts);
-    fEventAction->SetDecay_Z(decay_Z);
-    fEventAction->SetDecay_A(decay_A);
-    fEventAction->SetDecay_P(decay_P);
-    fEventAction->SetDecay_T(decay_T);
-    
+    auto decay_theta_LAB = std::vector<double>(1, 0.0);
+    auto decay_phi_LAB = std::vector<double>(1, 0.0);
+
+    //decay_theta_LAB[0] = acos(1 - (2.0*G4UniformRand()))/deg; // 0.0->180.0 deg
+    decay_theta_LAB[0] = acos(1 - (1.0*G4UniformRand() + 1.0))/deg; // 90.0->180.0 deg
+    decay_phi_LAB[0] = 360.0*G4UniformRand(); // deg
+
     fEventAction->SetDecay_theta_LAB(decay_theta_LAB);
     fEventAction->SetDecay_phi_LAB(decay_phi_LAB);
-    fEventAction->SetDecay_theta_reactionCOM(decay_theta_reactionCOM);
-    fEventAction->SetDecay_phi_reactionCOM(decay_phi_reactionCOM);
-    fEventAction->SetDecay_theta_recoilCOM(decay_theta_recoilCOM);
-    fEventAction->SetDecay_phi_recoilCOM(decay_phi_recoilCOM);
-    
-    double mx, my, mz;
     
     mx = sin(decay_theta_LAB[0]*deg)*cos(decay_phi_LAB[0]*deg);
     my = sin(decay_theta_LAB[0]*deg)*sin(decay_phi_LAB[0]*deg);
