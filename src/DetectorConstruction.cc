@@ -285,6 +285,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     CAKE_rotm[4].rotateY(-35.0661884*deg);
     CAKE_rotm[4].rotateZ((-54.1496802 + (4*72.))*deg);
 
+    for(G4int i=0; i<numberOf_CAKE; i++)
+    {
+        double rotationAngle_Zaxis = (-1.0*72.)/2.0; // deg
+        CAKE_rotm[i].rotateZ(rotationAngle_Zaxis*deg);
+    }
     
     /*
      ////   Old
