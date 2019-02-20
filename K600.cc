@@ -81,7 +81,7 @@ int main(int argc,char** argv)
     G4String macro;
     G4String session;
 #ifdef G4MULTITHREADED
-    G4int nThreads = 3;
+    G4int nThreads = 24;
 #endif
     for ( G4int i=1; i<argc; i=i+2 ) {
         if      ( G4String(argv[i]) == "-m" ) macro = argv[i+1];
@@ -101,12 +101,16 @@ int main(int argc,char** argv)
     
     // Choose the Random engine
     //
-    //G4Random::setTheEngine(new CLHEP::RanecuEngine);
-    
+    G4Random::setTheEngine(new CLHEP::RanecuEngine);
+    G4int seed = time( NULL );
+    G4Random::setTheSeed( seed );
+
+    /*
     CLHEP::RanluxEngine defaultEngine( 1234567, 4 );
     G4Random::setTheEngine( &defaultEngine );
     G4int seed = time( NULL );
     G4Random::setTheSeed( seed );
+    */
     
     // Construct the default run manager
     //

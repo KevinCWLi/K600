@@ -90,7 +90,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
     
     evtNb = evt->GetEventID();
     
-    GA_LineOfSight = true;
+    GA_LineOfSight = false;
     
     if(GA_MODE)
     {

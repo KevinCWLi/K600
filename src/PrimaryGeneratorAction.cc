@@ -474,6 +474,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     //====================================================================================
     //      SOLID ANGLE DETERMINATION (LAB FRAME)
+    
     double mx, my, mz;
 
     auto decay_theta_LAB = std::vector<double>(1, 0.0);
@@ -492,7 +493,46 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     //fEventAction->SetInitialParticleKineticEnergy(1.0); // MeV
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(mx, my, mz));
+    
+    
+    /*
+    G4double range;
+    G4double mx, my, mz;
+    G4bool acceptance = false;
+    
+    G4double angDist_theta = 0.0;
+    G4double function = 0.0;
+    
+    while(!acceptance)
+    {
+        //angDist_theta = 180.0*G4UniformRand();
+        angDist_theta = 90.0*G4UniformRand() + 90.0;
+        range = 1.00*G4UniformRand();
+        function = sin(angDist_theta*deg);
+        
+        if(range<function)
+        {
+            acceptance = true;
+        }
+    }
+    
+    phi = 360.*G4UniformRand();
+    
+    mx = sin(angDist_theta*deg)*cos(phi*deg);
+    my = sin(angDist_theta*deg)*sin(phi*deg);
+    mz = cos(angDist_theta*deg);
+    
+    auto decay_theta_LAB = std::vector<double>(1, 0.0);
+    auto decay_phi_LAB = std::vector<double>(1, 0.0);
+    
+    decay_theta_LAB[0] = angDist_theta; // 90.0->180.0 deg
+    decay_phi_LAB[0] = phi; // deg
 
+    fEventAction->SetDecay_theta_LAB(decay_theta_LAB);
+    fEventAction->SetDecay_phi_LAB(decay_phi_LAB);
+
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(mx, my, mz));
+    */
     
     ////////////////////////////////////////////////////
     ////    NEW CAKE SIMULATIONS
