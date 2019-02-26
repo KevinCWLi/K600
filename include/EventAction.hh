@@ -190,6 +190,7 @@ public:
     
     G4double    CAKE_AA[5][16][8][3][CAKE_TotalTimeSamples];
     G4bool      CAKE_AA_hit[5][16][8];
+    G4double    CAKE_AA_hitRadius[5][16][8];
     //  First index designates the CAKENo
     //  Second index designates the CAKE_RowNo
     //  Third index designates the CAKE_SectorNo
@@ -206,11 +207,12 @@ public:
     G4double GetVar_CAKE_AA(G4int i, G4int j, G4int l, G4int m, G4int k)
     {return CAKE_AA[i][j][l][m][k];};
     
-    void SetCAKE_AA_hit(int detNr, int ringNr, int sectorNr)
+    void SetCAKE_AA_hit(int detNr, int ringNr, int sectorNr, double hitRadius)
     {
         if(detNr>=0 && detNr<5 && ringNr>=0 && ringNr<16 && sectorNr>=0 && sectorNr<8)
         {
             CAKE_AA_hit[detNr][ringNr][sectorNr] = true;
+            CAKE_AA_hitRadius[detNr][ringNr][sectorNr] = hitRadius;
         }
         else
         {

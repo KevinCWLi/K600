@@ -95,7 +95,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(EventAction* eventAction): G4VUse
     //G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("proton");
     G4ParticleDefinition* particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle("geantino");
     
-    fParticleGun->SetParticleDefinition(particleDefinition);
+    //fParticleGun->SetParticleDefinition(particleDefinition);
     
     //fParticleGun->SetParticleEnergy(0.*MeV);
     //fParticleGun->SetParticleEnergy(0.100*MeV);
@@ -136,6 +136,18 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(EventAction* eventAction): G4VUse
      fParticleGun->SetParticleDefinition(ion);
      fParticleGun->SetParticleCharge(ionCharge);
      */
+    
+    /*
+    ////////    4He, +1 charge
+    G4int Z = 4, A = 8;
+    G4double ionCharge   = 0.*eplus;
+    G4double excitEnergy = 0.0*MeV;
+    
+    G4ParticleDefinition* ion = G4IonTable::GetIonTable()->GetIon(Z,A,excitEnergy);
+    //ion->SetPDGLifeTime(1*ns);
+    fParticleGun->SetParticleDefinition(ion);
+    fParticleGun->SetParticleCharge(ionCharge);
+    */
     
     
     ////========================================================////
@@ -183,6 +195,17 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+    /*
+    ////////    8B3, +1 charge
+    G4int Z = 4, A = 8;
+    G4double ionCharge   = 0.*eplus;
+    G4double excitEnergy = 0.0*MeV;
+    
+    G4ParticleDefinition* ion = G4IonTable::GetIonTable()->GetIon(Z,A,0);
+    //ion->SetPDGLifeTime(1*ns);
+    fParticleGun->SetParticleDefinition(ion);
+    fParticleGun->SetParticleCharge(ionCharge);
+    */
     
     ////////////////////////////////////////////////////////////////
     ////    Definition of states/resonances for 9Be(3He, t)9B
@@ -357,7 +380,203 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     
     
+    //------------------------------------------------------------------------------------
+    //      8Be simulation SCATTERING REACTION
+    /*
+    int nReactionProducts = 4;
+    std::vector<int>    reaction_Z{1, 6, 1, 6}; // e
+    std::vector<double> reaction_A{1.00727647, 14.00324199, 3.01550071, 12}; // amu
+    auto reaction_P = std::vector<double>(4, 0.0);
+    std::vector<double> reaction_T{140.0, 0.0, 0.0, 0.0}; // MeV
+    std::vector<double> reaction_Ex{0.0, 0.0, 0.0, 0.0}; // MeV
+    auto reaction_E = std::vector<double>(4, 0.0);
+    
+    //------------------------------------------------------------------------------------
+    //      Polar angles (LAB)
+    std::vector<double> reaction_theta_LAB{0.0, 0.0, acos(1 - (6.09173503004822869e-04*G4UniformRand()))/deg, 0.0}; // deg
+    auto reaction_theta_reactionCOM = std::vector<double>(4, 0.0);
+    
+    //------------------------------------------------------------------------------------
+    //      Azimuthal angles (LAB)
+    double reaction_ejectile_phi_LAB = 360.0*G4UniformRand(); // deg
+    double reaction_recoil_phi_LAB = reaction_ejectile_phi_LAB - 180.0; // deg
+    if(reaction_recoil_phi_LAB<0.0)
+    {
+        reaction_recoil_phi_LAB += 360.0;
+    }
+    
+    std::vector<double> reaction_phi_LAB{0.0, 0.0, reaction_ejectile_phi_LAB, reaction_recoil_phi_LAB}; // deg
+    auto reaction_phi_reactionCOM = std::vector<double>(4, 0.0);
+    
+    //------------------------------------------------------------------------------------
+    //      Recoil Nucleux Excitation Energy
+    //double recoilExcitationEnergy = 0.0; // MeV
+    //double recoilExcitationEnergy = 7.654; // MeV
+    //double recoilExcitationEnergy = 7.36659; // MeV
+    double recoilExcitationEnergy = 7.36659 + 0.5; // MeV
+    //double recoilExcitationEnergy = 12.0; // MeV
+    
+    //------------------------------------------------------------------------------------
+    //      Executing the Binary Relativistic Kinematics code
+    BiRelKin(&reaction_A[0], &reaction_T[0], &reaction_E[0], &reaction_P[0], reaction_theta_LAB[2], reaction_theta_LAB[3], recoilExcitationEnergy);
+    
+    //G4cout << "reaction_T[3]: " << reaction_T[3] << G4endl;
 
+    reaction_Ex[3] = recoilExcitationEnergy;
+    
+    //------------------------------------------------------------------------------------
+    //      Filling the vectors in the EventAction object
+    fEventAction->SetNReactionProducts(nReactionProducts);
+    fEventAction->SetReaction_Z(reaction_Z);
+    fEventAction->SetReaction_A(reaction_A);
+    fEventAction->SetReaction_P(reaction_P);
+    fEventAction->SetReaction_T(reaction_T);
+    fEventAction->SetReaction_Ex(reaction_Ex);
+    
+    fEventAction->SetReaction_theta_LAB(reaction_theta_LAB);
+    fEventAction->SetReaction_phi_LAB(reaction_phi_LAB);
+    fEventAction->SetReaction_theta_reactionCOM(reaction_theta_reactionCOM);
+    fEventAction->SetReaction_phi_reactionCOM(reaction_phi_reactionCOM);
+    
+    
+    //------------------------------------------------------------------------------------
+    //      Recoil Nucleus Decay
+    
+    int nDecayProducts = 2;
+    std::vector<int>    decay_Z{2, 4}; // e
+    std::vector<double> decay_A{4.00260325413, 8.005305102}; // amu
+    auto decay_P = std::vector<double>(2, 0.0);
+    auto decay_T = std::vector<double>(2, 0.0);
+    
+    auto decay_theta_LAB = std::vector<double>(2, 0.0);
+    auto decay_phi_LAB = std::vector<double>(2, 0.0);
+    auto decay_theta_recoilCOM = std::vector<double>(2, 0.0);
+    auto decay_phi_recoilCOM = std::vector<double>(2, 0.0);
+    auto decay_theta_reactionCOM = std::vector<double>(2, 0.0);
+    auto decay_phi_reactionCOM = std::vector<double>(2, 0.0);
+    
+    //------------------------------------------------------------------------------------
+    //      Polar angles (recoilCOM)
+    decay_theta_recoilCOM[0] = acos(1 - (2.0*G4UniformRand()))/deg;
+    decay_theta_recoilCOM[1] = 180.0 - decay_theta_recoilCOM[0];
+    
+    //------------------------------------------------------------------------------------
+    //      Azimuthal angles (LAB)
+    decay_phi_recoilCOM[0] = 360.0*G4UniformRand(); // deg
+    decay_phi_recoilCOM[1] = decay_phi_recoilCOM[0] - 180.0; // deg
+    
+    if(decay_phi_recoilCOM[1]<0.0)
+    {
+        decay_phi_recoilCOM[1] += 360.0;
+    }
+    
+    //------------------------------------------------------------------------------------
+    //reaction_P = std::vector<double>(4, 0.0);
+    CalculateBinaryDecayKinematics(recoilExcitationEnergy, 0.0, 7.36659, reaction_P[3], reaction_E[3], decay_A, reaction_theta_LAB[3], reaction_phi_LAB[3], decay_theta_recoilCOM, decay_phi_recoilCOM, decay_theta_LAB, decay_phi_LAB, decay_T);
+
+    //------------------------------------------------------------------------------------
+    int nDecayProducts_8Be = 2;
+    std::vector<int>    decay_Z_8Be{2, 2}; // e
+    std::vector<double> decay_A_8Be{4.00260325413, 4.00260325413}; // amu
+    auto decay_P_8Be = std::vector<double>(2, 0.0);
+    auto decay_T_8Be = std::vector<double>(2, 0.0);
+    
+    auto decay_theta_LAB_8Be = std::vector<double>(2, 0.0);
+    auto decay_phi_LAB_8Be = std::vector<double>(2, 0.0);
+    auto decay_theta_recoilCOM_8Be = std::vector<double>(2, 0.0);
+    auto decay_phi_recoilCOM_8Be = std::vector<double>(2, 0.0);
+    auto decay_theta_reactionCOM_8Be = std::vector<double>(2, 0.0);
+    auto decay_phi_reactionCOM_8Be = std::vector<double>(2, 0.0);
+
+    //------------------------------------------------------------------------------------
+    //      Polar angles (recoilCOM)
+    decay_theta_recoilCOM_8Be[0] = acos(1 - (2.0*G4UniformRand()))/deg;
+    decay_theta_recoilCOM_8Be[1] = 180.0 - decay_theta_recoilCOM_8Be[0];
+
+    //------------------------------------------------------------------------------------
+    //      Azimuthal angles (LAB)
+    decay_phi_recoilCOM_8Be[0] = 360.0*G4UniformRand(); // deg
+    decay_phi_recoilCOM_8Be[1] = decay_phi_recoilCOM_8Be[0] - 180.0; // deg
+    
+    if(decay_phi_recoilCOM_8Be[1]<0.0)
+    {
+        decay_phi_recoilCOM_8Be[1] += 360.0;
+    }
+    
+    //------------------------------------------------------------------------------------
+    //reaction_P = std::vector<double>(4, 0.0);
+    
+    //G4cout << "decay_T[0]: " << decay_T[0] << G4endl;
+    //G4cout << "decay_T[1]: " << decay_T[1] << G4endl;
+    
+    double c2 = 931.494;     // MeV/u, c^2
+    double P_8Be = sqrt(2.0*decay_A_8Be[1]*decay_T[1]);
+    double E_8Be = sqrt(pow(P_8Be, 2.0)*c2 + pow(decay_A_8Be[1]*c2, 2.0));
+    
+    //double P_8Be = 0.0;
+    //double E_8Be = sqrt(pow(P_8Be*931.5, 2.0) + pow(decay_A[1]*931.5, 2.0));
+
+    CalculateBinaryDecayKinematics(0.0, 0.0, -0.09184, P_8Be, E_8Be, decay_A_8Be, reaction_theta_LAB[3], reaction_phi_LAB[3], decay_theta_recoilCOM_8Be, decay_phi_recoilCOM_8Be, decay_theta_LAB_8Be, decay_phi_LAB_8Be, decay_T_8Be);
+
+    //decay_theta_LAB_8Be[0] = decay_theta_recoilCOM_8Be[0];
+    //decay_theta_LAB_8Be[1] = decay_theta_recoilCOM_8Be[1];
+    
+    //decay_phi_LAB_8Be[0] = decay_phi_recoilCOM_8Be[0];
+    //decay_phi_LAB_8Be[1] = decay_phi_recoilCOM_8Be[1];
+    
+    //------------------------------------------------------------------------------------
+    double mx, my, mz;
+    
+    mx = sin(decay_theta_LAB_8Be[0]*deg)*cos(decay_phi_LAB_8Be[0]*deg);
+    my = sin(decay_theta_LAB_8Be[0]*deg)*sin(decay_phi_LAB_8Be[0]*deg);
+    mz = cos(decay_theta_LAB_8Be[0]*deg);
+    
+    fEventAction->SetInitialParticleKineticEnergy(decay_T_8Be[0]*MeV); // MeV
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(mx, my, mz));
+    G4cout << "decay_T_8Be[0]: " << decay_T_8Be[0] << G4endl;
+    G4cout << "decay_theta_LAB_8Be[0]: " << decay_theta_LAB_8Be[0] << G4endl;
+    
+    fParticleGun->GeneratePrimaryVertex(anEvent);
+    
+    //------------------------------------------------------------------------------------
+    mx = sin(decay_theta_LAB_8Be[1]*deg)*cos(decay_phi_LAB_8Be[1]*deg);
+    my = sin(decay_theta_LAB_8Be[1]*deg)*sin(decay_phi_LAB_8Be[1]*deg);
+    mz = cos(decay_theta_LAB_8Be[1]*deg);
+    
+    fEventAction->SetInitialParticleKineticEnergy(decay_T_8Be[1]*MeV); // MeV
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(mx, my, mz));
+    G4cout << "decay_T_8Be[1]: " << decay_T_8Be[1] << G4endl;
+    G4cout << "decay_theta_LAB_8Be[1]: " << decay_theta_LAB_8Be[1] << G4endl;
+
+    fParticleGun->GeneratePrimaryVertex(anEvent);
+    */
+    
+    //------------------------------------------------------------------------------------
+//    fEventAction->SetNDecayProducts(nDecayProducts);
+//    fEventAction->SetDecay_Z(decay_Z);
+//    fEventAction->SetDecay_A(decay_A);
+//    fEventAction->SetDecay_P(decay_P);
+//    fEventAction->SetDecay_T(decay_T);
+//    
+//    fEventAction->SetDecay_theta_LAB(decay_theta_LAB);
+//    fEventAction->SetDecay_phi_LAB(decay_phi_LAB);
+//    fEventAction->SetDecay_theta_reactionCOM(decay_theta_reactionCOM);
+//    fEventAction->SetDecay_phi_reactionCOM(decay_phi_reactionCOM);
+//    fEventAction->SetDecay_theta_recoilCOM(decay_theta_recoilCOM);
+//    fEventAction->SetDecay_phi_recoilCOM(decay_phi_recoilCOM);
+//    
+//    double mx, my, mz;
+//    
+//    mx = sin(decay_theta_LAB[1]*deg)*cos(decay_phi_LAB[1]*deg);
+//    my = sin(decay_theta_LAB[1]*deg)*sin(decay_phi_LAB[1]*deg);
+//    mz = cos(decay_theta_LAB[1]*deg);
+//    
+//    fEventAction->SetInitialParticleKineticEnergy(decay_T[1]*MeV); // MeV
+//    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(mx, my, mz));
+
+    
+    
+    
     //------------------------------------------------------------------------------------
     //      INITIAL SCATTERING REACTION
     /*
@@ -444,7 +663,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     //------------------------------------------------------------------------------------
     reaction_P = std::vector<double>(4, 0.0);
-    CalculateBinaryDecayKinematics(recoilExcitationEnergy, 0.0, 7.36659, reaction_P, reaction_E, decay_A, reaction_theta_LAB[3], reaction_phi_LAB[3], decay_theta_recoilCOM, decay_phi_recoilCOM, decay_theta_LAB, decay_phi_LAB, decay_T);
+    CalculateBinaryDecayKinematics(recoilExcitationEnergy, 0.0, 7.36659, reaction_P[3], reaction_E[3], decay_A, reaction_theta_LAB[3], reaction_phi_LAB[3], decay_theta_recoilCOM, decay_phi_recoilCOM, decay_theta_LAB, decay_phi_LAB, decay_T);
     
     //------------------------------------------------------------------------------------
     fEventAction->SetNDecayProducts(nDecayProducts);
@@ -467,7 +686,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     my = sin(decay_theta_LAB[0]*deg)*sin(decay_phi_LAB[0]*deg);
     mz = cos(decay_theta_LAB[0]*deg);
     
-    fEventAction->SetInitialParticleKineticEnergy(1.0); // MeV
+    fEventAction->SetInitialParticleKineticEnergy(decay_T[0]); // MeV
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(mx, my, mz));
     */
     
@@ -494,7 +713,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //fEventAction->SetInitialParticleKineticEnergy(1.0); // MeV
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(mx, my, mz));
     
-    
+    fParticleGun->GeneratePrimaryVertex(anEvent);
+
     /*
     G4double range;
     G4double mx, my, mz;
@@ -1391,7 +1611,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     //create vertex
     //
-    fParticleGun->GeneratePrimaryVertex(anEvent);
+    //fParticleGun->GeneratePrimaryVertex(anEvent);
     
     
     
@@ -1476,15 +1696,15 @@ void PrimaryGeneratorAction::CalculateBinaryRelativisticKinematics(double theta_
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::CalculateBinaryDecayKinematics(double eX, double eX_residual, double sepE, std::vector<double> initialScatteringReactionMomentum, std::vector<double> initialScatteringReactionEnergy, std::vector<double> decay_A, double theta_recoil_LAB, double phi_recoil_LAB, std::vector<double>& decay_theta_recoilCOM, std::vector<double>& decay_phi_recoilCOM, std::vector<double>& decay_theta_LAB, std::vector<double>& decay_phi_LAB, std::vector<double>& decay_T)
+void PrimaryGeneratorAction::CalculateBinaryDecayKinematics(double eX, double eX_residual, double sepE, double initialScatteringReactionMomentum, double initialScatteringReactionEnergy, std::vector<double> decay_A, double theta_recoil_LAB, double phi_recoil_LAB, std::vector<double>& decay_theta_recoilCOM, std::vector<double>& decay_phi_recoilCOM, std::vector<double>& decay_theta_LAB, std::vector<double>& decay_phi_LAB, std::vector<double>& decay_T)
 {
     if(eX - eX_residual - sepE >= 0.0) // Energy conservation
     {
-        
         //------------------------------------------------
-        G4ThreeVector recoilCOM_P_v3 = initialScatteringReactionMomentum[3]*G4ThreeVector(sin(theta_recoil_LAB*deg)*cos(phi_recoil_LAB*deg), sin(theta_recoil_LAB*deg)*sin(phi_recoil_LAB*deg), cos(theta_recoil_LAB*deg));
-        G4LorentzVector recoilCOM_P_v4 = G4LorentzVector(recoilCOM_P_v3, initialScatteringReactionEnergy[3]/pow(c2, 0.5));
+        G4ThreeVector recoilCOM_P_v3 = initialScatteringReactionMomentum*G4ThreeVector(sin(theta_recoil_LAB*deg)*cos(phi_recoil_LAB*deg), sin(theta_recoil_LAB*deg)*sin(phi_recoil_LAB*deg), cos(theta_recoil_LAB*deg));
+        G4LorentzVector recoilCOM_P_v4 = G4LorentzVector(recoilCOM_P_v3, initialScatteringReactionEnergy/pow(c2, 0.5));
         double betaRecoil = recoilCOM_P_v4.beta();
+        //G4cout << "betaRecoil: " << betaRecoil << G4endl;
         G4ThreeVector boostVector_recoilCOMtoLAB = betaRecoil*(recoilCOM_P_v3.unit());
         
         //------------------------------------------------
@@ -1499,10 +1719,10 @@ void PrimaryGeneratorAction::CalculateBinaryDecayKinematics(double eX, double eX
         double decay_1_P = (1.0/pow(c2, 0.5))*sqrt(pow(decay_1_E, 2.0) - pow(decay_A[1]*c2, 2.0));
         
         //------------------------------------------------
-        G4ThreeVector decay_0_P_v3 = decay_0_P*G4ThreeVector(sin(decay_theta_recoilCOM[0]*deg)*cos(decay_phi_recoilCOM[0]*deg), sin(decay_theta_recoilCOM[0]*0.0174533)*sin(decay_phi_recoilCOM[0]*deg), cos(decay_theta_recoilCOM[0]*deg));
+        G4ThreeVector decay_0_P_v3 = decay_0_P*G4ThreeVector(sin(decay_theta_recoilCOM[0]*deg)*cos(decay_phi_recoilCOM[0]*deg), sin(decay_theta_recoilCOM[0]*deg)*sin(decay_phi_recoilCOM[0]*deg), cos(decay_theta_recoilCOM[0]*deg));
         G4LorentzVector decay_0_P_v4 = G4LorentzVector(decay_0_P_v3, decay_0_E/pow(c2, 0.5));
         
-        G4ThreeVector decay_1_P_v3 = decay_1_P*G4ThreeVector(sin(decay_theta_recoilCOM[1]*deg)*cos(decay_phi_recoilCOM[1]*deg), sin(decay_theta_recoilCOM[1]*0.0174533)*sin(decay_phi_recoilCOM[1]*deg), cos(decay_theta_recoilCOM[1]*deg));
+        G4ThreeVector decay_1_P_v3 = decay_1_P*G4ThreeVector(sin(decay_theta_recoilCOM[1]*deg)*cos(decay_phi_recoilCOM[1]*deg), sin(decay_theta_recoilCOM[1]*deg)*sin(decay_phi_recoilCOM[1]*deg), cos(decay_theta_recoilCOM[1]*deg));
         G4LorentzVector decay_1_P_v4 = G4LorentzVector(decay_1_P_v3, decay_1_E/pow(c2, 0.5));
         
         //------------------------------------------------

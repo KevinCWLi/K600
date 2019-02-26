@@ -227,6 +227,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
             for(G4int k=0; k<8; k++)
             {
                 CAKE_AA_hit[i][j][k] = false;
+                CAKE_AA_hitRadius[i][j][k] = 0.0;
             }
         }
     }
@@ -849,7 +850,8 @@ void EventAction::EndOfEventAction(const G4Event* event)
             std::vector<int>    ga_CAKE_detNr;
             std::vector<int>    ga_CAKE_ringNr;
             std::vector<int>    ga_CAKE_sectorNr;
-    
+            std::vector<double> ga_CAKE_hitRadius;
+
             for(G4int i=0; i<5; i++)
             {
                 for(G4int j=0; j<16; j++)
@@ -861,6 +863,8 @@ void EventAction::EndOfEventAction(const G4Event* event)
                             ga_CAKE_detNr.push_back(i);
                             ga_CAKE_ringNr.push_back(j);
                             ga_CAKE_sectorNr.push_back(k);
+                            
+                            ga_CAKE_hitRadius.push_back(CAKE_AA_hitRadius[i][j][k]);
                         }
                     }
                 }
@@ -870,6 +874,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
             fRunAction->SetCAKE_detNr(ga_CAKE_detNr);
             fRunAction->SetCAKE_ringNr(ga_CAKE_ringNr);
             fRunAction->SetCAKE_sectorNr(ga_CAKE_sectorNr);
+            fRunAction->SetCAKE_hitRadius(ga_CAKE_hitRadius);
 
             //--------------------------------------------------------------------
             analysisManager->AddNtupleRow(0);

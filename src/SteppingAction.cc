@@ -433,8 +433,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
             CAKENo = channelID/128;
             CAKE_RowNo = (channelID - (CAKENo*128))/8;
             CAKE_SectorNo = (channelID - (CAKENo*128))%8;
-
-            fEventAction->SetCAKE_AA_hit(CAKENo, CAKE_RowNo, CAKE_SectorNo);
+            
+            double hitRadius = preStepPoint->GetPosition().mag()/mm;
+            
+            fEventAction->SetCAKE_AA_hit(CAKENo, CAKE_RowNo, CAKE_SectorNo, hitRadius);
         }
     }
     

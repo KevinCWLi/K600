@@ -75,7 +75,7 @@ public:
     
     void CalculateBinaryRelativisticKinematics(double theta_ejectile, double phi_ejectile, double &theta_recoil, double &phi_recoil, double &eX);
 
-    void CalculateBinaryDecayKinematics(double eX, double eX_residual, double sepE, std::vector<double> initialScatteringReactionMomentum, std::vector<double> initialScatteringReactionEnergy, std::vector<double> decay_A, double theta_recoil_LAB, double phi_recoil_LAB, std::vector<double>& decay_theta_recoilCOM, std::vector<double>& decay_phi_recoilCOM, std::vector<double>& decay_theta_LAB, std::vector<double>& decay_phi_LAB, std::vector<double>& decay_T);
+    void CalculateBinaryDecayKinematics(double eX, double eX_residual, double sepE, double initialScatteringReactionMomentum, double initialScatteringReactionEnergy, std::vector<double> decay_A, double theta_recoil_LAB, double phi_recoil_LAB, std::vector<double>& decay_theta_recoilCOM, std::vector<double>& decay_phi_recoilCOM, std::vector<double>& decay_theta_LAB, std::vector<double>& decay_phi_LAB, std::vector<double>& decay_T);
 
 private:
     G4ParticleGun*  fParticleGun; // G4 particle gun

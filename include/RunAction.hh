@@ -81,10 +81,12 @@ public:
     std::vector<int>    CAKE_detNr;
     std::vector<int>    CAKE_ringNr;
     std::vector<int>    CAKE_sectorNr;
+    std::vector<double> CAKE_hitRadius;
     
     void SetCAKE_detNr(std::vector<int> vec)     {CAKE_detNr = vec;};
     void SetCAKE_ringNr(std::vector<int> vec)    {CAKE_ringNr = vec;};
     void SetCAKE_sectorNr(std::vector<int> vec)  {CAKE_sectorNr = vec;};
+    void SetCAKE_hitRadius(std::vector<double> vec)  {CAKE_hitRadius = vec;};
 
     //--------------------------------------------------------------------------------
     //      Reaction variables
