@@ -211,8 +211,11 @@ public:
     {
         if(detNr>=0 && detNr<5 && ringNr>=0 && ringNr<16 && sectorNr>=0 && sectorNr<8)
         {
-            CAKE_AA_hit[detNr][ringNr][sectorNr] = true;
-            CAKE_AA_hitRadius[detNr][ringNr][sectorNr] = hitRadius;
+            if(!CAKE_AA_hit[detNr][ringNr][sectorNr])
+            {
+                CAKE_AA_hit[detNr][ringNr][sectorNr] = true;
+                CAKE_AA_hitRadius[detNr][ringNr][sectorNr] = hitRadius;
+            }
         }
         else
         {
