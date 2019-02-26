@@ -143,7 +143,6 @@ RunAction::RunAction()
     analysisManager->CreateNtupleDColumn(0, "decay_phi_recoilCOM", decay_phi_recoilCOM);
     analysisManager->CreateNtupleDColumn(0, "decay_theta_reactionCOM", decay_theta_reactionCOM);
     analysisManager->CreateNtupleDColumn(0, "decay_phi_reactionCOM", decay_phi_reactionCOM);
-    */
     
     //--------------------------------
     //      CAKE Array
@@ -151,7 +150,8 @@ RunAction::RunAction()
     analysisManager->CreateNtupleIColumn(0, "CAKE_ringNr", CAKE_ringNr);
     analysisManager->CreateNtupleIColumn(0, "CAKE_sectorNr", CAKE_sectorNr);
     analysisManager->CreateNtupleDColumn(0, "CAKE_hitRadius", CAKE_hitRadius);
-
+    */
+    
     /*
     //--------------------------------
     //      CLOVER Detectors
@@ -185,13 +185,13 @@ RunAction::RunAction()
 
     //--------------------------------------------------------------------------------
     //      Only the neccessary leaves for the CAKE solid-angle simulation (LAB)
-    /*
+    
     analysisManager->CreateNtupleDColumn(0, "decay_theta_LAB", decay_theta_LAB);
     analysisManager->CreateNtupleDColumn(0, "decay_phi_LAB", decay_phi_LAB);
     analysisManager->CreateNtupleIColumn(0, "CAKE_detNr", CAKE_detNr);
     analysisManager->CreateNtupleIColumn(0, "CAKE_ringNr", CAKE_ringNr);
     analysisManager->CreateNtupleIColumn(0, "CAKE_sectorNr", CAKE_sectorNr);
-    */
+    analysisManager->CreateNtupleDColumn(0, "CAKE_hitRadius", CAKE_hitRadius);
     
     analysisManager->FinishNtuple(0);
     
