@@ -56,7 +56,7 @@ const G4bool        GA_CAKE = true;
 const G4bool        GA_W1 = false;
 const G4bool        GA_LineOfSightMODE = false;
 const G4int         GA_numberOfEvents = 100000000;
-
+const bool          CAKE_AA_singleHitCondition = true;
 const G4bool        GA_GenInputVar = true;
 const G4bool        GA_GenAngDist = true;
 //const G4int         GA_GenAngDist_buffer = 5000;
@@ -191,6 +191,8 @@ public:
     G4double    CAKE_AA[5][16][8][3][CAKE_TotalTimeSamples];
     G4bool      CAKE_AA_hit[5][16][8];
     G4double    CAKE_AA_hitRadius[5][16][8];
+    bool        CAKE_AA_singleHitRegister;
+    
     //  First index designates the CAKENo
     //  Second index designates the CAKE_RowNo
     //  Third index designates the CAKE_SectorNo
@@ -211,10 +213,15 @@ public:
     {
         if(detNr>=0 && detNr<5 && ringNr>=0 && ringNr<16 && sectorNr>=0 && sectorNr<8)
         {
-            if(!CAKE_AA_hit[detNr][ringNr][sectorNr])
+            if(((CAKE_AA_singleHitCondition && !CAKE_AA_singleHitRegister) || !CAKE_AA_singleHitCondition))
             {
-                CAKE_AA_hit[detNr][ringNr][sectorNr] = true;
-                CAKE_AA_hitRadius[detNr][ringNr][sectorNr] = hitRadius;
+                CAKE_AA_singleHitRegister = true;
+                
+                if(!CAKE_AA_hit[detNr][ringNr][sectorNr])
+                {
+                    CAKE_AA_hit[detNr][ringNr][sectorNr] = true;
+                    CAKE_AA_hitRadius[detNr][ringNr][sectorNr] = hitRadius;
+                }
             }
         }
         else

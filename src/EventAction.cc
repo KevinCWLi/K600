@@ -220,6 +220,8 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
     }
     
     //------------------------------------------------
+    CAKE_AA_singleHitRegister = false;
+    
     for(G4int i=0; i<5; i++)
     {
         for(G4int j=0; j<16; j++)
