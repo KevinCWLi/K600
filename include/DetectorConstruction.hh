@@ -102,8 +102,8 @@ const G4int     numberOf_PADDLE = 3;
 const G4int     numberOf_LEPS = 6;
 
 ///////////////     LEPS LaBr3Ce     ///////////////////
-//const G4int     numberOf_LaBr3Ce = 20;
-const G4int     numberOf_LaBr3Ce = 4;
+const G4int     numberOf_LaBr3Ce = 20;
+//const G4int     numberOf_LaBr3Ce = 4;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -277,7 +277,23 @@ private:
     //  HAGAR Front Disc
     G4VPhysicalVolume*  PhysiHAGAR_FrontDisc;
     
+    /////////////////////////////////////
+    //          TIGRESS DETECTORS
+    /////////////////////////////////////
     
+    G4bool              TIGRESS_AllPresent_Override;
+    G4bool              TIGRESS_AllAbsent_Override;
+    G4bool              TIGRESS_Presence[numberOf_TIGRESS];
+    G4double            TIGRESS_Distance[numberOf_TIGRESS];
+    G4RotationMatrix    TIGRESS_rotm[numberOf_TIGRESS];
+    G4Transform3D       TIGRESS_transform[numberOf_TIGRESS];
+    G4ThreeVector       TIGRESS_position[numberOf_TIGRESS];
+    G4double            TIGRESS_phi[numberOf_TIGRESS];
+    G4double            TIGRESS_theta[numberOf_TIGRESS];
+    
+    //  TIGRESS HPGe Crystals
+    G4VPhysicalVolume*  PhysiTIGRESS_HPGeCrystal;
+
     /////////////////////////////////////
     //          CLOVER DETECTORS
     /////////////////////////////////////
@@ -381,9 +397,6 @@ private:
     //  Shield PMT Tubes
     G4VPhysicalVolume*  PhysiCLOVER_Shield_PMT;
     
-    //  Boolean to use Walid's definition of the CLOVER crystal
-    bool useCLOVER_Walid;
-    
     //////////////////////////////////////
     //          K600 SPECTROMETER
     //////////////////////////////////////
@@ -471,6 +484,11 @@ private:
     ////    ALBA shielding - Truncated Icosahedron
     G4bool      K600_ALBA_TruncIcos_Shielding_Presence;
     
+
+    /////////////////////////////////////
+    //      Attenuation foil
+    G4bool      attenuationFoil_Presence;
+
     /////////////////////////////////////
     //  K600 Target
     G4bool      K600_Target_Presence;

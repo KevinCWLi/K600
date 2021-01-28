@@ -56,7 +56,7 @@ const G4bool        GA_CAKE = true;
 const G4bool        GA_W1 = false;
 const G4bool        GA_LineOfSightMODE = false;
 const G4int         GA_numberOfEvents = 100000000;
-const bool          CAKE_AA_singleHitCondition = true;
+const bool          CAKE_AA_singleHitCondition = false;
 const G4bool        GA_GenInputVar = true;
 const G4bool        GA_GenAngDist = true;
 //const G4int         GA_GenAngDist_buffer = 5000;
@@ -121,7 +121,7 @@ const G4double      VDC2_X_WIRE_ThresholdEnergy = 10.;   // keV
 const G4double      CAKE_AA_ThresholdEnergy = .5;   // MeV
 
 ///////////////     CLOVER - Energy Threshold     ///////////////////
-const G4double      CLOVER_HPGeCrystal_ThresholdEnergy = 40.;   // keV
+const G4double      CLOVER_HPGeCrystal_ThresholdEnergy = 120.;   // keV
 
 ///////////////     CLOVER BGO Anti-Compton Shield - Energy Threshold     ///////////////////
 const G4double      CLOVER_BGO_ThresholdEnergy = 10.;  //keV
@@ -182,6 +182,28 @@ public:
     G4double initialParticlePhi;
     void SetInitialParticleTheta(G4double a) {initialParticleTheta = a;};
     void SetInitialParticlePhi(G4double a) {initialParticlePhi = a;};
+
+    //----------------------------------------
+    //      Detectable energy
+    std::vector<double>   detectableEnergy; // MeV
+
+    void SetDetectableEnergy(double a)
+    {
+        bool found = false;
+        
+        for(int i=0; i<static_cast<int>(detectableEnergy.size()); i++)
+        {
+            if(detectableEnergy[i] == a)
+            {
+                found = true;
+            }
+        }
+        
+        if(!found)
+        {
+            detectableEnergy.insert(detectableEnergy.begin(), a);
+        }
+    };
 
     //----------------------------------------
     //      CAKE

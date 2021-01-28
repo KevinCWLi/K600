@@ -1,7 +1,7 @@
 # Use these open statements to open selected visualization
 #
 # Use this open statement to create an OpenGL view:
-#/vis/open OGL 800x600-0+0
+/vis/open OGL 800x600-0+0
 #/vis/open OGL 1600x1200-0+0
 # Use to the the lighting origin
 /vis/viewer/set/lightsThetaPhi 40 140
@@ -116,9 +116,44 @@
 
 #/vis/viewer/set/background 1.0 1.0 1.0
 #----------------------------
+/vis/modeling/trajectories/create/drawByAttribute
+/vis/modeling/trajectories/drawByAttribute-0/setAttribute IMag
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval1 0.00 MeV 0.25 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval2 0.25 MeV 0.50 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval3 0.50 MeV 0.75 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval4 0.75 MeV 1.00 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval5 1.0 MeV 1.5 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval6 1.5 MeV 2.0 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval7 2.0 MeV 2.5 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval8 2.5 MeV 3.0 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval9 3.0 MeV 3.5 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval10 3.5 MeV 4.0 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval11 4.0 MeV 4.5 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval12 4.5 MeV 5.0 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval13 5.0 MeV 5.5 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval14 5.5 MeV 6.0 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval15 6.0 MeV 6.5 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval16 6.5 MeV 7.0 MeV
+/vis/modeling/trajectories/drawByAttribute-0/interval1/setLineColourRGBA 0.0625 0.30 0.50000000 1
+/vis/modeling/trajectories/drawByAttribute-0/interval2/setLineColourRGBA 0.1250 0.25 0.46875000 1
+/vis/modeling/trajectories/drawByAttribute-0/interval3/setLineColourRGBA 0.1875 0.20 0.43750000 1
+/vis/modeling/trajectories/drawByAttribute-0/interval4/setLineColourRGBA 0.2500 0.15 0.40625000 1
+/vis/modeling/trajectories/drawByAttribute-0/interval5/setLineColourRGBA 0.3125 0.10 0.37500000 1
+/vis/modeling/trajectories/drawByAttribute-0/interval6/setLineColourRGBA 0.3750 0.05 0.34375000 1
+/vis/modeling/trajectories/drawByAttribute-0/interval7/setLineColourRGBA 0.4375 0.0 0.31250000 1
+/vis/modeling/trajectories/drawByAttribute-0/interval8/setLineColourRGBA 0.5000 0.0 0.28125000 1
+/vis/modeling/trajectories/drawByAttribute-0/interval9/setLineColourRGBA 0.5625 0.0 0.25000000 1
+/vis/modeling/trajectories/drawByAttribute-0/interval10/setLineColourRGBA 0.6250 0.0 0.21875000 1
+/vis/modeling/trajectories/drawByAttribute-0/interval11/setLineColourRGBA 0.6875 0.0 0.18750000 1
+/vis/modeling/trajectories/drawByAttribute-0/interval12/setLineColourRGBA 0.7500 0.0 0.15625000 1
+/vis/modeling/trajectories/drawByAttribute-0/interval13/setLineColourRGBA 0.8125 0.0 0.12500000 1
+/vis/modeling/trajectories/drawByAttribute-0/interval14/setLineColourRGBA 0.8750 0.0 0.093750000 1
+/vis/modeling/trajectories/drawByAttribute-0/interval15/setLineColourRGBA 0.9375 0.0 0.062500000 1
+/vis/modeling/trajectories/drawByAttribute-0/interval16/setLineColourRGBA 1.0000 0.0 0.031250000 1
+/vis/filtering/trajectories/create/attributeFilter
+/vis/filtering/trajectories/attributeFilter-0/setAttribute IMag
+/vis/filtering/trajectories/attributeFilter-0/addInterval 0.0 MeV 100 MeV
+#----------------------------
 /vis/viewer/set/viewpointThetaPhi 90 0
 /vis/viewer/zoom 1.7
-#/vis/viewer/panTo 7.0 0.0 cm
-
-#/vis/viewer/panTo -8.0 0.0 cm
-#/vis/viewer/zoom 20
+/vis/viewer/panTo 7.0 0.0 cm

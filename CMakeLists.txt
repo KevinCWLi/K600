@@ -19,12 +19,19 @@ else()
 endif()
 
 #----------------------------------------------------------------------------
+# Find ROOT (required package)
+#
+find_package(ROOT REQUIRED)
+
+#----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
 # Setup include directory for this project
 #
 include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/Distributions)
+include_directories(${ROOT_INCLUDE_DIRS})
+
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 # NB: headers are included so they will show up in IDEs
@@ -41,6 +48,7 @@ find_package(cadmesh)
 add_executable(K600 K600.cc ${sources} ${headers})
 target_link_libraries(K600 ${Geant4_LIBRARIES})
 target_link_libraries(K600 ${cadmesh_LIBRARIES})
+target_link_libraries(K600 ${ROOT_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -54,8 +62,6 @@ set(K600_SCRIPTS
   gui.mac
   run.png
   init_vis.mac
-  run1.mac
-  run2.mac
   vis.mac
   )
 

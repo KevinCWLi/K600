@@ -280,7 +280,15 @@ void EventAction::EndOfEventAction(const G4Event* event)
     fRunAction->SetInitialParticleKineticEnergy(iSimulatedParticle_T);
     
     iSimulatedParticle_T.clear();
+
+    ////////////////////////////////////////////////////////
+    //              Detectable Energy
+    ////////////////////////////////////////////////////////
     
+    fRunAction->SetDetectableEnergy(detectableEnergy);
+    
+    detectableEnergy.clear();
+
     ////////////////////////////////////////////////////////
     //
     //                CAKE DETECTOR ARRAY
@@ -442,7 +450,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
                     triggered = true;
                     
                     //CLOVER_HPGeCrystal_EDep[i][j][k] = G4RandGauss::shoot(CLOVER_HPGeCrystal_EDep[i][j][k], 1.7);
-                    CLOVER_HPGeCrystal_EDep[i][j][k] = G4RandGauss::shoot(CLOVER_HPGeCrystal_EDep[i][j][k], 0.849257);
+//                    CLOVER_HPGeCrystal_EDep[i][j][k] = G4RandGauss::shoot(CLOVER_HPGeCrystal_EDep[i][j][k], 0.849257);
                     
                     CLOVER_EnergyPerCrystal_vec.push_back(CLOVER_HPGeCrystal_EDep[i][j][k]);
                     
@@ -548,6 +556,10 @@ void EventAction::EndOfEventAction(const G4Event* event)
                 }
             }
             
+            double FWHM = sqrt(0.0041460210*CLOVER_EDep[i][k]);
+            double sigma = FWHM/2.3548200;
+            CLOVER_EDep[i][k] = G4RandGauss::shoot(CLOVER_EDep[i][k], sigma);
+
             if(triggered)
             {
                 //------------------------------------------------
@@ -577,7 +589,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
     
     if(eventN_CLOVER>0)
     {
-        analysisManager->FillNtupleIColumn(0, 4, eventN_CLOVER);
+//        analysisManager->FillNtupleIColumn(0, 4, eventN_CLOVER);
 
         fRunAction->SetCLOVER_IDs(CLOVER_Number_vec);
         fRunAction->SetCLOVER_NCrystalsTriggered(CLOVER_NCrystalsTriggered_vec);
@@ -595,7 +607,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
 
         fRunAction->SetCLOVER_BGOCrystalsTriggered(CLOVER_BGO_Triggered_vec);
         
-        analysisManager->AddNtupleRow(0);
+        //analysisManager->AddNtupleRow(0);
     }
     
 
@@ -653,8 +665,17 @@ void EventAction::EndOfEventAction(const G4Event* event)
     {
         for(G4int k=0; k<LaBr3Ce_TotalTimeSamples; k++)
         {
+//            G4cout << "EventAction 1" << G4endl;
+
+//            if(LaBr3Ce_EDep[i][k]>0.0)
+//            {
+//                G4cout << "EventAction 1B" << G4endl;
+//            }
+
             if(G4RandGauss::shoot(LaBr3Ce_EDep[i][k], 0.7) >= LaBr3Ce_LaBr3CeCrystal_ThresholdEnergy)
             {
+//                G4cout << "EventAction 2" << G4endl;
+
                 //------------------------------------------------
                 LaBr3Ce_Number_vec.push_back(i);
                 LaBr3Ce_DetectorTheta_vec.push_back(std::get<1>(angles_ALBA_LaBr3Ce[i]));
@@ -695,7 +716,14 @@ void EventAction::EndOfEventAction(const G4Event* event)
                 LaBr3Ce_Phi_vec.push_back(phi);
 
                 //------------------------------------------------
-                LaBr3Ce_EDep[i][k] = abs(G4RandGauss::shoot(LaBr3Ce_EDep[i][k], 1.7));
+                double a = 6.3;
+                double b = 0.625;
+                double c = 35.0e-06;
+                
+                double responseFWHM = sqrt(a + b*LaBr3Ce_EDep[i][k] + c*pow(LaBr3Ce_EDep[i][k], 2.0));
+                double responseSigma = responseFWHM/2.3548200;
+                
+                LaBr3Ce_EDep[i][k] = abs(G4RandGauss::shoot(LaBr3Ce_EDep[i][k], responseSigma));
                 LaBr3Ce_Energy_vec.push_back(LaBr3Ce_EDep[i][k]);
 
                 eventN_LaBr3Ce++;
@@ -705,7 +733,9 @@ void EventAction::EndOfEventAction(const G4Event* event)
     
     if(eventN_LaBr3Ce>0)
     {
-        analysisManager->FillNtupleIColumn(0, 17, eventN_LaBr3Ce);
+//        G4cout << "EventAction" << G4endl;
+        
+//        analysisManager->FillNtupleIColumn(0, 17, eventN_LaBr3Ce);
 
         fRunAction->SetLaBr3Ce_IDs(LaBr3Ce_Number_vec);
         fRunAction->SetLaBr3Ce_Energies(LaBr3Ce_Energy_vec);
@@ -723,9 +753,10 @@ void EventAction::EndOfEventAction(const G4Event* event)
     
     if(eventN_LaBr3Ce>0 || eventN_CLOVER>0)
     {
+        fRunAction->SetReaction_Ex(reaction_Ex);
+
         analysisManager->AddNtupleRow(0);
     }
-    
     
 
     
@@ -872,6 +903,18 @@ void EventAction::EndOfEventAction(const G4Event* event)
                 }
             }
 
+            /*
+            if(ga_CAKE_detNr.size()>1)
+            {
+                G4cout << "CHICKEN, ga_CAKE_detNr.size()>1" << G4endl;
+            }
+            
+            if(ga_CAKE_detNr.size()==1)
+            {
+                G4cout << "CHICKEN, ga_CAKE_detNr.size()==1" << G4endl;
+            }
+            */
+            
             //--------------------------------------------------------------------
             fRunAction->SetCAKE_detNr(ga_CAKE_detNr);
             fRunAction->SetCAKE_ringNr(ga_CAKE_ringNr);

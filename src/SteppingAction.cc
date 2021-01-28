@@ -92,6 +92,19 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     
     //G4ParticleDefinition* particleOI = G4Gamma::Gamma();
     
+    ////////////////////////////////////////////
+    //              DetectableEnergy
+    ////////////////////////////////////////////
+
+    if(volumeName == "World")
+    {
+        double detectableEnergy = aStep->GetPostStepPoint()->GetKineticEnergy()/MeV;
+
+//        std::cout << "detectableEnergy: " << detectableEnergy << std::endl;
+        
+        fEventAction->SetDetectableEnergy(detectableEnergy);
+    }
+    
     
     ////////////////////////////////////////////
     //              CAKE ARRAY
@@ -308,7 +321,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     
     if(interactiontime < CLOVER_TotalSampledTime)
     {
-        if(volumeName == "CLOVER_HPGeCrystal")
+        if(volumeName == "CLOVER_HPGeCrystal" || volumeName == "TIGRESS_HPGeCrystal")
         {
             channelID = volume->GetCopyNo();
             
@@ -411,6 +424,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
         iTS = interactiontime/LaBr3Ce_SamplingTime;
         edepLaBr3Ce_LaBr3CeCrystal = aStep->GetTotalEnergyDeposit()/keV;
         
+//        G4cout << "HERE, edepLaBr3Ce_LaBr3CeCrystal: " << edepLaBr3Ce_LaBr3CeCrystal << G4endl;
+
         fEventAction->AddEnergyLaBr3Ce_LaBr3CeCrystal(LaBr3CeNo, iTS, edepLaBr3Ce_LaBr3CeCrystal);
         fEventAction->AddEWpositionX_LaBr3Ce_LaBr3CeCrystal(LaBr3CeNo, iTS, edepLaBr3Ce_LaBr3CeCrystal*worldPosition.x()/cm);
         fEventAction->AddEWpositionY_LaBr3Ce_LaBr3CeCrystal(LaBr3CeNo, iTS, edepLaBr3Ce_LaBr3CeCrystal*worldPosition.y()/cm);

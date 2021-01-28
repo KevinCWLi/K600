@@ -112,24 +112,26 @@ RunAction::RunAction()
     // Creating ntuple
     analysisManager->CreateNtuple("SimulationTree", "SimulationTree");
     
-    /*
+    
     //------------------------------------
     //      Initial Simulated Particle
-    analysisManager->CreateNtupleDColumn(0, "iSimulatedParticle_T", iSimulatedParticle_T);
+//    analysisManager->CreateNtupleDColumn(0, "iSimulatedParticle_T", iSimulatedParticle_T);
+
 
     //--------------------------------
     //      Scattering Reaction
-    analysisManager->CreateNtupleIColumn(0, "nReactionProducts", nReactionProducts);
-    analysisManager->CreateNtupleIColumn(0, "reaction_Z", reaction_Z);
-    analysisManager->CreateNtupleDColumn(0, "reaction_A", reaction_A);
-    analysisManager->CreateNtupleDColumn(0, "reaction_P", reaction_P);
-    analysisManager->CreateNtupleDColumn(0, "reaction_T", reaction_T);
+    //analysisManager->CreateNtupleIColumn(0, "nReactionProducts", nReactionProducts);
+    //analysisManager->CreateNtupleIColumn(0, "reaction_Z", reaction_Z);
+    //analysisManager->CreateNtupleDColumn(0, "reaction_A", reaction_A);
+//    analysisManager->CreateNtupleDColumn(0, "reaction_P", reaction_P);
+//    analysisManager->CreateNtupleDColumn(0, "reaction_T", reaction_T);
     analysisManager->CreateNtupleDColumn(0, "reaction_Ex", reaction_Ex);
-    analysisManager->CreateNtupleDColumn(0, "reaction_theta_LAB", reaction_theta_LAB);
-    analysisManager->CreateNtupleDColumn(0, "reaction_phi_LAB", reaction_phi_LAB);
-    analysisManager->CreateNtupleDColumn(0, "reaction_theta_reactionCOM", reaction_theta_reactionCOM);
-    analysisManager->CreateNtupleDColumn(0, "reaction_phi_reactionCOM", reaction_phi_reactionCOM);
+//    analysisManager->CreateNtupleDColumn(0, "reaction_theta_LAB", reaction_theta_LAB);
+//    analysisManager->CreateNtupleDColumn(0, "reaction_phi_LAB", reaction_phi_LAB);
+//    analysisManager->CreateNtupleDColumn(0, "reaction_theta_reactionCOM", reaction_theta_reactionCOM);
+//    analysisManager->CreateNtupleDColumn(0, "reaction_phi_reactionCOM", reaction_phi_reactionCOM);
     
+    /*
     //--------------------------------
     //      Recoil Nucleus Decay
     analysisManager->CreateNtupleIColumn(0, "nDecayProducts", nDecayProducts);
@@ -168,31 +170,61 @@ RunAction::RunAction()
     analysisManager->CreateNtupleDColumn(0, "CLOVER_InitialParticleTheta", CLOVER_initialInteractionTheta);
     analysisManager->CreateNtupleDColumn(0, "CLOVER_InitialParticlePhi", CLOVER_initialInteractionPhi);
     analysisManager->CreateNtupleIColumn(0, "CLOVER_BGOCrystalsTriggered", CLOVER_BGOCrystalsTriggered);
+     */
+
+    /*
+    //--------------------------------
+    //      TIGRESS Detector
+    analysisManager->CreateNtupleDColumn(0, "GammaRayEnergies", reaction_Ex);
+    analysisManager->CreateNtupleDColumn(0, "TIGRESS_Energy", CLOVER_energy);
+    analysisManager->CreateNtupleDColumn(0, "TIGRESS_DetectorTheta", CLOVER_detectorTheta);
+    analysisManager->CreateNtupleDColumn(0, "TIGRESS_DetectorPhi", CLOVER_detectorPhi);
+
+//    analysisManager->CreateNtupleIColumn(0, "TIGRESS_EventFold", CLOVER_eventFold);
+//    analysisManager->CreateNtupleIColumn(0, "TIGRESS_NCrystalsTriggered", CLOVER_nCrystalsTriggered);
+//    analysisManager->CreateNtupleIColumn(0, "TIGRESS_Number", CLOVER_iD);
+//    analysisManager->CreateNtupleDColumn(0, "TIGRESS_EnergyPerCrystal", CLOVER_energyPerCrystal);
+//    analysisManager->CreateNtupleDColumn(0, "TIGRESS_Energy", CLOVER_energy);
+//    analysisManager->CreateNtupleDColumn(0, "TIGRESS_DetectorTheta", CLOVER_detectorTheta);
+//    analysisManager->CreateNtupleDColumn(0, "TIGRESS_DetectorPhi", CLOVER_detectorPhi);
+//    analysisManager->CreateNtupleIColumn(0, "TIGRESS_CrystalReflectionIndex", CLOVER_CrystalReflectionIndex);
+//    analysisManager->CreateNtupleDColumn(0, "TIGRESS_InitialInteractionTheta", CLOVER_initialInteractionTheta);
+//    analysisManager->CreateNtupleDColumn(0, "TIGRESS_InitialInteractionPhi", CLOVER_initialInteractionPhi);
+//    analysisManager->CreateNtupleDColumn(0, "TIGRESS_InitialParticleTheta", CLOVER_initialInteractionTheta);
+//    analysisManager->CreateNtupleDColumn(0, "TIGRESS_InitialParticlePhi", CLOVER_initialInteractionPhi);
+//    analysisManager->CreateNtupleIColumn(0, "TIGRESS_BGOCrystalsTriggered", CLOVER_BGOCrystalsTriggered);
 
     //--------------------------------
     //      LaBr3Ce Detectors
-    analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_EventFold", laBr3Ce_eventFold);
+//    analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_EventFold", laBr3Ce_eventFold);
     analysisManager->CreateNtupleIColumn(0, "LaBr3Ce_Number", laBr3Ce_iD);
     analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Energy", laBr3Ce_energy);
     analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_DetectorTheta", laBr3Ce_detectorTheta);
     analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_DetectorPhi", laBr3Ce_detectorPhi);
-    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Theta", laBr3Ce_theta);
-    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Phi", laBr3Ce_phi);
-    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_xPos", laBr3Ce_xPos); // cm (relative to the target/origin)
-    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_yPos", laBr3Ce_yPos); // cm (relative to the target/origin)
-    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_zPos", laBr3Ce_zPos); // cm (relative to the target/origin)
     */
+//    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Theta", laBr3Ce_theta);
+//    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_Phi", laBr3Ce_phi);
+//    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_xPos", laBr3Ce_xPos); // cm (relative to the target/origin)
+//    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_yPos", laBr3Ce_yPos); // cm (relative to the target/origin)
+//    analysisManager->CreateNtupleDColumn(0, "LaBr3Ce_zPos", laBr3Ce_zPos); // cm (relative to the target/origin)
+    
 
     //--------------------------------------------------------------------------------
     //      Only the neccessary leaves for the CAKE solid-angle simulation (LAB)
     
     analysisManager->CreateNtupleDColumn(0, "decay_theta_LAB", decay_theta_LAB);
     analysisManager->CreateNtupleDColumn(0, "decay_phi_LAB", decay_phi_LAB);
+    analysisManager->CreateNtupleDColumn(0, "decay_theta_recoilCOM", decay_theta_recoilCOM);
+
     analysisManager->CreateNtupleIColumn(0, "CAKE_detNr", CAKE_detNr);
     analysisManager->CreateNtupleIColumn(0, "CAKE_ringNr", CAKE_ringNr);
     analysisManager->CreateNtupleIColumn(0, "CAKE_sectorNr", CAKE_sectorNr);
-    analysisManager->CreateNtupleDColumn(0, "CAKE_hitRadius", CAKE_hitRadius);
+//    analysisManager->CreateNtupleDColumn(0, "CAKE_hitRadius", CAKE_hitRadius);
     
+    //--------------------------------
+    //      CAKE Array
+//    analysisManager->CreateNtupleDColumn(0, "DetectableEnergy", detectableEnergy);
+
     analysisManager->FinishNtuple(0);
     
 }

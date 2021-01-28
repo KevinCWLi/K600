@@ -41,6 +41,9 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
 #include "G4ThreeVector.hh"
+#include "G4LorentzVector.hh"
+#include <TF1.h>
+#include <TMath.h>
 
 class G4ParticleGun;
 class G4Event;
@@ -52,6 +55,9 @@ class EventAction;
 /// perpendicular to the input face. The type of the particle
 /// can be changed via the G4 build-in commands of G4ParticleGun class
 /// (see the macros provided with this example).
+
+//static std::mutex mutex_particleN;  // protects particleN
+static int particleN;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
@@ -73,16 +79,44 @@ public:
     
     G4double evaluateAngDist_interpolated(G4double chosenTheta);
     
-    void CalculateBinaryRelativisticKinematics(double theta_ejectile, double phi_ejectile, double &theta_recoil, double &phi_recoil, double &eX);
+    void CalculateBinaryRelativisticKinematics(long double theta_ejectile, long double phi_ejectile, long double &theta_recoil_LAB, long double &phi_recoil_LAB, long double &eX);
 
-    void CalculateBinaryDecayKinematics(double eX, double eX_residual, double sepE, double initialScatteringReactionMomentum, double initialScatteringReactionEnergy, std::vector<double> decay_A, double theta_recoil_LAB, double phi_recoil_LAB, std::vector<double>& decay_theta_recoilCOM, std::vector<double>& decay_phi_recoilCOM, std::vector<double>& decay_theta_LAB, std::vector<double>& decay_phi_LAB, std::vector<double>& decay_T);
+    void CalculateBinaryDecayKinematics(double eX, double eX_residual, double sepE, double initialScatteringReactionMomentum, double initialScatteringReactionEnergy, std::vector<double> decay_A, double theta_recoil_LAB, double phi_recoil_LAB, std::vector<double>& decay_theta_recoilCOM, std::vector<double>& decay_phi_recoilCOM, std::vector<double>& decay_theta_LAB, std::vector<double>& decay_phi_LAB, std::vector<double>& decay_T_LAB);
+    void CalculateBinaryDecayKinematics2(long double eX, long double eX_residual, long double sepE, long double initialScatteringReactionMomentum, long double initialScatteringReactionEnergy, std::vector<long double> decay_A, long double theta_recoil_LAB, long double phi_recoil_LAB, std::vector<long double>& decay_theta_recoilCOM, std::vector<long double>& decay_phi_recoilCOM, std::vector<long double>& decay_theta_LAB, std::vector<long double>& decay_phi_LAB, std::vector<long double>& decay_T_LAB);
 
+    std::vector<G4LorentzVector> CalculateBinaryDecayKinematics3(double eX, double eX_residual, double sepE, double initialScatteringReactionMomentum, double initialScatteringReactionEnergy, std::vector<double> decay_A, double theta_recoil_LAB, double phi_recoil_LAB, std::vector<double>& decay_theta_recoilCOM, std::vector<double>& decay_phi_recoilCOM, std::vector<double>& decay_theta_LAB, std::vector<double>& decay_phi_LAB, std::vector<double>& decay_T_LAB);
+
+    std::vector<G4LorentzVector> CalculateReactionMomentumVectors(double *massEnergies, double TBeam, double ThetaAlphaCM, double PhiAlphaCM);
+    
+//    std::mutex angDist_mutex;
+
+//    static G4ThreadLocal TF1* fAngCor_2plus_9870;
+//    static G4ThreadLocal TF1* fAngDist_2plus_9870;
+
+    TF1* fAngDist_1minus;
+
+//    TF1* fAngCor_2plus_9870;
+    TF1* fAngDist_2plus_9870;
+
+//    TF1* fAngCor_2plus_16106;
+//    TF1* fAngDist_2plus_16106;
+//
+    TF1* fAngDist_3minus;
+    
+    TF1* fAngDist_4plus;
+
+//    TF1* fAngCor_4plus_13300;
+//    TF1* fAngDist_4plus_13300;
+//    
+//    TF1* fAngCor_4plus_14079;
+//    TF1* fAngDist_4plus_14079;
+    
 private:
     G4ParticleGun*  fParticleGun; // G4 particle gun
     EventAction*  fEventAction;
     
-    double m[4], T[4], E[4], p[4];
-    double eX;
+    long double m[4], T[4], E[4], p[4];
+    long double eX;
     
     G4double    mx;
     G4double    my;
@@ -102,10 +136,23 @@ private:
     G4ThreeVector ejectileDirection;
     G4ThreeVector recoilDirection;
     
+    //------------------------------------------------
+    int nEnergies;
+    int nParticlesPerEnergy;
     
+    std::vector<G4double> nEventsPerKineticEnergy;
+    std::vector<G4double> initialKineticEnergies;
     
-    
+    int GetParticleN();
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline int PrimaryGeneratorAction::GetParticleN() {
+    
+//    std::lock_guard<std::mutex> lock(mutex_particleN);
+    return particleN++;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

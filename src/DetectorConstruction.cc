@@ -92,9 +92,6 @@
 #include "MagneticFieldMapping.hh"
 //#include "G4BlineTracer.hh"
 
-#include "GeometryConstructionDANDELION3.hh"
-#include "GeoConstruct_22_03_18.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -216,7 +213,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     ////////////////////////////
     ////    CAKE SETUP
     
-    CAKE_AllPresent_Override = true;
+    CAKE_AllPresent_Override = false;
     CAKE_AllAbsent_Override = false;
     
     double distance_CAKE_arm = 55.5;
@@ -253,7 +250,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //CAKE_rotm[0].rotateZ(59.63*deg);
     
     //  CAKE 2
-    CAKE_Presence[1] = false;
+    CAKE_Presence[1] = true;
     CAKE_AA_CentrePosition[1] = G4ThreeVector(0.4535687*mm, 1.9147014*mm, offset_CAKE_BeamAxis*mm);
     CAKE_rotm[1].rotateX(22.7683986*deg);
     CAKE_rotm[1].rotateY(-35.0661884*deg);
@@ -261,7 +258,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     
     
     //  CAKE 3
-    CAKE_Presence[2] = false;
+    CAKE_Presence[2] = true;
     CAKE_AA_CentrePosition[2] = G4ThreeVector(-1.6699365*mm, 1.0120638*mm, offset_CAKE_BeamAxis*mm);
     CAKE_rotm[2].rotateX(22.7683986*deg);
     CAKE_rotm[2].rotateY(-35.0661884*deg);
@@ -269,7 +266,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     
     
     //  CAKE 4
-    CAKE_Presence[3] = false;
+    CAKE_Presence[3] = true;
     CAKE_AA_CentrePosition[3] = G4ThreeVector(-1.4676763*mm, -1.2864401*mm, offset_CAKE_BeamAxis*mm);
     CAKE_rotm[3].rotateX(22.7683986*deg);
     CAKE_rotm[3].rotateY(-35.0661884*deg);
@@ -279,7 +276,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //  CAKE 5
     //  This CAKE was not present for PR226 and therefore the CAKE_AA_CentrePosition[4] was not yet measured from SolidEdge. Still to do for COMPLETENESS.
     //  In principle, one only has to rotate the CAKE_AA_CentrePosition[] for a particular MMM about the Z-axis for all 5 MMM's in the CAKE array configuration
-    CAKE_Presence[4] = false;
+    CAKE_Presence[4] = true;
     CAKE_AA_CentrePosition[4] = G4ThreeVector(0.773759*mm, -1.81811*mm, offset_CAKE_BeamAxis*mm);
     CAKE_rotm[4].rotateX(22.7683986*deg);
     CAKE_rotm[4].rotateY(-35.0661884*deg);
@@ -368,18 +365,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     ////    CLOVER SETUP
     
     CLOVER_AllPresent_Override = false;
-    CLOVER_AllAbsent_Override = true;
+    CLOVER_AllAbsent_Override = false;
     
     CLOVER_Shield_AllPresent_Override = false;
     CLOVER_Shield_AllAbsent_Override = true;
     
-    //--------------------------------
-    useCLOVER_Walid = false;
-    
-    if(useCLOVER_Walid)
+    for(G4int i=0; i<numberOf_CLOVER; i++)
     {
-        DefineHPGeCrystal_Walid();
-        DefineHPGeCrystal_Walid_2();
+        CLOVER_Presence[i] = false;
     }
     
     /*
@@ -447,124 +440,124 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     CLOVER_theta[8] = 90*deg;
     */
     
-    //  CLOVER 1
-    CLOVER_Presence[0] = true;
-    CLOVER_Shield_Presence[0] = true;
-    CLOVER_Distance[0] = 10.6*cm;
-    CLOVER_phi[0] = 0*deg;
-    CLOVER_theta[0] = 44.38*deg;
-    
-    //  CLOVER 2
-    CLOVER_Presence[1] = true;
-    CLOVER_Shield_Presence[1] = true;
-    CLOVER_Distance[1] = 10.6*cm;
-    CLOVER_phi[1] = 144*deg;
-    CLOVER_theta[1] = 44.38*deg;
-    
-    //  CLOVER 3
-    CLOVER_Presence[2] = true;
-    CLOVER_Shield_Presence[2] = true;
-    CLOVER_Distance[2] = 10.6*cm;
-    CLOVER_phi[2] = 72*deg;
-    CLOVER_theta[2] = 72.19*deg;
-    
-    //  CLOVER 4
-    CLOVER_Presence[3] = true;
-    CLOVER_Shield_Presence[3] = true;
-    CLOVER_Distance[3] = 10.6*cm;
-    CLOVER_phi[3] = 144*deg;
-    CLOVER_theta[3] = 86.19*deg;
-    
-    //  CLOVER 5
-    CLOVER_Presence[4] = true;
-    CLOVER_Shield_Presence[4] = true;
-    CLOVER_Distance[4] = 10.6*cm;
-    CLOVER_phi[4] = 216*deg;
-    CLOVER_theta[4] = 72.19*deg;
-    
-    //  CLOVER 6
-    CLOVER_Presence[5] = true;
-    CLOVER_Shield_Presence[5] = true;
-    CLOVER_Distance[5] = 10.6*cm;
-    CLOVER_phi[5] = 288*deg;
-    CLOVER_theta[5] = 72.19*deg;
-    
-    //  CLOVER 7
-    CLOVER_Presence[6] = true;
-    CLOVER_Shield_Presence[6] = true;
-    CLOVER_Distance[6] = 10.6*cm;
-    CLOVER_phi[6] = 36*deg;
-    CLOVER_theta[6] = 93.81*deg;
-    
-    //  CLOVER 8
-    CLOVER_Presence[7] = true;
-    CLOVER_Shield_Presence[7] = true;
-    CLOVER_Distance[7] = 10.6*cm;
-    CLOVER_phi[7] = 108*deg;
-    CLOVER_theta[7] = 93.81*deg;
-    
-    //  CLOVER 9
-    CLOVER_Presence[8] = true;
-    CLOVER_Shield_Presence[8] = true;
-    CLOVER_Distance[8] = 10.6*cm;
-    CLOVER_phi[8] = 180*deg;
-    CLOVER_theta[8] = 93.81*deg;
-    
-    //  CLOVER 10
-    CLOVER_Presence[9] = true;
-    CLOVER_Shield_Presence[9] = true;
-    CLOVER_Distance[9] = 10.6*cm;
-    CLOVER_phi[9] = 252*deg;
-    CLOVER_theta[9] = 93.81*deg;
-    
-    //  CLOVER 11
-    CLOVER_Presence[10] = true;
-    CLOVER_Shield_Presence[10] = true;
-    CLOVER_Distance[10] = 10.6*cm;
-    CLOVER_phi[10] = 324*deg;
-    CLOVER_theta[10] = 107.81*deg;
-    
-    //  CLOVER 12
-    CLOVER_Presence[11] = true;
-    CLOVER_Shield_Presence[11] = true;
-    CLOVER_Distance[11] = 10.6*cm;
-    CLOVER_phi[11] = 36*deg;
-    CLOVER_theta[11] = 135.62*deg;
-    
-    //  CLOVER 13
-    CLOVER_Presence[12] = true;
-    CLOVER_Shield_Presence[12] = true;
-    CLOVER_Distance[12] = 10.6*cm;
-    CLOVER_phi[12] = 108*deg;
-    CLOVER_theta[12] = 135.62*deg;
-    
-    //  CLOVER 14
-    CLOVER_Presence[13] = true;
-    CLOVER_Shield_Presence[13] = true;
-    CLOVER_Distance[13] = 10.6*cm;
-    CLOVER_phi[13] = 180.*deg;
-    CLOVER_theta[13] = 149.37*deg;
-    
-    //  CLOVER 15
-    CLOVER_Presence[14] = true;
-    CLOVER_Shield_Presence[14] = true;
-    CLOVER_Distance[14] = 10.6*cm;
-    CLOVER_phi[14] = 252*deg;
-    CLOVER_theta[14] = 135.62*deg;
-    
-    //  CLOVER 16
-    CLOVER_Presence[15] = true;
-    CLOVER_Shield_Presence[15] = true;
-    CLOVER_Distance[15] = 10.6*cm;
-    CLOVER_phi[15] = 324*deg;
-    CLOVER_theta[15] = 149.37*deg;
-    
-    //  CLOVER 17
-    CLOVER_Presence[16] = true;
-    CLOVER_Shield_Presence[16] = true;
-    CLOVER_Distance[16] = 10.6*cm;
-    CLOVER_phi[16] = 216*deg;
-    CLOVER_theta[16] = 30.63*deg;
+//    //  CLOVER 1
+//    CLOVER_Presence[0] = true;
+//    CLOVER_Shield_Presence[0] = false;
+//    CLOVER_Distance[0] = 10.6*cm;
+//    CLOVER_phi[0] = 0*deg;
+//    CLOVER_theta[0] = 90.0*deg;
+//    
+//    //  CLOVER 2
+//    CLOVER_Presence[1] = true;
+//    CLOVER_Shield_Presence[1] = true;
+//    CLOVER_Distance[1] = 10.6*cm;
+//    CLOVER_phi[1] = 144*deg;
+//    CLOVER_theta[1] = 44.38*deg;
+//    
+//    //  CLOVER 3
+//    CLOVER_Presence[2] = true;
+//    CLOVER_Shield_Presence[2] = true;
+//    CLOVER_Distance[2] = 10.6*cm;
+//    CLOVER_phi[2] = 72*deg;
+//    CLOVER_theta[2] = 72.19*deg;
+//    
+//    //  CLOVER 4
+//    CLOVER_Presence[3] = true;
+//    CLOVER_Shield_Presence[3] = true;
+//    CLOVER_Distance[3] = 10.6*cm;
+//    CLOVER_phi[3] = 144*deg;
+//    CLOVER_theta[3] = 86.19*deg;
+//    
+//    //  CLOVER 5
+//    CLOVER_Presence[4] = true;
+//    CLOVER_Shield_Presence[4] = true;
+//    CLOVER_Distance[4] = 10.6*cm;
+//    CLOVER_phi[4] = 216*deg;
+//    CLOVER_theta[4] = 72.19*deg;
+//    
+//    //  CLOVER 6
+//    CLOVER_Presence[5] = true;
+//    CLOVER_Shield_Presence[5] = true;
+//    CLOVER_Distance[5] = 10.6*cm;
+//    CLOVER_phi[5] = 288*deg;
+//    CLOVER_theta[5] = 72.19*deg;
+//    
+//    //  CLOVER 7
+//    CLOVER_Presence[6] = true;
+//    CLOVER_Shield_Presence[6] = true;
+//    CLOVER_Distance[6] = 10.6*cm;
+//    CLOVER_phi[6] = 36*deg;
+//    CLOVER_theta[6] = 93.81*deg;
+//    
+//    //  CLOVER 8
+//    CLOVER_Presence[7] = true;
+//    CLOVER_Shield_Presence[7] = true;
+//    CLOVER_Distance[7] = 10.6*cm;
+//    CLOVER_phi[7] = 108*deg;
+//    CLOVER_theta[7] = 93.81*deg;
+//    
+//    //  CLOVER 9
+//    CLOVER_Presence[8] = true;
+//    CLOVER_Shield_Presence[8] = true;
+//    CLOVER_Distance[8] = 10.6*cm;
+//    CLOVER_phi[8] = 180*deg;
+//    CLOVER_theta[8] = 93.81*deg;
+//    
+//    //  CLOVER 10
+//    CLOVER_Presence[9] = true;
+//    CLOVER_Shield_Presence[9] = true;
+//    CLOVER_Distance[9] = 10.6*cm;
+//    CLOVER_phi[9] = 252*deg;
+//    CLOVER_theta[9] = 93.81*deg;
+//    
+//    //  CLOVER 11
+//    CLOVER_Presence[10] = true;
+//    CLOVER_Shield_Presence[10] = true;
+//    CLOVER_Distance[10] = 10.6*cm;
+//    CLOVER_phi[10] = 324*deg;
+//    CLOVER_theta[10] = 107.81*deg;
+//    
+//    //  CLOVER 12
+//    CLOVER_Presence[11] = true;
+//    CLOVER_Shield_Presence[11] = true;
+//    CLOVER_Distance[11] = 10.6*cm;
+//    CLOVER_phi[11] = 36*deg;
+//    CLOVER_theta[11] = 135.62*deg;
+//    
+//    //  CLOVER 13
+//    CLOVER_Presence[12] = true;
+//    CLOVER_Shield_Presence[12] = true;
+//    CLOVER_Distance[12] = 10.6*cm;
+//    CLOVER_phi[12] = 108*deg;
+//    CLOVER_theta[12] = 135.62*deg;
+//    
+//    //  CLOVER 14
+//    CLOVER_Presence[13] = true;
+//    CLOVER_Shield_Presence[13] = true;
+//    CLOVER_Distance[13] = 10.6*cm;
+//    CLOVER_phi[13] = 180.*deg;
+//    CLOVER_theta[13] = 149.37*deg;
+//    
+//    //  CLOVER 15
+//    CLOVER_Presence[14] = true;
+//    CLOVER_Shield_Presence[14] = true;
+//    CLOVER_Distance[14] = 10.6*cm;
+//    CLOVER_phi[14] = 252*deg;
+//    CLOVER_theta[14] = 135.62*deg;
+//    
+//    //  CLOVER 16
+//    CLOVER_Presence[15] = true;
+//    CLOVER_Shield_Presence[15] = true;
+//    CLOVER_Distance[15] = 10.6*cm;
+//    CLOVER_phi[15] = 324*deg;
+//    CLOVER_theta[15] = 149.37*deg;
+//    
+//    //  CLOVER 17
+//    CLOVER_Presence[16] = true;
+//    CLOVER_Shield_Presence[16] = true;
+//    CLOVER_Distance[16] = 10.6*cm;
+//    CLOVER_phi[16] = 216*deg;
+//    CLOVER_theta[16] = 30.63*deg;
 
     
     for(G4int i=0; i<numberOf_CLOVER; i++)
@@ -762,7 +755,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     
     
     LaBr3Ce_AllPresent_Override = false;
-    LaBr3Ce_AllAbsent_Override = false;
+    LaBr3Ce_AllAbsent_Override = true;
     
     /*
     LaBr3CeSetupVersion = 1;
@@ -780,13 +773,94 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     LaBr3Ce_Distance[0] = 0.0*cm;
     */
     
+    for(int i=0; i<numberOf_LaBr3Ce; i++)
+    {
+        LaBr3Ce_Presence[i] = false;
+    }
+    
+    //------------------------------------------------
+    //      X17, gamma-gamma measurement
+    SetupPreconfiguredVersion(-1);
+    
+//    //  LaBr3Ce 1
+//    LaBr3Ce_Presence[0] = true;
+//    LaBr3Ce_Distance[0] = 150.0*mm;
+//    LaBr3Ce_theta[0] = 45.0*deg;
+//    LaBr3Ce_phi[0] = 0.0*deg;
+//    
+//    //  LaBr3Ce 2
+//    LaBr3Ce_Presence[1] = true;
+//    LaBr3Ce_Distance[1] = 150.0*mm;
+//    LaBr3Ce_theta[1] = 90.0*deg;
+//    LaBr3Ce_phi[1] = 0.0*deg;
+//    
+//    //  LaBr3Ce 3
+//    LaBr3Ce_Presence[2] = false;
+//    LaBr3Ce_Distance[2] = 150.0*mm;
+//    LaBr3Ce_theta[2] = 135.0*deg;
+//    LaBr3Ce_phi[2] = 0.0*deg;
+//
+//    //  LaBr3Ce 4
+//    LaBr3Ce_Presence[3] = true;
+//    LaBr3Ce_Distance[3] = 150.0*mm;
+//    LaBr3Ce_theta[3] = 45.0*deg;
+//    LaBr3Ce_phi[3] = 90.0*deg;
+//    
+//    //  LaBr3Ce 5
+//    LaBr3Ce_Presence[4] = true;
+//    LaBr3Ce_Distance[4] = 150.0*mm;
+//    LaBr3Ce_theta[4] = 90.0*deg;
+//    LaBr3Ce_phi[4] = 90.0*deg;
+//    
+//    //  LaBr3Ce 6
+//    LaBr3Ce_Presence[5] = true;
+//    LaBr3Ce_Distance[5] = 150.0*mm;
+//    LaBr3Ce_theta[5] = 135.0*deg;
+//    LaBr3Ce_phi[5] = 90.0*deg;
+//
+//    //  LaBr3Ce 7
+//    LaBr3Ce_Presence[6] = true;
+//    LaBr3Ce_Distance[6] = 150.0*mm;
+//    LaBr3Ce_theta[6] = 45.0*deg;
+//    LaBr3Ce_phi[6] = 180.0*deg;
+//    
+//    //  LaBr3Ce 8
+//    LaBr3Ce_Presence[7] = true;
+//    LaBr3Ce_Distance[7] = 150.0*mm;
+//    LaBr3Ce_theta[7] = 90.0*deg;
+//    LaBr3Ce_phi[7] = 180.0*deg;
+//    
+//    //  LaBr3Ce 9
+//    LaBr3Ce_Presence[8] = true;
+//    LaBr3Ce_Distance[8] = 150.0*mm;
+//    LaBr3Ce_theta[8] = 135.0*deg;
+//    LaBr3Ce_phi[8] = 180.0*deg;
+//
+//    //  LaBr3Ce 10
+//    LaBr3Ce_Presence[9] = true;
+//    LaBr3Ce_Distance[9] = 150.0*mm;
+//    LaBr3Ce_theta[9] = 45.0*deg;
+//    LaBr3Ce_phi[9] = 270.0*deg;
+//    
+//    //  LaBr3Ce 11
+//    LaBr3Ce_Presence[10] = true;
+//    LaBr3Ce_Distance[10] = 150.0*mm;
+//    LaBr3Ce_theta[10] = 90.0*deg;
+//    LaBr3Ce_phi[10] = 270.0*deg;
+//    
+//    //  LaBr3Ce 12
+//    LaBr3Ce_Presence[11] = true;
+//    LaBr3Ce_Distance[11] = 150.0*mm;
+//    LaBr3Ce_theta[11] = 135.0*deg;
+//    LaBr3Ce_phi[11] = 270.0*deg;
+
     
     //------------------------------------------------
     //      PRECONFIGURED SETUPS
     
     //      Work for Christiaan/Mathis/Katarzyna
-    //SetupPreconfiguredVersion(-1);
-
+//    SetupPreconfiguredVersion(-1);
+    
     //  No tapering
     //  LaBR3Ce_GlobalDistance = 13.2*cm;
     //SetupPreconfiguredVersion(0);
@@ -819,73 +893,93 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //SetupPreconfiguredVersion(9);
 
     //------------------------------------------------
+
+//    for(int i=0; i<numberOf_LaBr3Ce; i++)
+//    {
+//        if(!LaBr3Ce_Presence[i])
+//        {
+//            G4cout << "NOT PRESENT" << G4endl;
+//        }
+//    }
+
+//    for(int i=0; i<numberOf_LaBr3Ce; i++)
+//    {
+//        LaBr3Ce_Presence[i] = false;
+//    }
+
     
-    
-    for(G4int i=0; i<numberOf_LaBr3Ce; i++)
-    {
-        if( LaBr3Ce_AllPresent_Override == true ) LaBr3Ce_Presence[i] = true;
-        if( LaBr3Ce_AllAbsent_Override == true ) LaBr3Ce_Presence[i] = false;
-        if( LaBr3Ce_AllPresent_Override == true && LaBr3Ce_AllAbsent_Override == true ) LaBr3Ce_Presence[i] = false;
-        
-        if(LaBR3Ce_SetGlobalDistance)
-        {
-            LaBr3Ce_Distance[i] = LaBR3Ce_GlobalDistance;
-        }
-        
-        double x, y, z;
-        double theta, phi, r;
-        
-        if(i<20)
-        {
-            x = vertex_hexagonFaces_truncatedIcosahedron[i].x();
-            y = vertex_hexagonFaces_truncatedIcosahedron[i].y();
-            z = vertex_hexagonFaces_truncatedIcosahedron[i].z();
-            
-            r = vertex_hexagonFaces_truncatedIcosahedron[i].mag();
-        }
-        else if(i<32)
-        {
-            int pentIndex = i-20;
-            x = vertex_pentagonFaces_truncatedIcosahedron[pentIndex].x();
-            y = vertex_pentagonFaces_truncatedIcosahedron[pentIndex].y();
-            z = vertex_pentagonFaces_truncatedIcosahedron[pentIndex].z();
-            
-            r = vertex_pentagonFaces_truncatedIcosahedron[pentIndex].mag();
-        }
-        
-        theta = acos(z/r)/deg;
-        
-        if(x>0.0)
-        {
-            phi = atan(y/x)/deg;
-        }
-        else if(x<0.0 && y>=0.0)
-        {
-            phi = atan(y/x)/deg + 180.0;
-        }
-        else if(x<0.0 && y<0.0)
-        {
-            phi = atan(y/x)/deg - 180.0;
-        }
-        else if(x==0.0 && y>0.0)
-        {
-            phi = 90.0;
-        }
-        else if(x==0.0 && y<0.0)
-        {
-            phi = -90.0;
-        }
-        else if(x==0.0 && y==0.0)
-        {
-            phi = G4RandFlat::shoot(0.0, 360.0);
-        }
-        
-        if(configuration_truncatedIcosahedron_hexagons)
-        {
-            LaBr3Ce_theta[i] = theta*deg;
-            LaBr3Ce_phi[i] = phi*deg;
-        }
-    }
+//    for(G4int i=0; i<numberOf_LaBr3Ce; i++)
+//    {
+//        if( LaBr3Ce_AllPresent_Override == true ) LaBr3Ce_Presence[i] = true;
+//        if( LaBr3Ce_AllAbsent_Override == true ) LaBr3Ce_Presence[i] = false;
+//        if( LaBr3Ce_AllPresent_Override == true && LaBr3Ce_AllAbsent_Override == true ) LaBr3Ce_Presence[i] = false;
+//    }
+
+    //    for(G4int i=0; i<numberOf_LaBr3Ce; i++)
+//    {
+//        if( LaBr3Ce_AllPresent_Override == true ) LaBr3Ce_Presence[i] = true;
+//        if( LaBr3Ce_AllAbsent_Override == true ) LaBr3Ce_Presence[i] = false;
+//        if( LaBr3Ce_AllPresent_Override == true && LaBr3Ce_AllAbsent_Override == true ) LaBr3Ce_Presence[i] = false;
+//        
+//        if(LaBR3Ce_SetGlobalDistance)
+//        {
+//            LaBr3Ce_Distance[i] = LaBR3Ce_GlobalDistance;
+//        }
+//        
+//        double x, y, z;
+//        double theta, phi, r;
+//        
+//        if(i<20)
+//        {
+//            x = vertex_hexagonFaces_truncatedIcosahedron[i].x();
+//            y = vertex_hexagonFaces_truncatedIcosahedron[i].y();
+//            z = vertex_hexagonFaces_truncatedIcosahedron[i].z();
+//            
+//            r = vertex_hexagonFaces_truncatedIcosahedron[i].mag();
+//        }
+//        else if(i<32)
+//        {
+//            int pentIndex = i-20;
+//            x = vertex_pentagonFaces_truncatedIcosahedron[pentIndex].x();
+//            y = vertex_pentagonFaces_truncatedIcosahedron[pentIndex].y();
+//            z = vertex_pentagonFaces_truncatedIcosahedron[pentIndex].z();
+//            
+//            r = vertex_pentagonFaces_truncatedIcosahedron[pentIndex].mag();
+//        }
+//        
+//        theta = acos(z/r)/deg;
+//        
+//        if(x>0.0)
+//        {
+//            phi = atan(y/x)/deg;
+//        }
+//        else if(x<0.0 && y>=0.0)
+//        {
+//            phi = atan(y/x)/deg + 180.0;
+//        }
+//        else if(x<0.0 && y<0.0)
+//        {
+//            phi = atan(y/x)/deg - 180.0;
+//        }
+//        else if(x==0.0 && y>0.0)
+//        {
+//            phi = 90.0;
+//        }
+//        else if(x==0.0 && y<0.0)
+//        {
+//            phi = -90.0;
+//        }
+//        else if(x==0.0 && y==0.0)
+//        {
+//            phi = G4RandFlat::shoot(0.0, 360.0);
+//        }
+//        
+//        if(configuration_truncatedIcosahedron_hexagons)
+//        {
+//            LaBr3Ce_theta[i] = theta*deg;
+//            LaBr3Ce_phi[i] = phi*deg;
+//        }
+//    }
 
     
     ////////////////////////////////////////////
@@ -955,6 +1049,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     K600_ALBA_TruncIcos_Shielding_Presence = false;
     
     /////////////////////////////////////
+    //      Attenuation foil
+    attenuationFoil_Presence = false;
+
+    /////////////////////////////////////
     //  K600 Target
     K600_Target_Presence = false;
     
@@ -998,6 +1096,8 @@ void DetectorConstruction::DefineMaterials()
     nistManager->FindOrBuildMaterial("G4_SODIUM_IODIDE");
     nistManager->FindOrBuildMaterial("G4_LITHIUM_CARBONATE");
     nistManager->FindOrBuildMaterial("G4_Be");
+    nistManager->FindOrBuildMaterial("G4_lH2");
+    nistManager->FindOrBuildMaterial("G4_Ag");
 
     //  NIST Elementary Material Database - ELEMENTS
     nistManager->FindOrBuildElement("H");
@@ -1069,7 +1169,9 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     G4Material* G4_SODIUM_IODIDE_Material = G4Material::GetMaterial("G4_SODIUM_IODIDE");
     G4Material* G4_LITHIUM_CARBONATE_Material = G4Material::GetMaterial("G4_LITHIUM_CARBONATE");
     G4Material* G4_Be_Material = G4Material::GetMaterial("G4_Be");
-
+    G4Material* G4_lH2_Material = G4Material::GetMaterial("G4_lH2");
+    G4Material* G4_Ag_Material = G4Material::GetMaterial("G4_Ag");
+    
     ////    CLOVER Detector Shield, HEAVIMET Material
     G4Material* Heavimet_Material = new G4Material("Heavimet_Material",19.25*g/cm3, 5);
     Heavimet_Material->AddElement(Tungsten, 94.20*perCent);
@@ -1179,19 +1281,19 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     
     if(K600_BACTAR_sidesOn_Presence)
     {
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/STRUCTURES/BACTAR/BACTAR_sidesOn.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/STRUCTURES/BACTAR/BACTAR_sidesOn.ply");
     }
     if(K600_BACTAR_sidesOff_Presence)
     {
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/STRUCTURES/BACTAR/BACTAR_sidesOff.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/STRUCTURES/BACTAR/BACTAR_sidesOff.ply");
     }
     if(K600_BACTAR_beamRightSideOff_Presence)
     {
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/STRUCTURES/BACTAR/BACTAR_beamRightSideOff.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/STRUCTURES/BACTAR/BACTAR_beamRightSideOff.ply");
     }
     if(K600_BACTAR_beamLeftSideOff_Presence)
     {
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/STRUCTURES/BACTAR/BACTAR_beamLightSideOff.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/STRUCTURES/BACTAR/BACTAR_beamLightSideOff.ply");
     }
 
     
@@ -1228,9 +1330,9 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     if(K600_ALBA_TruncIcos_Shielding_Presence)
     {
         //  Without tolerances
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/STRUCTURES/ALBA/ALBA_shield.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/STRUCTURES/ALBA/ALBA_shield.ply");
         //  With tolerances
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/STRUCTURES/ALBA/ALBA_shield_mod.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/STRUCTURES/ALBA/ALBA_shield_mod.ply");
     }
     
     if(K600_ALBA_TruncIcos_Shielding_Presence)
@@ -1268,7 +1370,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     {
         G4ThreeVector offset_MathisTC = G4ThreeVector(0*cm, 0*cm, 0*cm);
         
-        CADMesh * mesh_MathisTC = new CADMesh("../K600-ALBA/Mesh-Models/STRUCTURES/MathisTC/MathisTC.ply", "PLY", mm, offset_MathisTC, false);
+        CADMesh * mesh_MathisTC = new CADMesh("../K600/Mesh-Models/STRUCTURES/MathisTC/MathisTC.ply", "PLY", mm, offset_MathisTC, false);
         
         G4VSolid * SolidMathisTC = mesh_MathisTC->TessellatedMesh();
         
@@ -1315,11 +1417,15 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     //                  TARGET DEFINITION
     //////////////////////////////////////////////////////////
     
-    G4double targetThickness = 2.42; // um
+    
+//    G4double targetThickness = 2.42; // um
     //G4double targetThickness = 2.18; // um
     //G4double targetThickness = 3.5; // um
     //G4double targetThickness = 4.5; // um
-    
+
+    //      X17
+//    G4double targetThickness = 3.0*1.1197459; // um
+    G4double targetThickness = 50.0; // um
     
     ////    For Daniel Lombarri's Experiment
     //G4double targetThickness = 1.5; // um
@@ -1327,11 +1433,12 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     
     G4ThreeVector positionTarget = G4ThreeVector(0,0,0);
     
-    G4Box* SolidTarget = new G4Box("Target", (20./2)*mm, (20./2)*mm, (targetThickness/2)*um);
+    G4Box* SolidTarget = new G4Box("Target", (10./2)*mm, (10./2)*mm, (targetThickness/2)*um);
     
     
     //G4LogicalVolume* LogicTarget = new G4LogicalVolume(SolidTarget, G4_LITHIUM_CARBONATE_Material,"Target",0,0,0);
-    G4LogicalVolume* LogicTarget = new G4LogicalVolume(SolidTarget, G4_Be_Material,"Target",0,0,0);
+//    G4LogicalVolume* LogicTarget = new G4LogicalVolume(SolidTarget, G4_Be_Material,"Target",0,0,0);
+    G4LogicalVolume* LogicTarget = new G4LogicalVolume(SolidTarget, G4_lH2_Material,"Target",0,0,0);
 
     if(K600_Target_Presence)
     {
@@ -1345,6 +1452,32 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                           fCheckOverlaps); // checking overlaps
     }
     
+    //////////////////////////////////////////////////////
+    //                  Attenuation foil
+    //////////////////////////////////////////////////////
+
+    G4ThreeVector positionAttenuationFoil = G4ThreeVector(0,0,1.0*cm);
+    
+    G4double attenuationFoilThickness = 7.0; // um
+//    G4double attenuationFoilThickness = 80.0; // um
+    G4Box* SolidAttenuationFoil = new G4Box("AttenuationFoil", (100./2)*mm, (100./2)*mm, (attenuationFoilThickness/2)*um);
+//    G4LogicalVolume* LogicAttenuationFoil = new G4LogicalVolume(SolidAttenuationFoil, G4_Al_Material,"AttenuationFoil",0,0,0);
+    G4LogicalVolume* LogicAttenuationFoil = new G4LogicalVolume(SolidAttenuationFoil, G4_Ag_Material,"AttenuationFoil",0,0,0);
+//    G4LogicalVolume* LogicAttenuationFoil = new G4LogicalVolume(SolidAttenuationFoil, G4_lH2_Material,"AttenuationFoil",0,0,0);
+//G4_Si_Material
+    
+    if(attenuationFoil_Presence)
+    {
+        new G4PVPlacement(0,               // no rotation
+                          positionAttenuationFoil, // at (x,y,z)
+                          LogicAttenuationFoil,       // its logical volume
+                          "Target",       // its name
+                          LogicVacuumChamber,         // its mother  volume
+                          false,           // no boolean operations
+                          0,               // copy number
+                          fCheckOverlaps); // checking overlaps
+    }
+
     
     //////////////////////////////////////////////////////
     //                  TARGET BACKING
@@ -2736,7 +2869,242 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     
     
     
+    /////////////////////////////////////////////
+    //             TIGRESS DEFINITION           //
+    /////////////////////////////////////////////
     
+    //G4double TIGRESStoShield_displacement = 10.0;  // cm
+    
+    //  Minimum closest distance the TIGRESS can placed away from the HEAVIMET to not clash (with TIGRESSEncasement.ply)
+    //G4double TIGRESStoShield_displacement = 7.8;  // cm
+    
+    //  Measured closest distance the TIGRESS can placed away from the HEAVIMET (to be used with TIGRESSEncasement_approx.ply
+//    G4double TIGRESStoShield_displacement = -0.16 + 20.0;  // cm
+    G4double TIGRESStoShield_displacement = 0.0;  // cm
+    
+    G4ThreeVector offset_TIGRESSInternalVacuum = G4ThreeVector(0*cm, 0*cm, -TIGRESStoShield_displacement*cm);
+    G4ThreeVector offset_TIGRESSEncasement = G4ThreeVector(0*cm, 0*cm, -TIGRESStoShield_displacement*cm);
+    G4ThreeVector offset_TIGRESSHPGeCrystal1 = G4ThreeVector(0*cm, 0*cm, -TIGRESStoShield_displacement*cm);
+    G4ThreeVector offset_TIGRESSHPGeCrystal2 = G4ThreeVector(0*cm, 0*cm, -TIGRESStoShield_displacement*cm);
+    G4ThreeVector offset_TIGRESSHPGeCrystal3 = G4ThreeVector(0*cm, 0*cm, -TIGRESStoShield_displacement*cm);
+    G4ThreeVector offset_TIGRESSHPGeCrystal4 = G4ThreeVector(0*cm, 0*cm, -TIGRESStoShield_displacement*cm);
+    
+    G4LogicalVolume * Logic_TIGRESS_InternalVacuum[numberOf_TIGRESS];
+    G4LogicalVolume * Logic_TIGRESS_Encasement;
+    G4LogicalVolume * Logic_TIGRESS_HPGeCrystal[4];
+    G4LogicalVolume * Logic_TIGRESS_HPGeCrystal_LithiumContact[4];
+    
+    bool useTIGRESS = false;
+    
+//    for(G4int i=0; i<numberOf_TIGRESS; i++)
+//    {
+//        if(TIGRESS_Presence[i])
+//        {
+//            useTIGRESS = true;
+//        }
+//    }
+    
+    if(useTIGRESS)
+    {
+        TIGRESS_Distance[0] = 15.0*cm;
+        TIGRESS_theta[0] = 135.0*deg;
+        TIGRESS_phi[0] = 0.0*deg;
+        
+        //--------------------------------------------
+        TIGRESS_position[0] = (TIGRESS_Distance[0])*G4ThreeVector(sin(TIGRESS_theta[0]) * cos(TIGRESS_phi[0]), sin(TIGRESS_theta[0]) * sin(TIGRESS_phi[0]), cos(TIGRESS_theta[0]));
+        
+        G4ThreeVector positionVector = TIGRESS_position[0].unit();
+        
+        G4ThreeVector requiredFinalXaxis = G4ThreeVector(cos(TIGRESS_theta[0])*cos(TIGRESS_phi[0]), cos(TIGRESS_theta[0])*sin(TIGRESS_phi[0]), -sin(TIGRESS_theta[0])); // unit vector of theta
+        G4ThreeVector requiredFinalZaxis = -positionVector;
+        G4ThreeVector requiredFinalYaxis = requiredFinalZaxis.cross(requiredFinalXaxis).unit();
+        
+        G4RotationMatrix rotmPrime2;
+        rotmPrime2.rotateAxes(requiredFinalXaxis, requiredFinalYaxis, requiredFinalZaxis);
+        
+        TIGRESS_transform[0] = G4Transform3D(rotmPrime2, TIGRESS_position[0]);
+
+        
+        //////////////////////////////////////////////////////////
+        //              TIGRESS Internal Vacuum - CADMesh
+        
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/TIGRESS/TIGRESS-InternalVacuum.ply");
+        
+        CADMesh * mesh_TIGRESSInternalVacuum = new CADMesh(meshPath, meshType, mm, offset_TIGRESSInternalVacuum, false);
+        
+        G4VSolid * Solid_TIGRESSInternalVacuum = mesh_TIGRESSInternalVacuum->TessellatedMesh();
+        
+        G4VisAttributes* TIGRESS_InternalVacuum_VisAtt = new G4VisAttributes(G4Colour(0.7, 0.7, 0.7));
+        TIGRESS_InternalVacuum_VisAtt->SetVisibility(true);
+        
+        for(G4int i=0; i<numberOf_TIGRESS; i++)
+        {
+            Logic_TIGRESS_InternalVacuum[i] = new G4LogicalVolume(Solid_TIGRESSInternalVacuum, G4_Galactic_Material, "LogicTIGRESSInternalVacuum", 0, 0, 0);
+            Logic_TIGRESS_InternalVacuum[i]->SetVisAttributes(TIGRESS_InternalVacuum_VisAtt);
+        
+//            new G4PVPlacement(0,               // no rotation
+//                              G4ThreeVector(), // at (x,y,z)
+//                              Logic_TIGRESS_InternalVacuum[i],
+//                              "CLOVER_HPGeLithiumDopedDeadlayer", // its name
+//                              LogicVacuumChamber,
+//                              false,           // no boolean operations
+//                              0,               // copy number
+//                              fCheckOverlaps); // checking overlaps
+        }
+
+        
+        ///////////////////////////////////////////////////////
+        //              TIGRESS Encasement - CADMesh
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/TIGRESS/TIGRESS-Encasement.ply");
+        
+        CADMesh * mesh_TIGRESSEncasement = new CADMesh(meshPath, meshType, mm, offset_TIGRESSEncasement, false);
+        
+        G4VSolid * Solid_TIGRESSEncasement = mesh_TIGRESSEncasement->TessellatedMesh();
+        
+        Logic_TIGRESS_Encasement = new G4LogicalVolume(Solid_TIGRESSEncasement, G4_Al_Material, "LogicTIGRESSCloverEncasement", 0, 0, 0);
+        
+        G4VisAttributes* TIGRESS_Encasement_VisAtt = new G4VisAttributes(G4Colour(0.7, 0.7, 0.7));
+        //TIGRESS_Encasement_VisAtt->SetForceSolid(true);
+        Logic_TIGRESS_Encasement->SetVisAttributes(TIGRESS_Encasement_VisAtt);
+
+        new G4PVPlacement(TIGRESS_transform[0], // at (x,y,z)
+                          Logic_TIGRESS_Encasement,
+                          "TIGRESS_Encasement", // its name
+                          LogicVacuumChamber,
+                          false,           // no boolean operations
+                          0,               // copy number
+                          fCheckOverlaps); // checking overlaps
+
+//        new G4PVPlacement(0,               // no rotation
+//                          G4ThreeVector(0.0, 0.0, -20.0*cm), // at (x,y,z)
+//                          Logic_TIGRESS_Encasement,
+//                          "TIGRESS_Encasement", // its name
+//                          LogicVacuumChamber,
+//                          false,           // no boolean operations
+//                          0,               // copy number
+//                          fCheckOverlaps); // checking overlaps
+
+//
+//        new G4PVPlacement(0,               // no rotation
+//                          G4ThreeVector(0.0, 0.0, -10.0*cm), // at (x,y,z)
+//                          Logic_TIGRESS_InternalVacuum[0],
+//                          "TIGRESS_InternalVacuum", // its name
+//                          LogicVacuumChamber,
+//                          false,           // no boolean operations
+//                          0,               // copy number
+//                          fCheckOverlaps); // checking overlaps
+
+//        new G4PVPlacement(0,               // no rotation
+//                          G4ThreeVector(0.0, 0.0, -0.001*cm), // at (x,y,z)
+//                          Logic_TIGRESS_Encasement,
+//                          "Logic_TIGRESS_Encasement", // its name
+//                          Logic_TIGRESS_InternalVacuum[0],
+//                          false,           // no boolean operations
+//                          0,               // copy number
+//                          fCheckOverlaps); // checking overlaps
+
+        //////////////////////////////////////////////////////////
+        //              TIGRESS HPGeCrystals - CADMesh
+        
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/TIGRESS/HPGe-Crystals/HPGe-Crystal1.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/TIGRESS/HPGe-Crystals/HPGe-RoundedCrystal1_10um.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/TIGRESS/HPGe-Crystals/HPGe-RoundedCrystal1_10um_invertedNormals.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/TIGRESS/HPGeCrystalA-TIGRESS.ply");
+        CADMesh * mesh_TIGRESSHPGeCrystal1 = new CADMesh(meshPath, meshType, mm, offset_TIGRESSHPGeCrystal1, false);
+        
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/TIGRESS/HPGe-Crystals/HPGe-Crystal2.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/TIGRESS/HPGe-Crystals/HPGe-RoundedCrystal2_10um.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/TIGRESS/HPGeCrystalB-TIGRESS.ply");
+        CADMesh * mesh_TIGRESSHPGeCrystal2 = new CADMesh(meshPath, meshType, mm, offset_TIGRESSHPGeCrystal2, false);
+        
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/TIGRESS/HPGe-Crystals/HPGe-Crystal3.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/TIGRESS/HPGe-Crystals/HPGe-RoundedCrystal3_10um.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/TIGRESS/HPGeCrystalC-TIGRESS.ply");
+        CADMesh * mesh_TIGRESSHPGeCrystal3 = new CADMesh(meshPath, meshType, mm, offset_TIGRESSHPGeCrystal3, false);
+        
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/TIGRESS/HPGe-Crystals/HPGe-Crystal4.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/TIGRESS/HPGe-Crystals/HPGe-RoundedCrystal4_10um.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/TIGRESS/HPGeCrystalD-TIGRESS.ply");
+        CADMesh * mesh_TIGRESSHPGeCrystal4 = new CADMesh(meshPath, meshType, mm, offset_TIGRESSHPGeCrystal4, false);
+
+        G4VSolid * Solid_HPGeCrystal1 = mesh_TIGRESSHPGeCrystal1->TessellatedMesh();
+        G4VSolid * Solid_HPGeCrystal2 = mesh_TIGRESSHPGeCrystal2->TessellatedMesh();
+        G4VSolid * Solid_HPGeCrystal3 = mesh_TIGRESSHPGeCrystal3->TessellatedMesh();
+        G4VSolid * Solid_HPGeCrystal4 = mesh_TIGRESSHPGeCrystal4->TessellatedMesh();
+        
+        Logic_TIGRESS_HPGeCrystal[0] = new G4LogicalVolume(Solid_HPGeCrystal1, G4_Ge_Material,"LogicTIGRESSHPGeCrystal",0,0,0);
+        Logic_TIGRESS_HPGeCrystal[1] = new G4LogicalVolume(Solid_HPGeCrystal2, G4_Ge_Material,"LogicTIGRESSHPGeCrystal",0,0,0);
+        Logic_TIGRESS_HPGeCrystal[2] = new G4LogicalVolume(Solid_HPGeCrystal3, G4_Ge_Material,"LogicTIGRESSHPGeCrystal",0,0,0);
+        Logic_TIGRESS_HPGeCrystal[3] = new G4LogicalVolume(Solid_HPGeCrystal4, G4_Ge_Material,"LogicTIGRESSHPGeCrystal",0,0,0);
+
+        G4VisAttributes* TIGRESS_HPGeCrystals_VisAtt = new G4VisAttributes(G4Colour(0.9, 0.9, 0.0));
+        //TIGRESS_HPGeCrystals_VisAtt->SetForceSolid(true);
+        
+        Logic_TIGRESS_HPGeCrystal[0]->SetVisAttributes(TIGRESS_HPGeCrystals_VisAtt);
+        Logic_TIGRESS_HPGeCrystal[1]->SetVisAttributes(TIGRESS_HPGeCrystals_VisAtt);
+        Logic_TIGRESS_HPGeCrystal[2]->SetVisAttributes(TIGRESS_HPGeCrystals_VisAtt);
+        Logic_TIGRESS_HPGeCrystal[3]->SetVisAttributes(TIGRESS_HPGeCrystals_VisAtt);
+    }
+
+    if(useTIGRESS)
+    {
+        for(int i=0; i<4; i++)
+        {
+            std::string name = "TIGRESS_HPGeCrystal";
+            
+            //        if(i==0)
+            //        {
+            //            name += "A";
+            //        }
+            //        else if(i==1)
+            //        {
+            //            name += "B";
+            //        }
+            //        else if(i==2)
+            //        {
+            //            name += "C";
+            //        }
+            //        else if(i==3)
+            //        {
+            //            name += "D";
+            //        }
+            
+            new G4PVPlacement(TIGRESS_transform[0], // at (x,y,z)
+                              Logic_TIGRESS_HPGeCrystal[i],
+                              name.c_str(), // its name
+                              LogicVacuumChamber,
+                              false,           // no boolean operations
+                              0,               // copy number
+                              fCheckOverlaps); // checking overlaps
+            
+            //        new G4PVPlacement(0,               // no rotation
+            //                          G4ThreeVector(0.0, 0.0, -20.001*cm), // at (x,y,z)
+            //                          Logic_TIGRESS_HPGeCrystal[i],
+            //                          name.c_str(), // its name
+            //                          LogicVacuumChamber,
+            //                          false,           // no boolean operations
+            //                          0,               // copy number
+            //                          fCheckOverlaps); // checking overlaps
+            
+            //        new G4PVPlacement(0,               // no rotation
+            //                          G4ThreeVector(0.0, 0.0, -0.002*cm), // at (x,y,z)
+            //                          Logic_TIGRESS_HPGeCrystal[i],
+            //                          name.c_str(), // its name
+            //                          Logic_TIGRESS_InternalVacuum[0],
+            //                          false,           // no boolean operations
+            //                          0,               // copy number
+            //                          fCheckOverlaps); // checking overlaps
+        }
+        
+        //--------------------------------------------------------------------
+        //    new G4PVPlacement(TIGRESS_transform[0], // at (x,y,z)
+        //                      Logic_TIGRESS_InternalVacuum[0],
+        //                      "TIGRESS_InternalVacuum", // its name
+        //                      LogicVacuumChamber,
+        //                      false,           // no boolean operations
+        //                      0,               // copy number
+        //                      fCheckOverlaps); // checking overlaps
+    }
     
     
     /////////////////////////////////////////////
@@ -2778,8 +3146,8 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //////////////////////////////////////////////////////////
         //              CLOVER Internal Vacuum - CADMesh
         
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/CLOVER-InternalVacuum/CloverInternalVacuum.ply");
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/CLOVER-InternalVacuum/CloverInternalVacuum_approx.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/CLOVER-InternalVacuum/CloverInternalVacuum.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/CLOVER-InternalVacuum/CloverInternalVacuum_approx.ply");
 
         CADMesh * mesh_CLOVERInternalVacuum = new CADMesh(meshPath, meshType, mm, offset_CLOVERInternalVacuum, false);
         
@@ -2798,8 +3166,8 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         ///////////////////////////////////////////////////////
         //              CLOVER Encasement - CADMesh
         
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Clover-Encasement/CloverEncasement.ply");
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Clover-Encasement/CloverEncasement_new_approx.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Clover-Encasement/CloverEncasement.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Clover-Encasement/CloverEncasement_new_approx.ply");
 
         CADMesh * mesh_CLOVEREncasement = new CADMesh(meshPath, meshType, mm, offset_CLOVEREncasement, false);
         
@@ -2815,25 +3183,29 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //////////////////////////////////////////////////////////
         //              CLOVER HPGeCrystals - CADMesh
         
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal1.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal1_10um.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal1_10um_invertedNormals.ply");
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_RoundedCrystal1_10um.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal1.ply");
+//        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal1_10um.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal1_10umTolerance.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal1_10um_invertedNormals.ply");
+//        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_RoundedCrystal1_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal1 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal1, false);
         
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal2.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal2_10um.ply");
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_RoundedCrystal2_10um.ply");
+//        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal2.ply");
+//        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal2_10um.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal2_10umTolerance.ply");
+//        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_RoundedCrystal2_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal2 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal2, false);
         
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal3.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal3_10um.ply");
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_RoundedCrystal3_10um.ply");
+//        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal3.ply");
+//        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal3_10um.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal3_10umTolerance.ply");
+//        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_RoundedCrystal3_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal3 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal3, false);
         
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal4.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal4_10um.ply");
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_RoundedCrystal4_10um.ply");
+//        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-Crystal4.ply");
+//        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal4_10um.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe-RoundedCrystal4_10umTolerance.ply");
+//        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_RoundedCrystal4_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal4 = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal4, false);
         
         G4VSolid * Solid_HPGeCrystal1 = mesh_CLOVERHPGeCrystal1->TessellatedMesh();
@@ -2857,16 +3229,16 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //////////////////////////////////////////////////////////////////////
         //              CLOVER HPGeCrystals - Lithium contacts - CADMesh
 
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_LithiumContact1_10um.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_LithiumContact1_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal1_LithiumContact = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal1, false);
 
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_LithiumContact2_10um.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_LithiumContact2_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal2_LithiumContact = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal2, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_LithiumContact3_10um.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_LithiumContact3_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal3_LithiumContact = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal3, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_LithiumContact4_10um.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/HPGe-Crystals/HPGe_pureCylindricalBorehole_LithiumContact4_10um.ply");
         CADMesh * mesh_CLOVERHPGeCrystal4_LithiumContact = new CADMesh(meshPath, meshType, mm, offset_CLOVERHPGeCrystal4, false);
 
         G4VSolid * Solid_HPGeCrystal1_LithiumContact = mesh_CLOVERHPGeCrystal1_LithiumContact->TessellatedMesh();
@@ -2874,10 +3246,10 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         G4VSolid * Solid_HPGeCrystal3_LithiumContact = mesh_CLOVERHPGeCrystal3_LithiumContact->TessellatedMesh();
         G4VSolid * Solid_HPGeCrystal4_LithiumContact = mesh_CLOVERHPGeCrystal4_LithiumContact->TessellatedMesh();
 
-        Logic_CLOVER_HPGeCrystal_LithiumContact[0] = new G4LogicalVolume(Solid_HPGeCrystal1_LithiumContact, G4_Li_Material,"LogicCLOVERHPGeCrystal_LithiumContact",0,0,0);
-        Logic_CLOVER_HPGeCrystal_LithiumContact[1] = new G4LogicalVolume(Solid_HPGeCrystal2_LithiumContact, G4_Li_Material,"LogicCLOVERHPGeCrystal_LithiumContact",0,0,0);
-        Logic_CLOVER_HPGeCrystal_LithiumContact[2] = new G4LogicalVolume(Solid_HPGeCrystal3_LithiumContact, G4_Li_Material,"LogicCLOVERHPGeCrystal_LithiumContact",0,0,0);
-        Logic_CLOVER_HPGeCrystal_LithiumContact[3] = new G4LogicalVolume(Solid_HPGeCrystal4_LithiumContact, G4_Li_Material,"LogicCLOVERHPGeCrystal_LithiumContact",0,0,0);
+        Logic_CLOVER_HPGeCrystal_LithiumContact[0] = new G4LogicalVolume(Solid_HPGeCrystal1_LithiumContact, G4_Ge_Material,"LogicCLOVERHPGeCrystal_LithiumContact",0,0,0);
+        Logic_CLOVER_HPGeCrystal_LithiumContact[1] = new G4LogicalVolume(Solid_HPGeCrystal2_LithiumContact, G4_Ge_Material,"LogicCLOVERHPGeCrystal_LithiumContact",0,0,0);
+        Logic_CLOVER_HPGeCrystal_LithiumContact[2] = new G4LogicalVolume(Solid_HPGeCrystal3_LithiumContact, G4_Ge_Material,"LogicCLOVERHPGeCrystal_LithiumContact",0,0,0);
+        Logic_CLOVER_HPGeCrystal_LithiumContact[3] = new G4LogicalVolume(Solid_HPGeCrystal4_LithiumContact, G4_Ge_Material,"LogicCLOVERHPGeCrystal_LithiumContact",0,0,0);
 
         
         
@@ -2886,109 +3258,252 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         for(G4int j=0; j<4; j++)
         {
             //------------------------------------------------
-            G4Tubs* outerCylinder = new G4Tubs("outerCylinder", 4.0*mm, 5.5*mm, 0.5*55.5*mm, 0.*deg, 360.*deg);
-            G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_cylinder = new G4LogicalVolume(outerCylinder, G4_Li_Material, "Logic_CLOVER_LithiumDeadLayer_cylinder");
+            bool flatCapDeadlayer = false;
             
-            G4Tubs* flatCylinderCap = new G4Tubs("flatCylinderCap", 0.0*mm, 5.1*mm, 0.5*0.5*mm, 0.*deg, 360.*deg);
-            G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_flatCap = new G4LogicalVolume(flatCylinderCap, G4_Li_Material, "Logic_CLOVER_LithiumDeadLayer_flatCap");
-            
-            G4VisAttributes* CLOVER_DeadLayer_Lithium_VisAtt = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));
-            CLOVER_DeadLayer_Lithium_VisAtt->SetForceSolid(true);
-            Logic_CLOVER_LithiumDeadLayer_cylinder->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
-            Logic_CLOVER_LithiumDeadLayer_flatCap->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
-            Logic_CLOVER_HPGeCrystal_LithiumContact[j]->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
-            
-            //------------------------------------------------
-            G4ThreeVector position_LithiumDeadLayer_cylinder;
-            
-            if(j==0)
+            if(flatCapDeadlayer)
             {
-                position_LithiumDeadLayer_cylinder = G4ThreeVector(-20.5*mm, 20.5*mm, -(20.0+70.0)*mm - (CLOVERtoShield_displacement*10.0)*mm + 0.5*55.5*mm);
-            }
-            else if(j==1)
-            {
-                position_LithiumDeadLayer_cylinder = G4ThreeVector(-20.5*mm, -20.5*mm, -(20.0+70.0)*mm - (CLOVERtoShield_displacement*10.0)*mm + 0.5*55.5*mm);
-            }
-            else if(j==2)
-            {
-                position_LithiumDeadLayer_cylinder = G4ThreeVector(20.5*mm, -20.5*mm, -(20.0+70.0)*mm - (CLOVERtoShield_displacement*10.0)*mm + 0.5*55.5*mm);
-            }
-            else if(j==3)
-            {
-                position_LithiumDeadLayer_cylinder = G4ThreeVector(20.5*mm, 20.5*mm, -(20.0+70.0)*mm - (CLOVERtoShield_displacement*10.0)*mm + 0.5*55.5*mm);
-            }
-            
-            //------------------------------------------------
-            G4RotationMatrix* rm = new G4RotationMatrix();
-            G4VSolid* CLOVER_LithiumDeadLayer_cylinderAndFlatCap = new G4UnionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap", outerCylinder, flatCylinderCap, rm, G4ThreeVector(0.,0.,0.5*55.5*mm - 0.5*0.5*mm));
-            G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap = new G4LogicalVolume(CLOVER_LithiumDeadLayer_cylinderAndFlatCap, G4_Li_Material, "Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap");
-            Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
-            
-            //------------------------------------------------
-            G4VSolid* CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge;
-            
-            if(j==0)
-            {
-                CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal1, rm, -position_LithiumDeadLayer_cylinder);
-            }
-            else if(j==1)
-            {
-                CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal2, rm, -position_LithiumDeadLayer_cylinder);
-            }
-            else if(j==2)
-            {
-                CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal3, rm, -position_LithiumDeadLayer_cylinder);
-            }
-            else if(j==3)
-            {
-                CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal4, rm, -position_LithiumDeadLayer_cylinder);
-            }
-            
-            G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4LogicalVolume(CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge, G4_Li_Material, "Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge");
-            Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
-
-            //------------------------------------------------
-            /*
-            static int test = 0;
-            
-            if(test==0)
-            {
+                G4Tubs* outerCylinder = new G4Tubs("outerCylinder", 4.0*mm, 5.5*mm, 0.5*55.5*mm, 0.*deg, 360.*deg);
+                G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_cylinder = new G4LogicalVolume(outerCylinder, G4_Ge_Material, "Logic_CLOVER_LithiumDeadLayer_cylinder");
+                
+                G4Tubs* flatCylinderCap = new G4Tubs("flatCylinderCap", 0.0*mm, 5.1*mm, 0.5*0.5*mm, 0.*deg, 360.*deg);
+                G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_flatCap = new G4LogicalVolume(flatCylinderCap, G4_Ge_Material, "Logic_CLOVER_LithiumDeadLayer_flatCap");
+                
+                G4VisAttributes* CLOVER_DeadLayer_Lithium_VisAtt = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));
+                CLOVER_DeadLayer_Lithium_VisAtt->SetForceSolid(true);
+                Logic_CLOVER_LithiumDeadLayer_cylinder->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+                Logic_CLOVER_LithiumDeadLayer_flatCap->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+                Logic_CLOVER_HPGeCrystal_LithiumContact[j]->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+                
+                //------------------------------------------------
+                G4ThreeVector position_LithiumDeadLayer_cylinder;
+                
+                if(j==0)
+                {
+                    position_LithiumDeadLayer_cylinder = G4ThreeVector(-20.5*mm, 20.5*mm, -(20.0+70.0)*mm - (CLOVERtoShield_displacement*10.0)*mm + 0.5*55.5*mm);
+                }
+                else if(j==1)
+                {
+                    position_LithiumDeadLayer_cylinder = G4ThreeVector(-20.5*mm, -20.5*mm, -(20.0+70.0)*mm - (CLOVERtoShield_displacement*10.0)*mm + 0.5*55.5*mm);
+                }
+                else if(j==2)
+                {
+                    position_LithiumDeadLayer_cylinder = G4ThreeVector(20.5*mm, -20.5*mm, -(20.0+70.0)*mm - (CLOVERtoShield_displacement*10.0)*mm + 0.5*55.5*mm);
+                }
+                else if(j==3)
+                {
+                    position_LithiumDeadLayer_cylinder = G4ThreeVector(20.5*mm, 20.5*mm, -(20.0+70.0)*mm - (CLOVERtoShield_displacement*10.0)*mm + 0.5*55.5*mm);
+                }
+                
+                //------------------------------------------------
+                G4RotationMatrix* rm = new G4RotationMatrix();
+                G4VSolid* CLOVER_LithiumDeadLayer_cylinderAndFlatCap = new G4UnionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap", outerCylinder, flatCylinderCap, rm, G4ThreeVector(0.,0.,0.5*55.5*mm - 0.5*0.5*mm));
+                G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap = new G4LogicalVolume(CLOVER_LithiumDeadLayer_cylinderAndFlatCap, G4_Ge_Material, "Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap");
+                Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+                
+                //------------------------------------------------
+                G4VSolid* CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge;
+                
+                if(j==0)
+                {
+                    CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal1, rm, -position_LithiumDeadLayer_cylinder);
+                }
+                else if(j==1)
+                {
+                    CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal2, rm, -position_LithiumDeadLayer_cylinder);
+                }
+                else if(j==2)
+                {
+                    CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal3, rm, -position_LithiumDeadLayer_cylinder);
+                }
+                else if(j==3)
+                {
+                    CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal4, rm, -position_LithiumDeadLayer_cylinder);
+                }
+                
+                G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4LogicalVolume(CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge, G4_Ge_Material, "Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge");
+                Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+                
+                //------------------------------------------------
+                /*
+                 static int test = 0;
+                 
+                 if(test==0)
+                 {
+                 new G4PVPlacement(0,               // no rotation
+                 G4ThreeVector(), // at (x,y,z)
+                 Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge,
+                 "CLOVER_HPGeLithiumDopedDeadlayer", // its name
+                 LogicWorld,
+                 false,           // no boolean operations
+                 0,               // copy number
+                 fCheckOverlaps); // checking overlaps
+                 }
+                 
+                 test++;
+                 */
+                
+                //----------------------------------------------------------------------------
+                //      Placement for lithium contact created through boolean operations
                 new G4PVPlacement(0,               // no rotation
-                                  G4ThreeVector(), // at (x,y,z)
+                                  position_LithiumDeadLayer_cylinder, // at (x,y,z)
                                   Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge,
                                   "CLOVER_HPGeLithiumDopedDeadlayer", // its name
-                                  LogicWorld,
+                                  Logic_CLOVER_HPGeCrystal[j],
                                   false,           // no boolean operations
                                   0,               // copy number
                                   fCheckOverlaps); // checking overlaps
+                
+                //----------------------------------------------------------------
+                //      Placement for lithium contact created through CADMesh
+                //            new G4PVPlacement(0,               // no rotation
+                //                              G4ThreeVector(), // at (x,y,z)
+                //                              Logic_CLOVER_HPGeCrystal_LithiumContact[j],
+                //                              "CLOVER_HPGeLithiumDopedDeadlayer", // its name
+                //                              Logic_CLOVER_HPGeCrystal[j],
+                //                              false,           // no boolean operations
+                //                              0,               // copy number
+                //                              fCheckOverlaps); // checking overlaps
             }
             
-            test++;
-            */
+            //------------------------------------------------
+            bool domedCapDeadlayer = true;
             
-            //----------------------------------------------------------------------------
-            //      Placement for lithium contact created through boolean operations
-            /*
-             new G4PVPlacement(0,               // no rotation
-             position_LithiumDeadLayer_cylinder, // at (x,y,z)
-             Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge,
-             "CLOVER_HPGeLithiumDopedDeadlayer", // its name
-             Logic_CLOVER_HPGeCrystal[j],
-             false,           // no boolean operations
-             0,               // copy number
-             fCheckOverlaps); // checking overlaps
-             */
-            
-            //----------------------------------------------------------------
-            //      Placement for lithium contact created through CADMesh
-            new G4PVPlacement(0,               // no rotation
-                              G4ThreeVector(), // at (x,y,z)
-                              Logic_CLOVER_HPGeCrystal_LithiumContact[j],
-                              "CLOVER_HPGeLithiumDopedDeadlayer", // its name
-                              Logic_CLOVER_HPGeCrystal[j],
-                              false,           // no boolean operations
-                              0,               // copy number
-                              fCheckOverlaps); // checking overlaps
+            if(domedCapDeadlayer)
+            {
+                G4double deadlayerThickness = 1.0*mm;
+                
+                G4Tubs* outerCylinder = new G4Tubs("outerCylinder", 4.0*mm, 5.5*mm, 0.5*55.5*mm, 0.*deg, 360.*deg);
+                G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_cylinder = new G4LogicalVolume(outerCylinder, G4_Ge_Material, "Logic_CLOVER_LithiumDeadLayer_cylinder");
+                
+//                G4Tubs* flatCylinderCap = new G4Tubs("flatCylinderCap", 0.0*mm, 5.1*mm, 0.5*0.5*mm, 0.*deg, 360.*deg);
+//                G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_domedCap = new G4LogicalVolume(flatCylinderCap, G4_Ge_Material, "Logic_CLOVER_LithiumDeadLayer_domedCap");
+                
+                G4double tolerance = 10*um;
+                auto domedCap_S = new G4Sphere("domedCap_S", 5.0*mm + tolerance, 5.0*mm + deadlayerThickness, 0.*deg, 360.*deg, 0.*deg, 90.0*deg);
+                auto domedCap_LV = new G4LogicalVolume(domedCap_S, G4_Ge_Material, "domedCap_LV");
+
+                G4double tolerance_cylinderEnd = 0.020*mm; // For the chamfered end of the cylinder where it meets the back end of the crystal
+                G4double cylinderLength = 50.0*mm - tolerance_cylinderEnd;
+                auto cylinder_S = new G4Tubs("cylinder_S", 5.0*mm + tolerance, 5.0*mm + deadlayerThickness, 0.5*cylinderLength*mm, 0.*deg, 360.*deg);
+                auto cylinder_LV = new G4LogicalVolume(cylinder_S, G4_Ge_Material, "cylinder_S");
+
+                G4VisAttributes* CLOVER_DeadLayer_Lithium_VisAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0));
+                CLOVER_DeadLayer_Lithium_VisAtt->SetForceSolid(true);
+                Logic_CLOVER_LithiumDeadLayer_cylinder->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+                domedCap_LV->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+                cylinder_LV->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+                Logic_CLOVER_HPGeCrystal_LithiumContact[j]->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+                
+                //------------------------------------------------
+                G4ThreeVector position_domedCap;
+                
+                G4double zAxisOffset_domedCap = -(20.0+70.0)*mm - (CLOVERtoShield_displacement*10.0)*mm + 50.0*mm;
+                
+                if(j==0)
+                {
+                    position_domedCap = G4ThreeVector(-20.5*mm, 20.5*mm, zAxisOffset_domedCap);
+                }
+                else if(j==1)
+                {
+                    position_domedCap = G4ThreeVector(-20.5*mm, -20.5*mm, zAxisOffset_domedCap);
+                }
+                else if(j==2)
+                {
+                    position_domedCap = G4ThreeVector(20.5*mm, -20.5*mm, zAxisOffset_domedCap);
+                }
+                else if(j==3)
+                {
+                    position_domedCap = G4ThreeVector(20.5*mm, 20.5*mm, zAxisOffset_domedCap);
+                }
+                
+                //----------------------------------------------------------------------------
+                //      Placement for lithium contact created through boolean operations
+                new G4PVPlacement(0,               // no rotation
+                                  position_domedCap, // at (x,y,z)
+                                  domedCap_LV,
+                                  "DomedCap", // its name
+                                  Logic_CLOVER_HPGeCrystal[j],
+                                  false,           // no boolean operations
+                                  0,               // copy number
+                                  fCheckOverlaps); // checking overlaps
+
+                
+                //------------------------------------------------
+                G4ThreeVector position_cylinder;
+                
+//                G4double zAxisOffset_cylinder = -(20.0+70.0)*mm - (CLOVERtoShield_displacement*10.0)*mm + (cylinderLength/2.0)*mm + tolerance_cylinderEnd;
+                G4double zAxisOffset_cylinder = -(20.0+70.0)*mm - (CLOVERtoShield_displacement*10.0)*mm + (50.0/2.0)*mm + tolerance_cylinderEnd/2.0;
+                
+                if(j==0)
+                {
+                    position_cylinder = G4ThreeVector(-20.5*mm, 20.5*mm, zAxisOffset_cylinder);
+                }
+                else if(j==1)
+                {
+                    position_cylinder = G4ThreeVector(-20.5*mm, -20.5*mm, zAxisOffset_cylinder);
+                }
+                else if(j==2)
+                {
+                    position_cylinder = G4ThreeVector(20.5*mm, -20.5*mm, zAxisOffset_cylinder);
+                }
+                else if(j==3)
+                {
+                    position_cylinder = G4ThreeVector(20.5*mm, 20.5*mm, zAxisOffset_cylinder);
+                }
+                
+                //----------------------------------------------------------------------------
+                //      Placement for lithium contact created through boolean operations
+                new G4PVPlacement(0,               // no rotation
+                                  position_cylinder, // at (x,y,z)
+                                  cylinder_LV,
+                                  "Cylinder", // its name
+                                  Logic_CLOVER_HPGeCrystal[j],
+                                  false,           // no boolean operations
+                                  0,               // copy number
+                                  fCheckOverlaps); // checking overlaps
+
+                
+                
+//                //------------------------------------------------
+//                G4RotationMatrix* rm = new G4RotationMatrix();
+//                G4VSolid* CLOVER_LithiumDeadLayer_cylinderAndFlatCap = new G4UnionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap", outerCylinder, flatCylinderCap, rm, G4ThreeVector(0.,0.,0.5*55.5*mm - 0.5*0.5*mm));
+//                G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap = new G4LogicalVolume(CLOVER_LithiumDeadLayer_cylinderAndFlatCap, G4_Ge_Material, "Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap");
+//                Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+//                
+//                //------------------------------------------------
+//                G4VSolid* CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge;
+//                
+//                if(j==0)
+//                {
+//                    CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal1, rm, -position_LithiumDeadLayer_cylinder);
+//                }
+//                else if(j==1)
+//                {
+//                    CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal2, rm, -position_LithiumDeadLayer_cylinder);
+//                }
+//                else if(j==2)
+//                {
+//                    CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal3, rm, -position_LithiumDeadLayer_cylinder);
+//                }
+//                else if(j==3)
+//                {
+//                    CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4IntersectionSolid("CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge", CLOVER_LithiumDeadLayer_cylinderAndFlatCap, Solid_HPGeCrystal4, rm, -position_LithiumDeadLayer_cylinder);
+//                }
+//                
+//                G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge = new G4LogicalVolume(CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge, G4_Ge_Material, "Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge");
+//                Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
+                
+//                //----------------------------------------------------------------------------
+//                //      Placement for lithium contact created through boolean operations
+//                new G4PVPlacement(0,               // no rotation
+//                                  position_LithiumDeadLayer_cylinder, // at (x,y,z)
+//                                  Logic_CLOVER_LithiumDeadLayer_cylinderAndFlatCap_roundedEdge,
+//                                  "CLOVER_HPGeLithiumDopedDeadlayer", // its name
+//                                  Logic_CLOVER_HPGeCrystal[j],
+//                                  false,           // no boolean operations
+//                                  0,               // copy number
+//                                  fCheckOverlaps); // checking overlaps
+            }
         }
     }
     
@@ -3025,11 +3540,11 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //              CLOVER Shield Body - CADMesh
         ///////////////////////////////////////////////////////
         
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body_Modified.ply");
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body_Modified2_tol_10um.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body_Modified3_tol_10um.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body_Modified4_tol_10um.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body_Modified.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body_Modified2_tol_10um.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body_Modified3_tol_10um.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Body/Body_Modified4_tol_10um.ply");
         
         CADMesh * mesh_CLOVER_Shield_Body = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_Body, false);
         
@@ -3045,29 +3560,29 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //              CLOVER Shield Heavimet - CADMesh
         ///////////////////////////////////////////////////////
         
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield.ply");
         
         //--------------------------------------------------------------------------------------------------------------------
         //      The "original" HEAVIMET shield for the AFRODITE array.
         //      The "_Modified" suffix of the .ply filename is because it is has been negligibly altered to avoid geometry overlaps (with a tolerance of 10um)
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield_Modified.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HeavimetShield_Modified.ply");
         
         //--------------------------------------------------------------------------------------------------------------------
         //      The "40mm" HEAVIMET shield Paul drew before 05/05/18
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_40mm_mod_10um.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_40mm_mod_10um.ply");
         
         //--------------------------------------------------------------------------------------------------------------------
         //      The new HEAVIMET drawings to optomize the HEAVIMET acceptance with respec to the peak-to-total ratios
         //      Models implemented on 05/05/18 and range from 30mm to 50mm in 2.5mm steps
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_30mm.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_32_5mm.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_35mm.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_37_5mm.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_40mm.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_42_5mm.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_45mm.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_47_5mm.ply");
-        //sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_50mm.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_30mm.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_32_5mm.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_35mm.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_37_5mm.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_40mm.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_42_5mm.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_45mm.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_47_5mm.ply");
+        //sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/Heavimet-Shield/HEAVIMET_50mm.ply");
         
         CADMesh * mesh_CLOVER_Shield_Heavimet = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_Heavimet, false);
         
@@ -3084,7 +3599,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         ///////////////////////////////////////////////////////
         
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMT-Connectors/PMT-ConnecterArray.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMT-Connectors/PMT-ConnecterArray.ply");
         CADMesh * mesh_CLOVER_Shield_PMTConArray = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMTConArray, false);
         
         G4VSolid * Solid_CLOVER_Shield_PMTConArray = mesh_CLOVER_Shield_PMTConArray->TessellatedMesh();
@@ -3097,101 +3612,101 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         ///////////////////////////////////////////////////////
         
         /*
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal1.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal1.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal1 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal2.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal2.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal2 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal3.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal3.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal3 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal4.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal4.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal4 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal5.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal5.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal5 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal6.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal6.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal6 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal7.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal7.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal7 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal8.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal8.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal8 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal9.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal9.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal9 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal10.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal10.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal10 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal11.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal11.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal11 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal12.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal12.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal12 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal13.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal13.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal13 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal14.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal14.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal14 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal15.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal15.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal15 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal16.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal16.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal16 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         */
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_1.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_1.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal1 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_2.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_2.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal2 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_3.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_3.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal3 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_4.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_4.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal4 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_5.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_5.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal5 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_6.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_6.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal6 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_7.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_7.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal7 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_8.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_8.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal8 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_9.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_9.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal9 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_10.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_10.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal10 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_11.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_11.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal11 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_12.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_12.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal12 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_13.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_13.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal13 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_14.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_14.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal14 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_15.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_15.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal15 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_16.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/BGO-Crystals/BGO-Crystal_Modified_16.ply");
         CADMesh * mesh_CLOVER_Shield_BGOCrystal16 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_BGOCrystals, false);
 
         
@@ -3224,52 +3739,52 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //      CLOVER Shield PMT's
         ////////////////////////////////////
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT1.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT1.ply");
         CADMesh * mesh_CLOVER_Shield_PMT1 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT2.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT2.ply");
         CADMesh * mesh_CLOVER_Shield_PMT2 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT3.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT3.ply");
         CADMesh * mesh_CLOVER_Shield_PMT3 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT4.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT4.ply");
         CADMesh * mesh_CLOVER_Shield_PMT4 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT5.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT5.ply");
         CADMesh * mesh_CLOVER_Shield_PMT5 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT6.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT6.ply");
         CADMesh * mesh_CLOVER_Shield_PMT6 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT7.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT7.ply");
         CADMesh * mesh_CLOVER_Shield_PMT7 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT8.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT8.ply");
         CADMesh * mesh_CLOVER_Shield_PMT8 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT9.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT9.ply");
         CADMesh * mesh_CLOVER_Shield_PMT9 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT10.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT10.ply");
         CADMesh * mesh_CLOVER_Shield_PMT10 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT11.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT11.ply");
         CADMesh * mesh_CLOVER_Shield_PMT11 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT12.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT12.ply");
         CADMesh * mesh_CLOVER_Shield_PMT12 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT13.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT13.ply");
         CADMesh * mesh_CLOVER_Shield_PMT13 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT14.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT14.ply");
         CADMesh * mesh_CLOVER_Shield_PMT14 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT15.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT15.ply");
         CADMesh * mesh_CLOVER_Shield_PMT15 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
-        sprintf(meshPath, "../K600-ALBA/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT16.ply");
+        sprintf(meshPath, "../K600/Mesh-Models/DETECTORS/CLOVER/Shield/PMTs/PMT16.ply");
         CADMesh * mesh_CLOVER_Shield_PMT16 = new CADMesh(meshPath, meshType, mm, offset_CLOVER_Shield_PMT, false);
         
         
@@ -3303,70 +3818,6 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     //               CLOVER INITIALIZATION            //
     ////////////////////////////////////////////////////
     
-    //------------------------------------------------------------------------------------
-    //      Offsets for Walid's crystal geometry
-    G4double length_head = (5./atan(7.1*deg)); // 5 = total enlevé vers lavant de la face tapered
-    //double offset = (-35.0-20.0); // mm
-    //double offset = (-35.0-20.0)-(CLOVERtoShield_displacement*10.0); // mm
-    
-    //  Properly centered Logic_HPGeCrystal_Walid
-    //double offset = (-35.0-20.0)-(CLOVERtoShield_displacement*10.0); // mm
-    
-    //  Walid's mistake
-    //double offset = (28.5-length_head-20.0)-20.0-(CLOVERtoShield_displacement*10.0); // mm
-    //double offset = (28.5-length_head-20); // mm
-    
-    //double offset = (28.5-length_head-20.0)-(CLOVERtoShield_displacement*10.0); // mm
-    //double offset = (-35.0+length_head-20.0)-(CLOVERtoShield_displacement*10.0); // mm
-    //double offset = (28.5-length_head-20+1.5)-(CLOVERtoShield_displacement*10.0); // mm
-    
-    //------------------------------------------------
-    //      New working for Logic_HPGeCrystal_Walid_2
-    //      This should be the working, but it is slightly off - likely due to the origin not being defined well (clearly) for the volume and/or approximations
-    //double offset = (-length_head*mm-20.0*mm)-(CLOVERtoShield_displacement*10.0)*mm; // mm
-    
-    //      Modified to match by eye - matched with our crystals
-    double walidCrystaloffset = (-length_head*mm-20.0*mm+0.41*mm)-(CLOVERtoShield_displacement*10.0)*mm; // mm
-    
-    //      Modified to match by eye - to match the front face with the X-Y plane
-    //double offset = (-length_head-(1.5/2.0))*mm; // mm
-    
-    //------------------------------------
-    //      Lithium doped layer
-    if(useCLOVER_Walid)
-    {
-        G4Tubs* outerCylinder = new G4Tubs("outerCylinder", 5.0*mm, 5.5*mm, 0.5*55.5*mm, 0.*deg, 360.*deg);
-        G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_cylinder = new G4LogicalVolume(outerCylinder, G4_Li_Material, "Logic_CLOVER_LithiumDeadLayer_cylinder");
-        
-        G4Tubs* flatCylinderCap = new G4Tubs("flatCylinderCap", 0.0*mm, 5.0*mm, 0.5*0.5*mm, 0.*deg, 360.*deg);
-        G4LogicalVolume *Logic_CLOVER_LithiumDeadLayer_flatCap = new G4LogicalVolume(flatCylinderCap, G4_Li_Material, "Logic_CLOVER_LithiumDeadLayer_flatCap");
-        
-        G4VisAttributes* CLOVER_DeadLayer_Lithium_VisAtt = new G4VisAttributes(G4Colour(0.7, 0.7, 0.0));
-        CLOVER_DeadLayer_Lithium_VisAtt->SetForceSolid(true);
-        Logic_CLOVER_LithiumDeadLayer_cylinder->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
-        Logic_CLOVER_LithiumDeadLayer_flatCap->SetVisAttributes(CLOVER_DeadLayer_Lithium_VisAtt);
-
-        new G4PVPlacement(0,               // no rotation
-                          G4ThreeVector(0,0,-(70.0-length_head)*mm + (0.5*55.5)*mm - 0.41*mm), // at (x,y,z)
-                          Logic_CLOVER_LithiumDeadLayer_cylinder,
-                          "CLOVER_HPGeLithiumDopedDeadlayer", // its name
-                          Logic_HPGeCrystal_Walid_2,
-                          false,           // no boolean operations
-                          0,               // copy number
-                          fCheckOverlaps); // checking overlaps
-        
-        
-        new G4PVPlacement(0,               // no rotation
-                          G4ThreeVector(0,0,-(70.0-length_head)*mm + (0.5*55.5)*mm - 0.41*mm + (0.5*55.5) - (0.5*0.5)*mm), // at (x,y,z)
-                          Logic_CLOVER_LithiumDeadLayer_flatCap,
-                          "CLOVER_HPGeLithiumDopedDeadlayer", // its name
-                          Logic_HPGeCrystal_Walid_2,
-                          false,           // no boolean operations
-                          0,               // copy number
-                          fCheckOverlaps); // checking overlaps
-        
-    }
-
     //--------------------------------------------------------------------------------
     for(G4int i=0; i<numberOf_CLOVER; i++)
     {
@@ -3469,228 +3920,17 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                               i,               // copy number
                               fCheckOverlaps); // checking overlaps
         
-            if(useCLOVER_Walid)
+            for(int j=0; j<4; j++)
             {
-                G4VisAttributes* CLOVER_HPGeCrystals_Walid_VisAtt = new G4VisAttributes(G4Colour(0.9, 0.9, 0.0));
-                CLOVER_HPGeCrystals_Walid_VisAtt->SetForceSolid(true);
-                Logic_HPGeCrystal_Walid->SetVisAttributes(CLOVER_HPGeCrystals_Walid_VisAtt);
-                //Logic_HPGeCrystal_Walid_2->SetVisAttributes(CLOVER_HPGeCrystals_Walid_VisAtt);
+                PhysiCLOVER_HPGeCrystal = new G4PVPlacement(0,               // no rotation
+                                                            G4ThreeVector(0,0,0), // at (x,y,z)
+                                                            Logic_CLOVER_HPGeCrystal[j],
+                                                            "CLOVER_HPGeCrystal", // its name
+                                                            Logic_CLOVER_InternalVacuum[i],
+                                                            false,           // no boolean operations
+                                                            i*4 + j,               // copy number
+                                                            fCheckOverlaps); // checking overlaps
                 
-                //G4double walid_crystalBackShift = abs(28.5-length_head-20+1.5);
-                
-                G4cout << "length_head: " << length_head << G4endl;
-                //--------------------
-                //      STANDARD
-                
-                bool walidComparison = false;
-                G4int nWalidCrystals = 0;
-                
-                if(walidComparison)
-                {
-                    nWalidCrystals = 3;
-                }
-                else
-                {
-                    nWalidCrystals = 4;
-                }
-                
-                for(int j=0; j<nWalidCrystals; j++)
-                {
-                    //------------------------------------------------
-                    G4ThreeVector position_HPGeCrystal_Walid;
-                    
-                    if(j==0)
-                    {
-                        position_HPGeCrystal_Walid = G4ThreeVector(-20.501*mm, 20.501*mm, walidCrystaloffset*mm);
-                    }
-                    else if(j==1)
-                    {
-                        position_HPGeCrystal_Walid = G4ThreeVector(-20.501*mm, -20.501*mm, walidCrystaloffset*mm);
-                    }
-                    else if(j==2)
-                    {
-                        position_HPGeCrystal_Walid = G4ThreeVector(20.501*mm, -20.501*mm, walidCrystaloffset*mm);
-                    }
-                    else if(j==3)
-                    {
-                        position_HPGeCrystal_Walid = G4ThreeVector(20.501*mm, 20.501*mm, walidCrystaloffset*mm);
-                    }
-                    
-                    //------------------------------------------------
-                    G4RotationMatrix* rm_HPGeCrystal_Walid = new G4RotationMatrix();
-                    rm_HPGeCrystal_Walid->rotateZ(((j+1)*90.0)*deg);
-                    
-                    //------------------------------------------------
-                    G4Transform3D CLOVER_HPGeCrystal_Walid_transform = G4Transform3D(*rm_HPGeCrystal_Walid, position_HPGeCrystal_Walid);
-                    
-                    //------------------------------------------------
-                    
-                    
-                    PhysiCLOVER_HPGeCrystal = new G4PVPlacement(CLOVER_HPGeCrystal_Walid_transform,
-                                                                Logic_HPGeCrystal_Walid_2,
-                                                                "CLOVER_HPGeCrystal", // its name
-                                                                Logic_CLOVER_InternalVacuum[i],
-                                                                false,           // no boolean operations
-                                                                i*4 + j,               // copy number
-                                                                fCheckOverlaps); // checking overlaps
-                    
-                    
-                    /*
-                    PhysiCLOVER_HPGeCrystal = new G4PVPlacement(CLOVER_HPGeCrystal_Walid_transform,
-                                                                Logic_HPGeCrystal_Walid_2,
-                                                                "CLOVER_HPGeCrystal", // its name
-                                                                LogicWorld,
-                                                                false,           // no boolean operations
-                                                                i*4 + j,               // copy number
-                                                                fCheckOverlaps); // checking overlaps
-                    */
-                    
-                    
-                }
-
-                for(int j=nWalidCrystals; j<4; j++)
-                {
-                    PhysiCLOVER_HPGeCrystal = new G4PVPlacement(0,               // no rotation
-                                                                G4ThreeVector(0,0,0), // at (x,y,z)
-                                                                Logic_CLOVER_HPGeCrystal[j],
-                                                                "CLOVER_HPGeCrystal", // its name
-                                                                Logic_CLOVER_InternalVacuum[i],
-                                                                false,           // no boolean operations
-                                                                i*4 + j,               // copy number
-                                                                fCheckOverlaps); // checking overlaps
-                    
-                }
-                
-                
-                new G4PVPlacement(0,               // no rotation
-                                  G4ThreeVector(0,0,-20.0*mm-70.0*mm-10.0*mm-(CLOVERtoShield_displacement*10.0)*mm), // at (x,y,z)
-                                  Logic_CLOVER_HPGeAluminiumBackingPlate,
-                                  "CLOVER_HPGeAluminiumBackingPlate", // its name
-                                  Logic_CLOVER_InternalVacuum[i],
-                                  false,           // no boolean operations
-                                  i,               // copy number
-                                  fCheckOverlaps); // checking overlaps
-                
-                
-                
-                /*
-                //--------------------------------------------
-                //      Test at origin (of VacuumChamber)
-                for(int j=0; j<1; j++)
-                {
-                    //------------------------------------------------
-                    G4ThreeVector position_HPGeCrystal_Walid;
-                    //double offset = -(28.5-length_head); // mm
-                    double offset = (28.5-length_head-20); // mm
-                    //double offset = (-35.0-20.0)-(CLOVERtoShield_displacement*10.0); // mm
-                    //double offset = (-35.0-20.0)-(CLOVERtoShield_displacement*10.0); // mm
-                    
-                    if(j==0)
-                    {
-                        position_HPGeCrystal_Walid = G4ThreeVector(-20.501*mm, 20.501*mm, offset*mm);
-                    }
-                    else if(j==1)
-                    {
-                        position_HPGeCrystal_Walid = G4ThreeVector(-20.501*mm, -20.501*mm, offset*mm);
-                    }
-                    else if(j==2)
-                    {
-                        position_HPGeCrystal_Walid = G4ThreeVector(20.501*mm, -20.501*mm, offset*mm);
-                    }
-                    else if(j==3)
-                    {
-                        position_HPGeCrystal_Walid = G4ThreeVector(20.501*mm, 20.501*mm, offset*mm);
-                    }
-                    
-                    //------------------------------------------------
-                    G4RotationMatrix* rm_HPGeCrystal_Walid = new G4RotationMatrix();
-                    rm_HPGeCrystal_Walid->rotateZ(((j+1)*90.0)*deg);
-                    
-                    //------------------------------------------------
-                    G4Transform3D CLOVER_HPGeCrystal_Walid_transform = G4Transform3D(*rm_HPGeCrystal_Walid, position_HPGeCrystal_Walid);
-                    
-                    //------------------------------------------------
-                    
-                    PhysiCLOVER_HPGeCrystal = new G4PVPlacement(CLOVER_HPGeCrystal_Walid_transform,
-                                                                Logic_HPGeCrystal_Walid,
-                                                                "CLOVER_HPGeCrystal", // its name
-                                                                LogicVacuumChamber,
-                                                                false,           // no boolean operations
-                                                                i*4 + j,               // copy number
-                                                                fCheckOverlaps); // checking overlaps
-                    
-                    
-                    
-                    offset = (CLOVERtoShield_displacement*cm+20*mm); // mm
-                    PhysiCLOVER_HPGeCrystal = new G4PVPlacement(0,               // no rotation
-                                                                G4ThreeVector(0,0,offset), // at (x,y,z)
-                                                                Logic_CLOVER_HPGeCrystal[j],
-                                                                "CLOVER_HPGeCrystal", // its name
-                                                                Logic_CLOVER_InternalVacuum[i],
-                                                                false,           // no boolean operations
-                                                                i*4 + j,               // copy number
-                                                                fCheckOverlaps); // checking overlaps
-                }
-                */
-                
-                //--------------------
-                //      TEMP
-                /*
-                for(int j=0; j<4; j++)
-                {
-                    //------------------------------------------------
-                    G4ThreeVector position_HPGeCrystal_Walid;
-                    
-                    if(j==0)
-                    {
-                        position_HPGeCrystal_Walid = G4ThreeVector(0.0, 0.0, 0.0);
-                    }
-                    else if(j==1)
-                    {
-                        position_HPGeCrystal_Walid = G4ThreeVector(0.0, 0.0, 0.0);
-                    }
-                    else if(j==2)
-                    {
-                        position_HPGeCrystal_Walid = G4ThreeVector(0.0, 0.0, 0.0);
-                    }
-                    else if(j==3)
-                    {
-                        position_HPGeCrystal_Walid = G4ThreeVector(0.0, 0.0, 0.0);
-                    }
-                    
-                    //------------------------------------------------
-                    G4RotationMatrix* rm_HPGeCrystal_Walid = new G4RotationMatrix();
-                    rm_HPGeCrystal_Walid->rotateZ((i*90.0)*deg);
-                    
-                    //------------------------------------------------
-                    G4Transform3D CLOVER_HPGeCrystal_Walid_transform = G4Transform3D(*rm_HPGeCrystal_Walid, position_HPGeCrystal_Walid);
-
-                    //------------------------------------------------
-                    PhysiCLOVER_HPGeCrystal = new G4PVPlacement(CLOVER_HPGeCrystal_Walid_transform,
-                                                                Logic_HPGeCrystal_Walid,
-                                                                "CLOVER_HPGeCrystal", // its name
-                                                                Logic_CLOVER_InternalVacuum[i],
-                                                                false,           // no boolean operations
-                                                                i*4 + j,               // copy number
-                                                                fCheckOverlaps); // checking overlaps
-                    
-                }
-                */
-            }
-            else
-            {
-                for(int j=0; j<4; j++)
-                {
-                    PhysiCLOVER_HPGeCrystal = new G4PVPlacement(0,               // no rotation
-                                                                G4ThreeVector(0,0,0), // at (x,y,z)
-                                                                Logic_CLOVER_HPGeCrystal[j],
-                                                                "CLOVER_HPGeCrystal", // its name
-                                                                Logic_CLOVER_InternalVacuum[i],
-                                                                false,           // no boolean operations
-                                                                i*4 + j,               // copy number
-                                                                fCheckOverlaps); // checking overlaps
-                    
-                }
             }
             
             new G4PVPlacement(CLOVER_transform[i],
@@ -3933,7 +4173,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     //----------------------------------------------------
     //      Work for Christiaan/Mathis/Katarzyna
     
-    double LaBr3Ce_encasement_innerRadius = 45.1; // mm
+    double LaBr3Ce_encasement_innerRadius = 44.6; // mm
     double LaBr3Ce_encasement_outerRadius = 50.0; // mm
     
     double LaBe3CeCrystal_cone_innerRadius;
@@ -3942,7 +4182,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     double LaBr3Ce_encasement_cone_innerRadius;
     double LaBr3Ce_encasement_cone_outerRadius = LaBr3Ce_encasement_outerRadius;
     
-    double crystalBase_outerRadius = 45.0; // mm
+    double crystalBase_outerRadius = 44.5; // mm
     double LaBr3Ce_window_axialLength = 5.0; // mm
     
     
@@ -4179,32 +4419,9 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
         //LaBr3Ce_InternalVacuum_position[i] = (13.2*cm + ((LaBr3Ce_crystal_axialLength+LaBr3Ce_window_axialLength)/2.0)*mm)*G4ThreeVector(std::sin(LaBr3Ce_theta[i]) * std::cos(LaBr3Ce_phi[i]), std::sin(LaBr3Ce_theta[i]) * std::sin(LaBr3Ce_phi[i]), std::cos(LaBr3Ce_theta[i]));
         //LaBr3Ce_InternalVacuum_position[i] = (8.9632*cm + ((LaBr3Ce_crystal_axialLength+LaBr3Ce_window_axialLength)/2.0)*mm)*G4ThreeVector(std::sin(LaBr3Ce_theta[i]) * std::cos(LaBr3Ce_phi[i]), std::sin(LaBr3Ce_theta[i]) * std::sin(LaBr3Ce_phi[i]), std::cos(LaBr3Ce_theta[i]));
         
-        if(setPreconfiguredVersion && LaBr3CeSetupVersion==-1)
+        if(LaBr3Ce_Presence[i] && setPreconfiguredVersion && LaBr3CeSetupVersion==-1)
         {
-            //  LaBr3Ce 1
-            LaBr3Ce_Presence[0] = true;
-            LaBr3Ce_Distance[0] = 246.4*mm;
-            LaBr3Ce_theta[0] = 90.0*deg;
-            LaBr3Ce_phi[0] = 151.0*deg;
-            
-            //  LaBr3Ce 2
-            LaBr3Ce_Presence[1] = true;
-            LaBr3Ce_Distance[1] = 247.65*mm;
-            LaBr3Ce_theta[1] = 135.0*deg;
-            LaBr3Ce_phi[1] = 180.0*deg;
-            
-            //  LaBr3Ce 3
-            LaBr3Ce_Presence[2] = true;
-            LaBr3Ce_Distance[2] = 217.8*mm;
-            LaBr3Ce_theta[2] = 135.0*deg;
-            LaBr3Ce_phi[2] = 0.0*deg;
-            
-            //  LaBr3Ce 4
-            LaBr3Ce_Presence[3] = true;
-            LaBr3Ce_Distance[3] = 236.8*mm;
-            LaBr3Ce_theta[3] = 90.0*deg;
-            LaBr3Ce_phi[3] = 62.0*deg;
-            
+            G4cout << "CHECKPOINT" << G4endl;
             double x = std::sin(LaBr3Ce_theta[i])*std::cos(LaBr3Ce_phi[i]);
             double y = std::sin(LaBr3Ce_theta[i])*std::sin(LaBr3Ce_phi[i]);
             double z = std::cos(LaBr3Ce_theta[i]);
@@ -4251,7 +4468,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 
         /////////////////////////////
         //          LaBr3Ce
-        if(LaBr3Ce_Presence[i] == true)
+        if(LaBr3Ce_Presence[i])
         {
             
             new G4PVPlacement(LaBr3Ce_Encasement_transform[i],   // transformation matrix
@@ -4455,7 +4672,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
             
             G4double z_Q_Offset = 4.4*mm+ 100*cm;
             
-            G4MagneticField* PurgMagField = new MagneticFieldMapping("../K600-ALBA/MagneticFieldMaps/Quadrupole_MagneticFieldMap.TABLE", z_Q_Offset);
+            G4MagneticField* PurgMagField = new MagneticFieldMapping("../K600/MagneticFieldMaps/Quadrupole_MagneticFieldMap.TABLE", z_Q_Offset);
             fEquationMagneticField_K600_Q = new G4Mag_UsualEqRhs(PurgMagField);
             
             fieldManagerMagneticField_K600_Q = new G4FieldManager(PurgMagField);

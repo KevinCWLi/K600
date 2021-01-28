@@ -77,6 +77,13 @@ public:
     void SetInitialParticleKineticEnergy(std::vector<double> vec) {iSimulatedParticle_T = vec;};
     
     //--------------------------------------------------------------------------------
+    //      Detectable energy
+
+    std::vector<double>   detectableEnergy; // MeV
+    
+    void SetDetectableEnergy(std::vector<double> vec) {detectableEnergy = vec;};
+
+    //--------------------------------------------------------------------------------
     //      CAKE
     std::vector<int>    CAKE_detNr;
     std::vector<int>    CAKE_ringNr;

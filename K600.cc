@@ -71,13 +71,19 @@ namespace {
 
 int main(int argc,char** argv)
 {
+    std::cout << "CHECKPOINT -3" << std::endl;
     // Evaluate arguments
     //
     if ( argc > 7 ) {
+        
+        std::cout << "CHECKPOINT -2" << std::endl;
+
         PrintUsage();
         return 1;
     }
     
+    std::cout << "CHECKPOINT -1" << std::endl;
+
     G4String macro;
     G4String session;
 #ifdef G4MULTITHREADED
@@ -95,9 +101,13 @@ int main(int argc,char** argv)
             PrintUsage();
             return 1;
         }
+        
+        std::cout << "macro: " << macro << std::endl;
+        std::cout << "argv[i+1]: " << argv[i+1] << std::endl;
     }
     
-    
+    std::cout << "CHECKPOINT 0" << std::endl;
+
     
     // Choose the Random engine
     //
@@ -115,9 +125,13 @@ int main(int argc,char** argv)
     // Construct the default run manager
     //
 #ifdef G4MULTITHREADED
+    std::cout << "CHECKPOINT 1" << std::endl;
+
     G4MTRunManager * runManager = new G4MTRunManager;
-    runManager->SetNumberOfThreads(nThreads);
-    
+    runManager->SetNumberOfThreads(1);
+
+    std::cout << "CHECKPOINT 2" << std::endl;
+
     /*
      if ( nThreads > 0 ) {
      runManager->SetNumberOfThreads(4);
@@ -141,6 +155,8 @@ int main(int argc,char** argv)
     //      Initialising the Physics List with Radioactive Decay
     ////////////////////////////////////////////////////////////////////
     
+    std::cout << "CHECKPOINT 3" << std::endl;
+
     G4PhysListFactory factory;
     G4VModularPhysicsList* phys = 0;
     G4String physName = "QGSP_BERT";
@@ -149,15 +165,21 @@ int main(int argc,char** argv)
     phys->RegisterPhysics(new G4RadioactiveDecayPhysics());
     runManager->SetUserInitialization(phys);
     
+    std::cout << "CHECKPOINT 4" << std::endl;
+
     
     ActionInitialization* actionInitialization
     = new ActionInitialization(detConstruction);
     runManager->SetUserInitialization(actionInitialization);
     
+    std::cout << "CHECKPOINT 4 A" << std::endl;
+
     // Initialize G4 kernel
     //
     runManager->Initialize();
     
+    std::cout << "CHECKPOINT 5" << std::endl;
+
 #ifdef G4VIS_USE
     // Initialize visualization
     G4VisManager* visManager = new G4VisExecutive;
@@ -166,13 +188,20 @@ int main(int argc,char** argv)
     visManager->Initialize();
 #endif
     
+    std::cout << "CHECKPOINT 6" << std::endl;
+
     // Get the pointer to the User Interface manager
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
     
     if ( macro.size() ) {
+        
+        std::cout << "CHECKPOINT 6A" << std::endl;
+
         // batch mode
         G4String command = "/control/execute ";
         UImanager->ApplyCommand(command+macro);
+        
+        G4cout << "macro: " << macro << G4endl;
     }
     else  {
         // interactive mode : define UI session
@@ -190,16 +219,24 @@ int main(int argc,char** argv)
 #endif
     }
     
+    std::cout << "CHECKPOINT 7" << std::endl;
+
     // Job termination
     // Free the store: user actions, physics_list and detector_description are
     // owned and deleted by the run manager, so they should not be deleted
     // in the main() program !
     
 #ifdef G4VIS_USE
+    
+    std::cout << "CHECKPOINT 8" << std::endl;
+
     delete visManager;
 #endif
+    
+    std::cout << "CHECKPOINT 9" << std::endl;
     delete runManager;
     
+    std::cout << "CHECKPOINT 10" << std::endl;
     return 0;
 }
 
