@@ -289,7 +289,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(EventAction* eventAction): G4VUse
                               [&](double*x, double *p)
                               {
                                   //                                     return p[0]*fAngCor_2plus_9870->Eval(x[0])*TMath::Sin(x[0]*0.0174533);
-                                  return p[0]*TMath::Power(0.5*(5.0*TMath::Power(TMath::Cos(x[0]*0.0174533), 2.0) - 3.0*TMath::Cos(x[0]*0.0174533)), 2.0)*TMath::Sin(x[0]*0.0174533);
+                                  return p[0]*TMath::Power((1.0/8.0)*(35.0*TMath::Power(TMath::Cos(x[0]*0.0174533), 4.0) - 30.0*TMath::Power(TMath::Cos(x[0]*0.0174533), 2.0) + 3.0), 2.0)*TMath::Sin(x[0]*0.0174533);
                               },
                               xMin, xMax, 1);
     fAngDist_4plus->SetNpx(1000);
@@ -1827,7 +1827,18 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 //    fAngDist_3minus
 //    fAngDist_4plus
     
-    double xMax = fAngDist_1minus->GetMaximum() + 0.001;
+//    fAngDist_1minus->GetMaximum(): 0.3849
+//    fAngDist_2plus_9870->GetMaximum(): 0.25
+//    fAngDist_3minus->GetMaximum(): 5.04066
+//    fAngDist_4plus->GetMaximum(): 0.140625
+    
+    double xMax = 0.3849 + 0.001;   // fAngDist_1minus
+//    double xMax = 0.25 + 0.001;     // fAngDist_2plus_9870
+//    double xMax = 5.04066 + 0.001;  // fAngDist_3minus
+//    double xMax = 0.140625 + 0.001; // fAngDist_4plus
+
+//    double xMax = fAngDist_1minus->GetMaximum() + 0.001;
+
     double thetaTest = 0.0; // deg
     double functionTest = 0.0; // deg
     
